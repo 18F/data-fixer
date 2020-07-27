@@ -1,14 +1,37 @@
 {
-    "name": "datafixer",
-    "version": "0.1.0",
-    "private": true,
-    "devDependencies": {
-        "@bazel/bazelisk": "latest",
-        "@bazel/ibazel": "latest",
-        "@bazel/buildifier": "latest"
-    },
-    "scripts": {
-        "build": "bazel build //...",
-        "test": "bazel test //..."
+  "name": "datafixer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "bazel build //...",
+    "test": "bazel test //..."
+  },
+  "devDependencies": {
+    "@bazel/bazelisk": "latest",
+    "@bazel/buildifier": "latest",
+    "@bazel/ibazel": "latest",
+    "@bazel/jasmine": "^2.0.1",
+    "@bazel/rollup": "^2.0.1",
+    "@bazel/typescript": "^2.0.1",
+    "husky": "^4.2.5",
+    "jasmine": "^3.6.1",
+    "jasmine-core": "^3.6.0",
+    "rollup": "^2.23.0",
+    "typescript": "^3.9.7"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "> 0.2%"
+  ],
+  "dependencies": {
+    "@types/jasmine": "^3.5.11",
+    "@types/react": "^16.9.43",
+    "react": "^16.13.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test"
     }
+  }
 }

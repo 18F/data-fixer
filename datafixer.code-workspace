@@ -1,7 +1,19 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	]
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.fontFamily": "Source Code Pro for Powerline",
+    "editor.fontSize": 15,
+    "files.exclude": {
+      "**/node_modules": true,
+      "*.git": true,
+      ".cache": true,
+      "dist": true,
+      "bazel-out": true,
+      ".vscode": true
+    }
+  }
 }

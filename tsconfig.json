@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "lib": ["dom", "es6", "es2017"],
+    "paths": {
+      "soilio/*": ["*"]
+    },
+    "rootDirs": [".", "./dist/bin"],
+    "strict": true,
+    "strictBindCallApply": true,
+    "types": []
+  }
+}
