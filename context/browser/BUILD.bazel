@@ -19,3 +19,11 @@ rollup_bundle(
         "//context/browser:lib",
     ],
 )
+
+filegroup(
+    name="assets",
+    srcs=[
+        ":bundle",
+        "//frontend:assets",
+    ],
+)

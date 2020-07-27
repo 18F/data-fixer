@@ -1,1 +1,1 @@
-console.log("core library");
+console.log('core library');

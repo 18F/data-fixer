@@ -1,1 +1,1 @@
-console.log("browser bundle");
+console.log('browser bundle');

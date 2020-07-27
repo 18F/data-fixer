@@ -1,5 +1,6 @@
 package(default_visibility=["//visibility:public"])
 
+load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 ts_library(
@@ -9,4 +10,56 @@ ts_library(
         exclude=["**/*.test.ts"],
     ),
     deps=[],
+)
+
+filegroup(
+    name="tsx-files",
+    srcs=glob(["**/*.tsx"]),
+)
+
+npm_package_bin(
+    name="compiled-sass",
+    outs=[
+        "compiled-sass.css",
+    ],
+    args=[
+        "$(execpath :styles.scss)",
+        "--include-path external/npm/node_modules/uswds/dist/scss",
+        "--output $@",
+    ],
+    data=[
+        ":styles.scss",
+        "@npm//uswds",
+    ],
+    package="node-sass",
+    package_bin="node-sass",
+)
+
+npm_package_bin(
+    name="css-bundle",
+    outs=[
+        "bundle.css",
+    ],
+    args=[
+        "$(execpath :compiled-sass)",
+        "--config $(rootpath :postcss.config.js)",
+        "--output $@",
+    ],
+    data=[
+        ":compiled-sass",
+        ":postcss.config.js",
+        ":tsx-files",
+        "@npm//@fullhuman/postcss-purgecss",
+        "@npm//autoprefixer",
+        "@npm//postcss-csso",
+    ],
+    package="postcss-cli",
+    package_bin="postcss",
+)
+
+filegroup(
+    name="assets",
+    srcs=[
+        ":css-bundle",
+    ],
 )
