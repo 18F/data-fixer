@@ -9,7 +9,9 @@ ts_library(
         ["**/*.ts"],
         exclude=["**/*.test.ts"],
     ),
-    deps=[],
+    deps=[
+        "@npm//io-ts",
+    ],
 )
 
 ts_library(
