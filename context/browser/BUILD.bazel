@@ -1,22 +1,23 @@
 package(default_visibility=["//visibility:public"])
 
 load("@npm//@bazel/rollup:index.bzl", "rollup_bundle")
-load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@npm//@bazel/typescript:index.bzl", "ts_devserver", "ts_library")
 
 ts_library(
     name="lib",
-    srcs=glob(["**/*.ts"]),
+    srcs=[
+        ":index.ts",
+    ],
     deps=[
-        "//core:lib",
         "//frontend:lib",
     ],
 )
 
 rollup_bundle(
     name="bundle",
-    entry_points={"//context/browser:index.ts": "browser"},
+    entry_point=":index.ts",
     deps=[
-        "//context/browser:lib",
+        ":lib",
     ],
 )
 
@@ -25,5 +26,35 @@ filegroup(
     srcs=[
         ":bundle",
         "//frontend:assets",
+    ],
+)
+
+# For ts_devserver, copy index.html from frontend into this package.
+genrule(
+    name="index",
+    srcs=["//frontend:index.html"],
+    outs=["index.html"],
+    cmd="cp $< $@",
+)
+
+ts_devserver(
+    name="devserver",
+    port=5432,
+    deps=[
+        ":lib",
+        # TODO: Figure out how to avoid specifying these dependencies directly:
+        "@npm//react:react__umd",
+        "@npm//react-dom:react-dom__umd",
+        "@npm//uswds:uswds__umd",
+    ],
+    entry_module="datafixer/context/browser/index",
+    serving_path="/bundle.js",
+    static_files=[
+        "index.html",
+        "//frontend:assets",
+    ],
+    additional_root_paths=[
+        "datafixer/node_modules/uswds/dist/img",
+        "datafixer/node_modules/uswds/dist/fonts",
     ],
 )

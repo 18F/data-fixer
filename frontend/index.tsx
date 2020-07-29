@@ -1,24 +1,17 @@
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { render } from 'react-dom';
+import 'uswds';
 
-const template = (staticRoot: string, html: string) => `<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>10x Data Fixer Prototype</title>
-        <link rel="stylesheet" href="${staticRoot || ''}/frontend/bundle.css">
-        <script src="${staticRoot || ''}/context/browser/browser.js"></script>
-    </head>
-    <body>
-        <div id="app">${html}</div>
-    </body>
-</html>`;
+import { Header } from './components/header.component';
 
 const App = () => {
-  return <div>{'Hello'}</div>;
+  return (
+    <>
+      <Header />
+    </>
+  );
 };
 
-export const getRenderPageAction = (staticRoot: string) => () => {
-  return template(staticRoot, renderToString(<App />));
+export const getRenderPage = () => () => {
+  return render(App(), document.getElementById('root'));
 };

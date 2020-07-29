@@ -5,9 +5,11 @@
   "scripts": {
     "build": "bazel build //...",
     "format": "yarn run prettier --write core frontend context",
+    "start": "ibazel run //context/browser:devserver",
     "test": "bazel test //..."
   },
   "devDependencies": {
+    "@babel/core": "^7.10.5",
     "@bazel/bazelisk": "latest",
     "@bazel/buildifier": "latest",
     "@bazel/ibazel": "latest",
@@ -35,6 +37,7 @@
   "dependencies": {
     "@types/jasmine": "^3.5.11",
     "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "uswds": "^2.8.0"

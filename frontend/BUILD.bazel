@@ -1,65 +1,95 @@
-package(default_visibility=["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
 
 load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 ts_library(
-    name="lib",
-    srcs=glob(
-        ["**/*.ts"],
-        exclude=["**/*.test.ts"],
+    name = "lib",
+    srcs = glob(
+        [
+            "**/*.ts",
+            "**/*.tsx",
+        ],
+        exclude = [
+            "**/*.test.ts",
+        ],
     ),
-    deps=[],
+    deps = [
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//react",
+        "@npm//react-dom",
+        "@npm//uswds",
+    ],
 )
 
 filegroup(
-    name="tsx-files",
-    srcs=glob(["**/*.tsx"]),
+    name = "tsx-files",
+    srcs = glob(["**/*.tsx"]),
 )
 
 npm_package_bin(
-    name="compiled-sass",
-    outs=[
+    name = "compiled-sass",
+    outs = [
         "compiled-sass.css",
     ],
-    args=[
+    args = [
         "$(execpath :styles.scss)",
         "--include-path external/npm/node_modules/uswds/dist/scss",
         "--output $@",
     ],
-    data=[
+    data = [
         ":styles.scss",
         "@npm//uswds",
     ],
-    package="node-sass",
-    package_bin="node-sass",
+    package = "node-sass",
+    package_bin = "node-sass",
 )
 
 npm_package_bin(
-    name="css-bundle",
-    outs=[
+    name = "css-bundle",
+    outs = [
         "bundle.css",
     ],
-    args=[
+    args = [
         "$(execpath :compiled-sass)",
         "--config $(rootpath :postcss.config.js)",
         "--output $@",
     ],
-    data=[
+    data = [
         ":compiled-sass",
+        ":index.html",
         ":postcss.config.js",
         ":tsx-files",
         "@npm//@fullhuman/postcss-purgecss",
         "@npm//autoprefixer",
         "@npm//postcss-csso",
     ],
-    package="postcss-cli",
-    package_bin="postcss",
+    package = "postcss-cli",
+    package_bin = "postcss",
 )
 
 filegroup(
-    name="assets",
-    srcs=[
+    name = "uswds-assets",
+    srcs = [
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-bold-webfont.ttf",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-bold-webfont.woff",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-bold-webfont.woff2",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.ttf",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff2",
+        "@npm//:node_modules/uswds/dist/img/chevron.svg",
+        "@npm//:node_modules/uswds/dist/img/icon-dot-gov.svg",
+        "@npm//:node_modules/uswds/dist/img/icon-https.svg",
+        "@npm//:node_modules/uswds/dist/img/us_flag_small.png",
+    ],
+)
+
+filegroup(
+    name = "assets",
+    srcs = [
         ":css-bundle",
+        ":index.html",
+        ":uswds-assets",
     ],
 )
