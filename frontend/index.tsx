@@ -2,6 +2,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import 'uswds';
 
+import { GetDataSetService } from 'datafixer/core/services';
+
 import { DataInfo } from './components/data-info';
 import { DataTable } from './components/data-table';
 import { DataConsumers } from './components/data-consumers';
@@ -33,8 +35,8 @@ const App = () => {
           </div>
           <div className="grid-col-12 mobile-lg:grid-col-4">
             <DataConsumers
-            urls={['/derived-data-1.csv', '/derived-data-2.csv']}
-          />
+              urls={['/derived-data-1.csv', '/derived-data-2.csv']}
+            />
           </div>
         </div>
         <div className="grid-row">
@@ -51,6 +53,6 @@ const App = () => {
   );
 };
 
-export const getRenderPage = () => () => {
+export const RenderPage = (getDataSet: GetDataSetService) => () => {
   return render(App(), document.getElementById('root'));
 };

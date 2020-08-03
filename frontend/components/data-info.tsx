@@ -10,8 +10,8 @@ export const DataInfo = (props: {
     <div>
       <h1>{props.title}</h1>
       <em>
-        Source: {props.source} /
-        Last Modified: {props.lastModified.toLocaleString()}
+        Source: {props.source} / Last Modified:{' '}
+        {props.lastModified.toLocaleString()}
       </em>
       <p>{props.description}</p>
     </div>

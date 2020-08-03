@@ -15,6 +15,7 @@ ts_library(
         ],
     ),
     deps = [
+        "//core:lib",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//react",

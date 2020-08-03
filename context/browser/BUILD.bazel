@@ -1,29 +1,30 @@
-package(default_visibility=["//visibility:public"])
+package(default_visibility = ["//visibility:public"])
 
 load("@npm//@bazel/rollup:index.bzl", "rollup_bundle")
 load("@npm//@bazel/typescript:index.bzl", "ts_devserver", "ts_library")
 
 ts_library(
-    name="lib",
-    srcs=[
+    name = "lib",
+    srcs = [
         ":index.ts",
     ],
-    deps=[
+    deps = [
+        "//core:lib",
         "//frontend:lib",
     ],
 )
 
 rollup_bundle(
-    name="bundle",
-    entry_point=":index.ts",
-    deps=[
+    name = "bundle",
+    entry_point = ":index.ts",
+    deps = [
         ":lib",
     ],
 )
 
 filegroup(
-    name="assets",
-    srcs=[
+    name = "assets",
+    srcs = [
         ":bundle",
         "//frontend:assets",
     ],
@@ -31,30 +32,30 @@ filegroup(
 
 # For ts_devserver, copy index.html from frontend into this package.
 genrule(
-    name="index",
-    srcs=["//frontend:index.html"],
-    outs=["index.html"],
-    cmd="cp $< $@",
+    name = "index",
+    srcs = ["//frontend:index.html"],
+    outs = ["index.html"],
+    cmd = "cp $< $@",
 )
 
 ts_devserver(
-    name="devserver",
-    port=5432,
-    deps=[
+    name = "devserver",
+    additional_root_paths = [
+        "datafixer/node_modules/uswds/dist/img",
+        "datafixer/node_modules/uswds/dist/fonts",
+    ],
+    entry_module = "datafixer/context/browser/index",
+    port = 9000,
+    serving_path = "/bundle.js",
+    static_files = [
+        "index.html",
+        "//frontend:assets",
+    ],
+    deps = [
         ":lib",
         # TODO: Figure out how to avoid specifying these dependencies directly:
         "@npm//react:react__umd",
         "@npm//react-dom:react-dom__umd",
         "@npm//uswds:uswds__umd",
-    ],
-    entry_module="datafixer/context/browser/index",
-    serving_path="/bundle.js",
-    static_files=[
-        "index.html",
-        "//frontend:assets",
-    ],
-    additional_root_paths=[
-        "datafixer/node_modules/uswds/dist/img",
-        "datafixer/node_modules/uswds/dist/fonts",
     ],
 )
