@@ -6,10 +6,11 @@
     "build": "bazel build //...",
     "format": "yarn run prettier --write core frontend context",
     "start": "ibazel run //context/browser:devserver",
+    "storybook": "ibazel run //context/storybook:storybook",
     "test": "bazel test //..."
   },
   "devDependencies": {
-    "@babel/core": "^7.10.5",
+    "@babel/core": "^7.11.0",
     "@bazel/bazelisk": "latest",
     "@bazel/buildifier": "latest",
     "@bazel/ibazel": "latest",
@@ -17,7 +18,10 @@
     "@bazel/rollup": "^2.0.1",
     "@bazel/typescript": "^2.0.1",
     "@fullhuman/postcss-purgecss": "^2.3.0",
+    "@storybook/react": "^5.3.19",
     "autoprefixer": "^9.8.5",
+    "babel-loader": "^8.1.0",
+    "babel-preset-react-app": "^9.1.2",
     "husky": "^4.2.5",
     "jasmine": "^3.6.1",
     "jasmine-core": "^3.6.0",
