@@ -16,8 +16,12 @@
     "@bazel/ibazel": "latest",
     "@bazel/jasmine": "^2.0.1",
     "@bazel/rollup": "^2.0.1",
+    "@bazel/terser": "^2.0.2",
     "@bazel/typescript": "^2.0.1",
+    "@types/jasmine": "^3.5.11",
     "@fullhuman/postcss-purgecss": "^2.3.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
     "@storybook/react": "^5.3.19",
     "autoprefixer": "^9.8.5",
     "babel-loader": "^8.1.0",
@@ -31,6 +35,8 @@
     "postcss-csso": "^4.0.0",
     "prettier": "^2.0.5",
     "rollup": "^2.23.0",
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "terser": "4.8.0",
     "typescript": "^3.9.7"
   },
   "browserslist": [
@@ -39,10 +45,10 @@
     "> 0.2%"
   ],
   "dependencies": {
-    "@types/jasmine": "^3.5.11",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "fp-ts": "^2.7.1",
+    "fp-ts-routing": "^0.5.4",
     "io-ts": "^2.2.9",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

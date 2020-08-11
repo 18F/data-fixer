@@ -1,16 +1,24 @@
 import * as t from 'io-ts';
 
-const TabularRow = t.type({
-  values: t.array(t.any),
+const DatasetIdValidator = t.string;
+export type DatasetId = t.TypeOf<typeof DatasetIdValidator>;
+
+const DatasetValidator = t.type({
+  id: DatasetIdValidator,
+  title: t.string,
+  source: t.string,
+  description: t.string,
+  lastModified: t.string,
+  versions: t.array(DatasetIdValidator),
+  sources: t.array(DatasetIdValidator),
+  consumers: t.array(DatasetIdValidator),
+  table: t.array(t.any),
+  schema: t.type({
+    type: t.string,
+    description: t.string,
+  }),
 });
+export type Dataset = t.TypeOf<typeof DatasetValidator>;
 
-const TabularData = t.type({
-  uri: t.string,
-  columns: t.array(t.string),
-  rows: t.array(TabularRow),
-});
-
-export type TabularRow = t.TypeOf<typeof TabularRow>;
-export type TabularData = t.TypeOf<typeof TabularData>;
-
-export const getTabularData = null;
+const DatasetArrayValidator = t.array(DatasetValidator);
+export type Datasets = t.TypeOf<typeof DatasetArrayValidator>;

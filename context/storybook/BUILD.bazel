@@ -18,7 +18,7 @@ filegroup(
 filegroup(
     name = "frontend-sources",
     srcs = [
-        "//frontend:lib",
+        "//frontend",
     ],
     output_group = "es6_sources",
 )
@@ -30,10 +30,10 @@ nodejs_binary(
         "--config-dir ./context/storybook/.storybook",
     ],
     data = [
-        ":storybook-files",
-        "//core:lib",
-        "//frontend:assets",
         ":frontend-sources",
+        ":storybook-files",
+        "//core",
+        "//frontend:assets",
         "@npm//@storybook/react",
     ],
     entry_point = "@npm//:node_modules/@storybook/react/bin/index.js",

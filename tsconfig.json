@@ -6,9 +6,7 @@
     "experimentalDecorators": true,
     "jsx": "react",
     "lib": ["dom", "es6", "es2017"],
-    "paths": {
-      "soilio/*": ["*"]
-    },
+    "paths": {},
     "rootDirs": [".", "./dist/bin"],
     "strict": true,
     "strictBindCallApply": true,

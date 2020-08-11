@@ -14,6 +14,9 @@
       "dist": true,
       "bazel-out": true,
       ".vscode": true
+    },
+    "search.exclude": {
+      "./dist/**": true
     }
   }
 }

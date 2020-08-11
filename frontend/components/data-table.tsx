@@ -1,48 +1,31 @@
 import React from 'react';
 
-export const DataTable = (props: { caption: string }) => {
+export const DataTable = (props: {
+  caption: string;
+  table: Array<Array<String>>;
+}) => {
+  const [headerRow, ...rows] = props.table;
   return (
     <>
       <table className="usa-table">
         <caption>{props.caption}</caption>
         <thead>
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Col1</th>
-            <th scope="col">Col2</th>
-            <th scope="col">Col3</th>
-            <th scope="col">Col4</th>
+            {headerRow.map((col, index) => (
+              <th key={index} scope="col">
+                {col}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Val1</td>
-            <td>Val2</td>
-            <td>Val3</td>
-            <td>Val4</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Val1</td>
-            <td>Val2</td>
-            <td>Val3</td>
-            <td>Val4</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Val1</td>
-            <td>Val2</td>
-            <td>Val3</td>
-            <td>Val4</td>
-          </tr>
-          <tr>
-            <th scope="row">1</th>
-            <td>Val1</td>
-            <td>Val2</td>
-            <td>Val3</td>
-            <td>Val4</td>
-          </tr>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((col, colIndex) => (
+                <td key={colIndex}>{col}</td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

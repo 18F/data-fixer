@@ -1,7 +1,9 @@
-export type GetDataSetGateway = (dataSetId: string) => Promise<any>;
+import { Dataset, DatasetId } from './entities';
 
-export const getMockDataSetGateway = (
-  mockData: any
-): GetDataSetGateway => async (dataSetId: string) => {
-  return mockData[dataSetId];
+export type GetDatasetGateway = (datasetId: DatasetId) => Promise<Dataset>;
+
+export const getMockDatasetGateway = (
+  mockData: Record<string, Dataset>
+): GetDatasetGateway => async (datasetId: DatasetId) => {
+  return mockData[datasetId];
 };

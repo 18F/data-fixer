@@ -25,7 +25,10 @@ module.exports = {
     // Map dependencies under the context's runfiles, locally maps to:
     //     dist/bin/context/storybook/storybook.sh.runfiles
     // These must defined deps in //context/storybook:storybook
-    config.resolve.alias['datafixer/frontend'] = path.resolve(__dirname, '../../../frontend');
+    config.resolve.alias['datafixer/frontend'] = path.resolve(
+      __dirname,
+      '../../../frontend'
+    );
 
     // Return the altered config
     return config;

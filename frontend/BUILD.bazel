@@ -4,7 +4,7 @@ load("@build_bazel_rules_nodejs//:index.bzl", "npm_package_bin")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 ts_library(
-    name = "lib",
+    name = "frontend",
     srcs = glob(
         [
             "**/*.ts",
@@ -14,10 +14,12 @@ ts_library(
             "**/*.test.ts",
         ],
     ),
+    module_name = "datafixer/frontend",
     deps = [
-        "//core:lib",
+        "//core",
         "@npm//@types/react",
         "@npm//@types/react-dom",
+        "@npm//fp-ts-routing",
         "@npm//react",
         "@npm//react-dom",
         "@npm//uswds",
@@ -32,7 +34,7 @@ filegroup(
 npm_package_bin(
     name = "compiled-sass",
     outs = [
-        "compiled-sass.css",
+        "bundle.css",
     ],
     args = [
         "$(execpath :styles.scss)",
@@ -50,7 +52,7 @@ npm_package_bin(
 npm_package_bin(
     name = "css-bundle",
     outs = [
-        "bundle.css",
+        "bundle.min.css",
     ],
     args = [
         "$(execpath :compiled-sass)",
@@ -90,6 +92,15 @@ filegroup(
     name = "assets",
     srcs = [
         ":css-bundle",
+        ":index.html",
+        ":uswds-assets",
+    ],
+)
+
+filegroup(
+    name = "assets-dev",
+    srcs = [
+        ":compiled-sass",
         ":index.html",
         ":uswds-assets",
     ],

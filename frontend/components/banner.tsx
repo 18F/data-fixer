@@ -2,7 +2,7 @@ import React from 'react';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';
 
-export const Header = () => {
+export const Banner = () => {
   return (
     <section className="usa-banner" aria-label="Official government website">
       <div className="usa-accordion">

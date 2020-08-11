@@ -1,9 +1,10 @@
-import { GetDataSetGateway } from './gateways';
+import { DatasetId } from './entities';
+import { GetDatasetGateway } from './gateways';
 
-export const GetDataSetService = (getDataSet: GetDataSetGateway) => async (
-  dataSetId: string
+export const GetDatasetService = (getDataset: GetDatasetGateway) => async (
+  datasetId: DatasetId
 ) => {
-  return getDataSet(dataSetId);
+  return getDataset(datasetId);
 };
 
-export type GetDataSetService = ReturnType<typeof GetDataSetService>;
+export type GetDatasetService = ReturnType<typeof GetDatasetService>;

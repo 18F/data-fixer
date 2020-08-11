@@ -3,17 +3,15 @@ import 'datafixer/frontend/bundle.css';
 
 import React from 'react';
 
-import { Header } from 'datafixer/frontend/components/header';
+import { Banner } from 'datafixer/frontend/components/banner';
 
 export default {
-  component: Header,
-  title: 'Header',
+  component: Banner,
+  title: 'Banner',
 };
 
-export const Basic = () => (
-  <Header />
-);
+export const Basic = () => <Header />;
 
 Basic.story = {
-  name: 'Basic header',
+  name: 'Standard usa-banner component',
 };

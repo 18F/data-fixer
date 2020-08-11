@@ -3,7 +3,7 @@ import { configure, storiesOf } from '@storybook/react';
 import storybook from '@storybook/react/standalone';
 import * as React from 'react';
 
-//import Header from 'datafixer/frontend/components/header.story';
+//import Header from '@/components/header.story';
 console.log('args', process.argv);
 
 configure(() => {
