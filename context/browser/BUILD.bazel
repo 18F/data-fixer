@@ -86,6 +86,7 @@ ts_devserver(
         # use ts_devserver.
         ":fp-ts-routing",
         "@npm//uswds:uswds__umd",
+        "@npm//uuid:uuid__umd",
     ],
 )
 

@@ -4,6 +4,9 @@ export const DataTable = (props: {
   caption: string;
   table: Array<Array<String>>;
 }) => {
+  if (props.table.length === 0) {
+    return null;
+  }
   const [headerRow, ...rows] = props.table;
   return (
     <>

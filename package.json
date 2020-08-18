@@ -18,11 +18,12 @@
     "@bazel/rollup": "^2.0.1",
     "@bazel/terser": "^2.0.2",
     "@bazel/typescript": "^2.0.1",
-    "@types/jasmine": "^3.5.11",
     "@fullhuman/postcss-purgecss": "^2.3.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
     "@storybook/react": "^5.3.19",
+    "@types/jasmine": "^3.5.11",
+    "@types/uuid": "^8.3.0",
     "autoprefixer": "^9.8.5",
     "babel-loader": "^8.1.0",
     "babel-preset-react-app": "^9.1.2",
@@ -50,9 +51,11 @@
     "fp-ts": "^2.7.1",
     "fp-ts-routing": "^0.5.4",
     "io-ts": "^2.2.9",
+    "io-ts-types": "^0.5.9",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "uswds": "^2.8.0"
+    "uswds": "^2.8.0",
+    "uuid": "^8.3.0"
   },
   "husky": {
     "hooks": {

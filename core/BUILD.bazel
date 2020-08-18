@@ -13,6 +13,8 @@ ts_library(
     deps = [
         "@npm//fp-ts",
         "@npm//io-ts",
+        "@npm//uuid",
+        "@npm//@types/uuid",
     ],
 )
 

@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { render } from 'react-dom';
 import 'uswds';
 
-import { GetDatasetService } from 'datafixer/core/services';
+import {
+  CreateDatasetProjectService,
+  GetDatasetProjectService,
+} from 'datafixer/core/services';
 
 import { Banner } from './components/banner';
 import { DatasetPage } from './components/dataset';
 import { Footer } from './components/footer';
 import {
-  datasetLocation,
+  datasetProjectLocation,
   home,
   parseLocation,
   getUrl,
@@ -33,7 +36,10 @@ export const useLocation = (): [Location, (location: Location) => void] => {
   return [location, updateLocation];
 };
 
-const App = (props: { getDataset: GetDatasetService }) => {
+const App = (props: {
+  createDatasetProject: CreateDatasetProjectService;
+  getDatasetProject: GetDatasetProjectService;
+}) => {
   const [location, updateLocation] = useLocation();
 
   let pageComponent: JSX.Element;
@@ -41,17 +47,20 @@ const App = (props: { getDataset: GetDatasetService }) => {
     case 'Home':
       pageComponent = (
         <div>
-          <Link to={datasetLocation('id1v1')} updateLocation={updateLocation}>
+          <Link
+            to={datasetProjectLocation('3e66a3b2-aa96-4319-8a58-646126d9d793')}
+            updateLocation={updateLocation}
+          >
             Dataset id1
           </Link>
         </div>
       );
       break;
-    case 'Dataset':
+    case 'DatasetProject':
       pageComponent = (
         <DatasetPage
-          getDataset={props.getDataset}
-          datasetId={location.datasetId}
+          getDatasetProject={props.getDatasetProject}
+          datasetProjectId={location.datasetProjectId}
           updateLocation={updateLocation}
         />
       );
@@ -76,9 +85,15 @@ const App = (props: { getDataset: GetDatasetService }) => {
   );
 };
 
-export const RenderPage = (getDataset: GetDatasetService) => () => {
+export const RenderPage = (
+  createDatasetProject: CreateDatasetProjectService,
+  getDatasetProject: GetDatasetProjectService
+) => () => {
   return render(
-    <App getDataset={getDataset} />,
+    <App
+      createDatasetProject={createDatasetProject}
+      getDatasetProject={getDatasetProject}
+    />,
     document.getElementById('root')
   );
 };
