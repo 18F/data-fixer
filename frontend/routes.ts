@@ -1,9 +1,14 @@
 import { end, format, lit, parse, str, zero, Route } from 'fp-ts-routing';
 
-import { DatasetProjectId } from 'datafixer/core/entities';
+import { DatasetId, DatasetProjectId } from 'datafixer/core/entities';
 
 interface HomeLocation {
   readonly type: 'Home';
+}
+
+interface DatasetLocation {
+  readonly type: 'Dataset';
+  readonly datasetId: DatasetId;
 }
 
 interface DatasetProjectLocation {
@@ -15,10 +20,21 @@ interface NotFoundLocation {
   readonly type: 'NotFound';
 }
 
-export type Location = HomeLocation | DatasetProjectLocation | NotFoundLocation;
+export type Location =
+  | HomeLocation
+  | DatasetLocation
+  | DatasetProjectLocation
+  | NotFoundLocation;
 
 export const home: Location = {
   type: 'Home',
+};
+
+export const datasetLocation = (datasetId: DatasetId): Location => {
+  return {
+    type: 'Dataset',
+    datasetId,
+  };
 };
 
 export const datasetProjectLocation = (
@@ -35,12 +51,14 @@ const notFound: Location = {
 };
 
 const homeMatch = end;
-const datasetProjectMatch = lit('datasets')
+const datasetMatch = lit('datasets').then(str('datasetId')).then(end);
+const datasetProjectMatch = lit('projects')
   .then(str('datasetProjectId'))
   .then(end);
 
 const router = zero<Location>()
   .alt(homeMatch.parser.map(() => home))
+  .alt(datasetMatch.parser.map(({ datasetId }) => datasetLocation(datasetId)))
   .alt(
     datasetProjectMatch.parser.map(({ datasetProjectId }) =>
       datasetProjectLocation(datasetProjectId)
@@ -55,6 +73,8 @@ export const getUrl = (location: Location): string => {
   switch (location.type) {
     case 'Home':
       return format(homeMatch.formatter, location);
+    case 'Dataset':
+      return format(datasetMatch.formatter, location);
     case 'DatasetProject':
       return format(datasetProjectMatch.formatter, location);
     case 'NotFound':

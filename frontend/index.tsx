@@ -4,11 +4,13 @@ import 'uswds';
 
 import {
   CreateDatasetProjectService,
+  GetDatasetService,
   GetDatasetProjectService,
 } from 'datafixer/core/services';
 
 import { Banner } from './components/banner';
 import { DatasetPage } from './components/dataset';
+import { DatasetProjectPage } from './components/dataset-project';
 import { Footer } from './components/footer';
 import {
   datasetProjectLocation,
@@ -36,8 +38,13 @@ export const useLocation = (): [Location, (location: Location) => void] => {
   return [location, updateLocation];
 };
 
-const App = (props: {
+const App = ({
+  createDatasetProject,
+  getDataset,
+  getDatasetProject,
+}: {
   createDatasetProject: CreateDatasetProjectService;
+  getDataset: GetDatasetService;
   getDatasetProject: GetDatasetProjectService;
 }) => {
   const [location, updateLocation] = useLocation();
@@ -48,7 +55,7 @@ const App = (props: {
       pageComponent = (
         <div>
           <Link
-            to={datasetProjectLocation('3e66a3b2-aa96-4319-8a58-646126d9d793')}
+            to={datasetProjectLocation('a897f990-9e1b-428c-bf63-4585290a947e')}
             updateLocation={updateLocation}
           >
             Dataset id1
@@ -56,10 +63,19 @@ const App = (props: {
         </div>
       );
       break;
-    case 'DatasetProject':
+    case 'Dataset':
       pageComponent = (
         <DatasetPage
-          getDatasetProject={props.getDatasetProject}
+          getDataset={getDataset}
+          datasetId={location.datasetId}
+          updateLocation={updateLocation}
+        />
+      );
+      break;
+    case 'DatasetProject':
+      pageComponent = (
+        <DatasetProjectPage
+          getDatasetProject={getDatasetProject}
           datasetProjectId={location.datasetProjectId}
           updateLocation={updateLocation}
         />
@@ -87,11 +103,13 @@ const App = (props: {
 
 export const RenderPage = (
   createDatasetProject: CreateDatasetProjectService,
+  getDataset: GetDatasetService,
   getDatasetProject: GetDatasetProjectService
 ) => () => {
   return render(
     <App
       createDatasetProject={createDatasetProject}
+      getDataset={getDataset}
       getDatasetProject={getDatasetProject}
     />,
     document.getElementById('root')

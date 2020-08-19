@@ -1,16 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { DatasetProjectId, DatasetProject } from './entities';
-import { DatasetGateway } from './gateways';
-
-export const GetDatasetProjectService = (
-  datasetGateway: DatasetGateway
-) => async (datasetProjectId: DatasetProjectId) => {
-  return datasetGateway.getDatasetProject(datasetProjectId);
-};
-export type GetDatasetProjectService = ReturnType<
-  typeof GetDatasetProjectService
->;
+import { DatasetId, DatasetProjectId, DatasetProject } from './entities';
+import { DatasetGateway, MockDatasetGateway } from './gateways';
 
 export const CreateDatasetProjectService = (
   datasetGateway: DatasetGateway
@@ -21,3 +12,19 @@ export const CreateDatasetProjectService = (
 export type CreateDatasetProjectService = ReturnType<
   typeof CreateDatasetProjectService
 >;
+
+export const GetDatasetProjectService = (
+  datasetGateway: DatasetGateway
+) => async (datasetProjectId: DatasetProjectId) => {
+  return datasetGateway.getDatasetProject(datasetProjectId);
+};
+export type GetDatasetProjectService = ReturnType<
+  typeof GetDatasetProjectService
+>;
+
+export const GetDatasetService = (datasetGateway: DatasetGateway) => async (
+  datasetId: DatasetId
+) => {
+  return datasetGateway.getDataset(datasetId);
+};
+export type GetDatasetService = ReturnType<typeof GetDatasetService>;

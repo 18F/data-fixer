@@ -1,5 +1,7 @@
 import * as t from 'io-ts';
 
+// Define a type for entity IDs; for now, just use a string - but this should
+// be a UUID in the future.
 const IdentifierV = t.string;
 type Identifier = t.TypeOf<typeof IdentifierV>;
 export type DatasetId = Identifier;
@@ -10,11 +12,14 @@ export type TabularData = t.TypeOf<typeof TabularDataV>;
 
 const DatasetV = t.type({
   id: IdentifierV,
+  projectId: IdentifierV,
   schema: t.type({
     type: t.string,
     description: t.string,
   }),
   data: TabularDataV,
+  consumers: t.array(IdentifierV),
+  sources: t.array(IdentifierV),
 });
 export type Dataset = t.TypeOf<typeof DatasetV>;
 
@@ -43,6 +48,7 @@ export type SourceType = t.TypeOf<typeof SourceTypeV>;
 const DatasetProjectV = t.type({
   id: IdentifierV,
   source: SourceTypeV,
+  consumers: t.array(IdentifierV),
   details: t.type({
     title: t.string,
     source: t.string,

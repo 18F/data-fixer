@@ -34,7 +34,6 @@ export class MockDatasetGateway implements DatasetGateway {
   }
 
   async getDatasetProject(id: DatasetProjectId) {
-    console.log(id, this.data.datasetProjects);
     return this.data.datasetProjects[id];
   }
 
