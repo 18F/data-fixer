@@ -48,10 +48,10 @@
   "dependencies": {
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
-    "fp-ts": "^2.7.1",
+    "fp-ts": "^2.8.1",
     "fp-ts-routing": "^0.5.4",
-    "io-ts": "^2.2.9",
-    "io-ts-types": "^0.5.9",
+    "io-ts": "^2.2.10",
+    "io-ts-types": "^0.5.10",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "uswds": "^2.8.0",

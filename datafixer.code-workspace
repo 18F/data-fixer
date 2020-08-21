@@ -5,8 +5,11 @@
     }
   ],
   "settings": {
+    "editor.detectIndentation": true,
     "editor.fontFamily": "Source Code Pro for Powerline",
     "editor.fontSize": 15,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
     "files.exclude": {
       "**/node_modules": true,
       "*.git": true,

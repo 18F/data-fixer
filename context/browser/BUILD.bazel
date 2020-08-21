@@ -36,64 +36,11 @@ terser_minified(
     src = ":bundle",
 )
 
-rollup_bundle(
-    name = "fp-ts-routing",
-    srcs = ["@npm//fp-ts-routing:fp-ts-routing__files"],
-    args = ["--output.name=fp-ts-routing"],
-    # args = ["--output.name=UseSWR"],
-    config_file = ":rollup.config.js",
-    entry_point = "@npm//:node_modules/fp-ts-routing/es6/index.js",
-    format = "umd",
-    deps = [
-        "@npm//@rollup/plugin-commonjs",
-        "@npm//@rollup/plugin-node-resolve",
-        "@npm//fp-ts",
-        "@npm//io-ts",
-        "@npm//rollup-plugin-node-polyfills",
-    ],
-)
-
-# Copy index.html from frontend
-genrule(
-    name = "index",
-    srcs = ["//frontend:index.html"],
-    outs = ["index.html"],
-    cmd = "cp $< $@",
-)
-
+# Serve up the Rollup bundle via ts_devserver. This isn't as efficient as
+# letting ts_devserver inject UMD modules, but its easier to manage some of the
+# node dependencies if we develop against the Rollup bundle.
 ts_devserver(
     name = "devserver",
-    additional_root_paths = [
-        "datafixer/node_modules/uswds/dist/img",
-        "datafixer/node_modules/uswds/dist/fonts",
-    ],
-    bootstrap = [
-        # Custom bootstrap to shim up dev versions of React UMD modules.
-        "bootstrap.js",
-    ],
-    entry_module = "datafixer/context/browser/index",
-    port = 9000,
-    serving_path = "/bundle.js",
-    static_files = [
-        # ts_devserver fails building a UMD module of fp-ts-routing,
-        # so use a rollup-bundled version of it.
-        ":fp-ts-routing",
-        ":index.html",
-        "//frontend:assets",
-    ],
-    deps = [
-        ":lib",
-        # Unfortunately we need to specify these dependencies directly if we
-        # use ts_devserver.
-        ":fp-ts-routing",
-        "@npm//uswds:uswds__umd",
-        "@npm//uuid:uuid__umd",
-    ],
-)
-
-# Unlike :devserver, serve up the rollup bundle
-ts_devserver(
-    name = "devserver_rollup",
     additional_root_paths = [
         "datafixer/node_modules/uswds/dist/img",
         "datafixer/node_modules/uswds/dist/fonts",
@@ -102,6 +49,6 @@ ts_devserver(
     static_files = [
         ":bundle",
         ":index.html",
-        "//frontend:assets",
+        "//frontend:assets-dev",
     ],
 )

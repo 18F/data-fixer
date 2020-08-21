@@ -1,6 +1,6 @@
 import { end, format, lit, parse, str, zero, Route } from 'fp-ts-routing';
 
-import { DatasetId, DatasetProjectId } from 'datafixer/core/entities';
+import { DatasetId, DatasetProjectId } from 'datafixer/core/data';
 
 interface HomeLocation {
   readonly type: 'Home';

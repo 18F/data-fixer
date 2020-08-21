@@ -1,4 +1,4 @@
-import { MockData } from 'datafixer/core/gateways';
+import { MockData, MockDatasetGateway } from 'datafixer/core/data/impl/mock';
 
 const WISCONSIN_PROJECT = '4b56b64f-cc78-4834-87db-7a0cf50c28a6';
 const WISCONSIN_DATASET_V1 = 'c072c0d8-1af7-4e9c-b737-f572a28c9a5d';
@@ -9,7 +9,7 @@ const DOT_PROJECT = 'a897f990-9e1b-428c-bf63-4585290a947e';
 const DOT_DATASET_V1 = '3c7b24e1-696b-4490-9deb-5140f07993df';
 const DOT_DATASET_V2 = '7c81fc21-fefd-4dc8-9df5-e0aeb571b293';
 
-export const mockData: MockData = {
+const mockData: MockData = {
   datasets: {
     [WISCONSIN_DATASET_V1]: {
       id: WISCONSIN_DATASET_V1,
@@ -152,3 +152,5 @@ export const mockData: MockData = {
     },
   },
 };
+
+export const mockDatasetGateway = new MockDatasetGateway(mockData);

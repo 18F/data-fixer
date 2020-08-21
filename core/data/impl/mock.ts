@@ -1,18 +1,10 @@
 import {
   Dataset,
+  DatasetGateway,
   DatasetId,
   DatasetProject,
   DatasetProjectId,
-} from './entities';
-
-export interface DatasetGateway {
-  getDataset(id: DatasetId): Promise<Dataset>;
-  getDatasetProject(id: DatasetProjectId): Promise<DatasetProject>;
-  createDatasetProject(
-    id: DatasetProjectId,
-    dataset: DatasetProject
-  ): Promise<void>;
-}
+} from '..';
 
 export type MockData = {
   datasetProjects: Record<DatasetProjectId, DatasetProject>;
@@ -20,8 +12,11 @@ export type MockData = {
 };
 
 export class MockDatasetGateway implements DatasetGateway {
-  constructor(private data: MockData) {
-    this._setData(data);
+  data: MockData;
+
+  constructor(private initialMockData: MockData) {
+    this.data = initialMockData;
+    this._setData(initialMockData);
   }
 
   _setData(data: MockData) {
@@ -45,5 +40,9 @@ export class MockDatasetGateway implements DatasetGateway {
         [id]: project,
       },
     });
+  }
+
+  resetFactoryDefaults() {
+    this._setData(this.initialMockData);
   }
 }

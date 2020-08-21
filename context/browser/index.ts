@@ -1,21 +1,15 @@
-import { MockData, MockDatasetGateway } from 'datafixer/core/gateways';
-import {
-  CreateDatasetProjectService,
-  GetDatasetService,
-  GetDatasetProjectService,
-} from 'datafixer/core/services';
+import { AuthenticationService } from 'datafixer/core/auth';
+import { MockAuthenticationGateway } from 'datafixer/core/auth/impl/mock';
+import { DatasetService } from 'datafixer/core/data';
 import { RenderPage } from 'datafixer/frontend';
-import { mockData } from './mock-data';
+import { mockDatasetGateway } from './mock-data';
 
-const datasetGateway = new MockDatasetGateway(mockData);
-const createDatasetProject = CreateDatasetProjectService(datasetGateway);
-const getDatasetProject = GetDatasetProjectService(datasetGateway);
-const getDataset = GetDatasetService(datasetGateway);
-const renderPage = RenderPage(
-  createDatasetProject,
-  getDataset,
-  getDatasetProject
+const datasetService = DatasetService(mockDatasetGateway);
+const authenticationService = AuthenticationService(
+  new MockAuthenticationGateway()
 );
+
+const renderPage = RenderPage(authenticationService, datasetService);
 
 // App entrypoint - render a dummy page
 renderPage();

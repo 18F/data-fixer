@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Dataset, DatasetId } from 'datafixer/core/entities';
-import { GetDatasetService } from 'datafixer/core/services';
+import { Dataset, DatasetId, GetDatasetService } from 'datafixer/core/data';
 
 import { DataTable } from './data-table';
 import { Link } from './link';

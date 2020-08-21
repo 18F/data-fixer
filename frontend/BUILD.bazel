@@ -19,6 +19,7 @@ ts_library(
         "//core",
         "@npm//@types/react",
         "@npm//@types/react-dom",
+        "@npm//fp-ts",
         "@npm//fp-ts-routing",
         "@npm//react",
         "@npm//react-dom",
@@ -34,7 +35,7 @@ filegroup(
 npm_package_bin(
     name = "compiled-sass",
     outs = [
-        "bundle.css",
+        "styles",
     ],
     args = [
         "$(execpath :styles.scss)",
@@ -61,12 +62,31 @@ npm_package_bin(
     ],
     data = [
         ":compiled-sass",
-        ":index.html",
         ":postcss.config.js",
         ":tsx-files",
         "@npm//@fullhuman/postcss-purgecss",
         "@npm//autoprefixer",
         "@npm//postcss-csso",
+    ],
+    package = "postcss-cli",
+    package_bin = "postcss",
+)
+
+npm_package_bin(
+    name = "css-dev-bundle",
+    outs = [
+        "bundle.css",
+    ],
+    args = [
+        "$(execpath :compiled-sass)",
+        "--config $(rootpath :postcss-dev.config.js)",
+        "--output $@",
+    ],
+    data = [
+        ":compiled-sass",
+        ":postcss-dev.config.js",
+        ":tsx-files",
+        "@npm//autoprefixer",
     ],
     package = "postcss-cli",
     package_bin = "postcss",
@@ -78,6 +98,9 @@ filegroup(
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-bold-webfont.ttf",
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-bold-webfont.woff",
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-bold-webfont.woff2",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-italic-webfont.ttf",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-italic-webfont.woff",
+        "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-italic-webfont.woff2",
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.ttf",
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff",
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff2",
@@ -92,7 +115,6 @@ filegroup(
     name = "assets",
     srcs = [
         ":css-bundle",
-        ":index.html",
         ":uswds-assets",
     ],
 )
@@ -100,8 +122,7 @@ filegroup(
 filegroup(
     name = "assets-dev",
     srcs = [
-        ":compiled-sass",
-        ":index.html",
+        ":css-dev-bundle",
         ":uswds-assets",
     ],
 )

@@ -2,71 +2,73 @@ import React, { useState } from 'react';
 import { render } from 'react-dom';
 import 'uswds';
 
-import {
-  CreateDatasetProjectService,
-  GetDatasetService,
-  GetDatasetProjectService,
-} from 'datafixer/core/services';
+import { AuthenticationService } from 'datafixer/core/auth';
+import { DatasetService } from 'datafixer/core/data';
 
-import { Banner } from './components/banner';
 import { DatasetPage } from './components/dataset';
 import { DatasetProjectPage } from './components/dataset-project';
-import { Footer } from './components/footer';
-import {
-  datasetProjectLocation,
-  home,
-  parseLocation,
-  getUrl,
-  Location,
-} from './routes';
+import { Layout } from './components/layout';
+import { datasetProjectLocation } from './routes';
 import { Link } from './components/link';
-
-export const useLocation = (): [Location, (location: Location) => void] => {
-  const [location, setRoute] = useState<Location>(
-    parseLocation(window.location.pathname)
-  );
-
-  const updateLocation = (newLocation: Location) => {
-    setRoute(newLocation);
-    window.history.pushState(null, '', getUrl(newLocation));
-  };
-
-  window.addEventListener('popstate', () => {
-    setRoute(parseLocation(window.location.pathname));
-  });
-
-  return [location, updateLocation];
-};
+import { useLocation } from './hooks/location';
+import { useSession } from './hooks/session';
 
 const App = ({
-  createDatasetProject,
-  getDataset,
-  getDatasetProject,
+  authenticationService,
+  datasetService,
 }: {
-  createDatasetProject: CreateDatasetProjectService;
-  getDataset: GetDatasetService;
-  getDatasetProject: GetDatasetProjectService;
+  authenticationService: AuthenticationService;
+  datasetService: DatasetService;
 }) => {
   const [location, updateLocation] = useLocation();
+  const [sessionToken, logIn, logOut] = useSession(authenticationService);
 
   let pageComponent: JSX.Element;
   switch (location.type) {
     case 'Home':
       pageComponent = (
-        <div>
-          <Link
-            to={datasetProjectLocation('a897f990-9e1b-428c-bf63-4585290a947e')}
-            updateLocation={updateLocation}
-          >
-            Dataset id1
-          </Link>
-        </div>
+        <section className="grid-container usa-section usa-section--condensed border-top border-base-lightest">
+          <p>
+            Welcome to the <a href="https://10x.gsa.gov/">10x</a> Data Fixer
+            prototype!
+          </p>
+          <p>
+            You may interact with the application, and come back here to reset
+            the application state:
+          </p>
+          <ul>
+            <li>
+              <button
+                className="usa-button usa-button--unstyled"
+                onClick={datasetService.resetFactoryDefaults}
+              >
+                Reset To Factory Defaults
+              </button>
+            </li>
+          </ul>
+          <p>
+            To explore, here are initial dataset projects we have configured for
+            sample purposes:
+          </p>
+          <ul>
+            <li>
+              <Link
+                to={datasetProjectLocation(
+                  'a897f990-9e1b-428c-bf63-4585290a947e'
+                )}
+                updateLocation={updateLocation}
+              >
+                DOT Aggregate Dataset
+              </Link>
+            </li>
+          </ul>
+        </section>
       );
       break;
     case 'Dataset':
       pageComponent = (
         <DatasetPage
-          getDataset={getDataset}
+          getDataset={datasetService.getDataset}
           datasetId={location.datasetId}
           updateLocation={updateLocation}
         />
@@ -75,7 +77,7 @@ const App = ({
     case 'DatasetProject':
       pageComponent = (
         <DatasetProjectPage
-          getDatasetProject={getDatasetProject}
+          getDatasetProject={datasetService.getDatasetProject}
           datasetProjectId={location.datasetProjectId}
           updateLocation={updateLocation}
         />
@@ -86,31 +88,25 @@ const App = ({
   }
 
   return (
-    <>
-      <Banner />
-      <div className="grid-container">
-        <nav>
-          <Link to={home} updateLocation={updateLocation}>
-            Home
-          </Link>
-        </nav>
-        {pageComponent}
-      </div>
-      <Footer />
-    </>
+    <Layout
+      logOut={logOut}
+      sessionToken={sessionToken}
+      logIn={logIn}
+      updateLocation={updateLocation}
+    >
+      {pageComponent}
+    </Layout>
   );
 };
 
 export const RenderPage = (
-  createDatasetProject: CreateDatasetProjectService,
-  getDataset: GetDatasetService,
-  getDatasetProject: GetDatasetProjectService
+  authenticationService: AuthenticationService,
+  datasetService: DatasetService
 ) => () => {
   return render(
     <App
-      createDatasetProject={createDatasetProject}
-      getDataset={getDataset}
-      getDatasetProject={getDatasetProject}
+      authenticationService={authenticationService}
+      datasetService={datasetService}
     />,
     document.getElementById('root')
   );

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { DatasetProject, DatasetProjectId } from 'datafixer/core/entities';
+import { DatasetProject, DatasetProjectId } from 'datafixer/core/data';
 import {
   GetDatasetService,
   GetDatasetProjectService,
-} from 'datafixer/core/services';
+} from 'datafixer/core/data';
 
 import { DataTable } from './data-table';
 import { Link } from './link';
