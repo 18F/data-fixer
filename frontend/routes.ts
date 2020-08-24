@@ -1,48 +1,82 @@
 import { end, format, lit, parse, str, zero, Route } from 'fp-ts-routing';
 
-import { DatasetId, DatasetProjectId } from 'datafixer/core/data';
+import {
+  DatasetId,
+  ProjectAlias,
+  OrganizationAlias,
+} from 'datafixer/core/data';
 
-interface HomeLocation {
+export interface HomeLocation {
   readonly type: 'Home';
 }
 
-interface DatasetLocation {
+export interface OrganizationLocation {
+  readonly type: 'Organization';
+  readonly organizationAlias: OrganizationAlias;
+}
+
+export interface DatasetLocation {
   readonly type: 'Dataset';
+  readonly organizationAlias: OrganizationAlias;
+  readonly alias: ProjectAlias;
   readonly datasetId: DatasetId;
 }
 
-interface DatasetProjectLocation {
-  readonly type: 'DatasetProject';
-  readonly datasetProjectId: DatasetProjectId;
+export interface ProjectLocation {
+  readonly type: 'Project';
+  readonly organizationAlias: OrganizationAlias;
+  readonly alias: ProjectAlias;
 }
 
-interface NotFoundLocation {
+export interface NotFoundLocation {
   readonly type: 'NotFound';
 }
 
 export type Location =
   | HomeLocation
   | DatasetLocation
-  | DatasetProjectLocation
+  | OrganizationLocation
+  | ProjectLocation
   | NotFoundLocation;
+
+export interface UpdateLocation {
+  (location: Location): void;
+}
 
 export const home: Location = {
   type: 'Home',
 };
 
-export const datasetLocation = (datasetId: DatasetId): Location => {
+export const organizationLocation = (
+  organizationAlias: OrganizationAlias
+): Location => {
+  return {
+    type: 'Organization',
+    organizationAlias,
+  };
+};
+
+export const datasetLocation = (
+  organizationAlias: OrganizationAlias,
+  alias: ProjectAlias,
+  datasetId: DatasetId
+): Location => {
   return {
     type: 'Dataset',
+    organizationAlias,
+    alias,
     datasetId,
   };
 };
 
-export const datasetProjectLocation = (
-  datasetProjectId: DatasetProjectId
+export const projectLocation = (
+  organizationAlias: OrganizationAlias,
+  alias: ProjectAlias
 ): Location => {
   return {
-    type: 'DatasetProject',
-    datasetProjectId,
+    type: 'Project',
+    organizationAlias,
+    alias,
   };
 };
 
@@ -51,17 +85,27 @@ const notFound: Location = {
 };
 
 const homeMatch = end;
-const datasetMatch = lit('datasets').then(str('datasetId')).then(end);
-const datasetProjectMatch = lit('projects')
-  .then(str('datasetProjectId'))
-  .then(end);
+const organization = str('organizationAlias');
+const organizationMatch = organization.then(end);
+const project = organization.then(str('alias'));
+const projectMatch = project.then(end);
+const datasetMatch = project.then(str('datasetId')).then(end);
 
 const router = zero<Location>()
   .alt(homeMatch.parser.map(() => home))
-  .alt(datasetMatch.parser.map(({ datasetId }) => datasetLocation(datasetId)))
   .alt(
-    datasetProjectMatch.parser.map(({ datasetProjectId }) =>
-      datasetProjectLocation(datasetProjectId)
+    organizationMatch.parser.map(({ organizationAlias }) =>
+      organizationLocation(organizationAlias)
+    )
+  )
+  .alt(
+    datasetMatch.parser.map(({ organizationAlias, alias, datasetId }) =>
+      datasetLocation(organizationAlias, alias, datasetId)
+    )
+  )
+  .alt(
+    projectMatch.parser.map(({ organizationAlias, alias }) =>
+      projectLocation(organizationAlias, alias)
     )
   );
 
@@ -75,8 +119,10 @@ export const getUrl = (location: Location): string => {
       return format(homeMatch.formatter, location);
     case 'Dataset':
       return format(datasetMatch.formatter, location);
-    case 'DatasetProject':
-      return format(datasetProjectMatch.formatter, location);
+    case 'Project':
+      return format(projectMatch.formatter, location);
+    case 'Organization':
+      return format(organizationMatch.formatter, location);
     case 'NotFound':
       return '/';
   }

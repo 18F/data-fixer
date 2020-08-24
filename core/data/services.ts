@@ -1,6 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { DatasetId, DatasetProjectId, DatasetProject } from './entities';
+import {
+  DatasetId,
+  DatasetProject,
+  OrganizationAlias,
+  ProjectAlias,
+} from './entities';
 import { DatasetGateway } from './gateways';
 
 export const CreateDatasetProjectService = (
@@ -15,8 +20,8 @@ export type CreateDatasetProjectService = ReturnType<
 
 export const GetDatasetProjectService = (
   datasetGateway: DatasetGateway
-) => async (datasetProjectId: DatasetProjectId) => {
-  return datasetGateway.getDatasetProject(datasetProjectId);
+) => async (organizationAlias: OrganizationAlias, alias: ProjectAlias) => {
+  return datasetGateway.getDatasetProjectByName(organizationAlias, alias);
 };
 export type GetDatasetProjectService = ReturnType<
   typeof GetDatasetProjectService
@@ -25,9 +30,18 @@ export type GetDatasetProjectService = ReturnType<
 export const GetDatasetService = (datasetGateway: DatasetGateway) => async (
   datasetId: DatasetId
 ) => {
-  return datasetGateway.getDataset(datasetId);
+  return await datasetGateway.getDataset(datasetId);
 };
 export type GetDatasetService = ReturnType<typeof GetDatasetService>;
+
+export const GetFeaturedProjectsService = (
+  datasetGateway: DatasetGateway
+) => async () => {
+  return await datasetGateway.getFeaturedProjects();
+};
+export type GetFeaturedProjectsService = ReturnType<
+  typeof GetFeaturedProjectsService
+>;
 
 export const ResetFactoryDefaultsService = (
   datasetGateway: DatasetGateway
@@ -43,6 +57,7 @@ export const DatasetService = (datasetGateway: DatasetGateway) => {
     createDatasetProject: CreateDatasetProjectService(datasetGateway),
     getDataset: GetDatasetService(datasetGateway),
     getDatasetProject: GetDatasetProjectService(datasetGateway),
+    getFeaturedProjects: GetFeaturedProjectsService(datasetGateway),
     resetFactoryDefaults: ResetFactoryDefaultsService(datasetGateway),
   };
 };

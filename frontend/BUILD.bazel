@@ -105,6 +105,7 @@ filegroup(
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff",
         "@npm//:node_modules/uswds/dist/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff2",
         "@npm//:node_modules/uswds/dist/img/chevron.svg",
+        "@npm//:node_modules/uswds/dist/img/close.svg",
         "@npm//:node_modules/uswds/dist/img/icon-dot-gov.svg",
         "@npm//:node_modules/uswds/dist/img/icon-https.svg",
         "@npm//:node_modules/uswds/dist/img/us_flag_small.png",

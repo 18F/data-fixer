@@ -2,15 +2,19 @@ import {
   Dataset,
   DatasetId,
   DatasetProject,
-  DatasetProjectId,
+  OrganizationAlias,
+  ProjectId,
+  ProjectAlias,
 } from './entities';
 
 export interface DatasetGateway {
   getDataset(id: DatasetId): Promise<Dataset>;
-  getDatasetProject(id: DatasetProjectId): Promise<DatasetProject>;
-  createDatasetProject(
-    id: DatasetProjectId,
-    dataset: DatasetProject
-  ): Promise<void>;
+  getDatasetProjectById(id: ProjectId): Promise<DatasetProject>;
+  getDatasetProjectByName(
+    organizationAlias: OrganizationAlias,
+    alias: ProjectAlias
+  ): Promise<DatasetProject>;
+  getFeaturedProjects(): Promise<DatasetProject[]>;
+  createDatasetProject(id: ProjectId, dataset: DatasetProject): Promise<void>;
   resetFactoryDefaults(): void;
 }

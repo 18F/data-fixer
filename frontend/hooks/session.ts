@@ -11,6 +11,12 @@ import {
 
 const SESSION_TOKEN_KEY = 'sessionToken';
 
+export type SessionHook = {
+  sessionToken: SessionToken | null;
+  logIn: (authenticationDetails: any) => void;
+  logOut: () => void;
+};
+
 const persistSessionToken = (sessionToken: SessionToken | null) => {
   if (sessionToken === null) {
     window.localStorage.removeItem(SESSION_TOKEN_KEY);
@@ -21,7 +27,7 @@ const persistSessionToken = (sessionToken: SessionToken | null) => {
 
 export const useSession = (
   authenticationService: AuthenticationService
-): [SessionToken | null, (authenticationDetails: any) => void, () => void] => {
+): SessionHook => {
   const [sessionToken, logInToken] = useState<SessionToken | null>(null);
 
   // Initialize state with value from local storage, if set.
@@ -75,5 +81,5 @@ export const useSession = (
       });
   };
 
-  return [sessionToken, logIn, logOut];
+  return { sessionToken, logIn, logOut };
 };

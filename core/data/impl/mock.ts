@@ -3,12 +3,17 @@ import {
   DatasetGateway,
   DatasetId,
   DatasetProject,
-  DatasetProjectId,
+  Organization,
+  OrganizationId,
+  OrganizationAlias,
+  ProjectId,
+  ProjectAlias,
 } from '..';
 
 export type MockData = {
-  datasetProjects: Record<DatasetProjectId, DatasetProject>;
+  datasetProjects: Record<ProjectId, DatasetProject>;
   datasets: Record<DatasetId, Dataset>;
+  organizations: Record<OrganizationId, Organization>;
 };
 
 export class MockDatasetGateway implements DatasetGateway {
@@ -28,11 +33,30 @@ export class MockDatasetGateway implements DatasetGateway {
     return this.data.datasets[id];
   }
 
-  async getDatasetProject(id: DatasetProjectId) {
+  async getDatasetProjectById(id: ProjectId) {
     return this.data.datasetProjects[id];
   }
 
-  async createDatasetProject(id: DatasetProjectId, project: DatasetProject) {
+  async getDatasetProjectByName(
+    organizationAlias: OrganizationAlias,
+    projectAlias: ProjectAlias
+  ) {
+    const organization = Object.values(this.data.organizations).filter(
+      (org: Organization) => org.alias === organizationAlias
+    )[0];
+    const project = Object.values(this.data.datasetProjects).filter(
+      (project: DatasetProject) =>
+        project.organization.alias === organizationAlias &&
+        project.alias === projectAlias
+    )[0];
+    return project;
+  }
+
+  async getFeaturedProjects() {
+    return Object.values(this.data.datasetProjects);
+  }
+
+  async createDatasetProject(id: ProjectId, project: DatasetProject) {
     this._setData({
       ...this.data,
       datasetProjects: {

@@ -1,64 +1,26 @@
-import React, { useState } from 'react';
-
-import {
-  AuthenticationDetails,
-  AuthenticationService,
-  SessionToken,
-} from 'datafixer/core/auth';
+import React from 'react';
 
 import { Banner } from './banner';
 import { Footer } from './footer';
-import { Link } from './link';
-import { home, Location } from '../routes';
+import { Header } from './header';
+import { SessionHook } from '../hooks/session';
+import { Location } from '../routes';
 
 export const Layout = ({
   children,
-  logOut,
-  sessionToken,
-  logIn,
+  session,
   updateLocation,
 }: {
   children: React.ReactNode;
-  logOut: () => void;
-  sessionToken: SessionToken | null;
-  logIn: (authenticationDetails: AuthenticationDetails) => void;
+  session: SessionHook;
   updateLocation: (location: Location) => void;
 }) => {
   return (
     <>
       <Banner />
-      <div className="grid-container">
-        <nav>
-          <ul>
-            <li>
-              <Link to={home} updateLocation={updateLocation}>
-                Home
-              </Link>
-            </li>
-            <li>
-              {sessionToken === null ? (
-                <button
-                  className="usa-button usa-button--unstyled"
-                  onClick={() => {
-                    logIn({ authDetails: 'here' });
-                  }}
-                >
-                  Log in
-                </button>
-              ) : (
-                <button
-                  className="usa-button usa-button--unstyled"
-                  onClick={logOut}
-                >
-                  Log out
-                </button>
-              )}
-            </li>
-          </ul>
-        </nav>
-        {children}
-      </div>
-      <Footer />
+      <Header session={session} />
+      <div className="grid-container">{children}</div>
+      <Footer updateLocation={updateLocation} />
     </>
   );
 };

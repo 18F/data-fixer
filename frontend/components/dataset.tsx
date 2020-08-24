@@ -1,85 +1,53 @@
 import React, { useState } from 'react';
 
-import { Dataset, DatasetId, GetDatasetService } from 'datafixer/core/data';
+import {
+  DatasetProject,
+  GetDatasetProjectService,
+  GetDatasetService,
+} from 'datafixer/core/data';
 
 import { DataTable } from './data-table';
-import { Link } from './link';
-import { datasetLocation, datasetProjectLocation, Location } from '../routes';
+import { DatasetLayout } from './dataset-layout';
+import { useDataset } from '../hooks/dataset';
+import { useDatasetProject } from '../hooks/dataset-project';
+import { DatasetLocation, Location } from '../routes';
 
 export const DatasetPage = ({
-  datasetId,
   getDataset,
+  getDatasetProject,
+  location,
   updateLocation,
 }: {
-  datasetId: DatasetId;
   getDataset: GetDatasetService;
+  getDatasetProject: GetDatasetProjectService;
+  location: DatasetLocation;
   updateLocation: (location: Location) => void;
 }) => {
-  const [dataset, setDataset] = useState<Dataset | undefined>();
-  getDataset(datasetId).then(dataset => {
-    return setDataset(dataset);
-  });
+  const dataset = useDataset(location.datasetId, getDataset);
+  const datasetProject = useDatasetProject(
+    location.organizationAlias,
+    location.alias,
+    getDatasetProject
+  );
 
-  if (!dataset) {
+  if (!dataset || !datasetProject) {
     return <div>Loading...</div>;
   }
 
   return (
-    <>
-      <Link
-        to={datasetProjectLocation(dataset.projectId)}
-        updateLocation={updateLocation}
-      >
-        &lt; Back to project {dataset.projectId}
-      </Link>
-      <div className="grid-row">
-        <div className="grid-col-12 mobile-lg:grid-col-4">
-          <figure>
-            <figcaption>Data sources</figcaption>
-            <ul className="usa-list">
-              {dataset.sources.map(datasetId => (
-                <li key={datasetId}>
-                  <Link
-                    to={datasetLocation(datasetId)}
-                    updateLocation={updateLocation}
-                  >
-                    {datasetId}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </figure>
-        </div>
-        <div className="grid-col-12 mobile-lg:grid-col-4">
-          <figure>
-            <figcaption>Data consumers</figcaption>
-            <ul className="usa-list">
-              {dataset.consumers.map(datasetId => (
-                <li key={datasetId}>
-                  <Link
-                    to={datasetLocation(datasetId)}
-                    updateLocation={updateLocation}
-                  >
-                    {datasetId}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </figure>
-        </div>
-        <div className="grid-col-12 mobile-lg:grid-col-4">
-          <div>
-            <dl>
-              <dt>Schema type</dt>
-              <dd>{dataset.schema.type}</dd>
-            </dl>
-            <code>{dataset.schema.description}</code>
-          </div>
-        </div>
-      </div>
+    <DatasetLayout
+      datasetProject={datasetProject}
+      currentId={location.datasetId}
+      location={location}
+      updateLocation={updateLocation}
+    >
+      <figure>
+        <figcaption>{dataset.schema.type}</figcaption>
+        <code>{dataset.schema.description}</code>
+      </figure>
       <div className="grid-row">
         <DataTable caption="Browse this data" table={dataset.data} />
       </div>
-    </>
+    </DatasetLayout>
   );
 };
