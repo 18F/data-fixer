@@ -1,14 +1,25 @@
 import { Either } from 'fp-ts/Either';
+import * as t from 'io-ts';
 
 // Placeholder types
 export type SessionToken = string;
 export type AuthenticationDetails = any;
 
+const UserDetailsV = t.type({
+  displayName: t.string,
+});
+export type UserDetails = t.TypeOf<typeof UserDetailsV>;
+
+export type AuthenticationResult = {
+  sessionToken: SessionToken;
+  userDetails: UserDetails;
+};
+
 export interface AuthenticationGateway {
   isSessionActive(sessionToken: SessionToken): Promise<Either<Error, boolean>>;
   authenticate(
     authenticationDetails: AuthenticationDetails
-  ): Promise<Either<Error, SessionToken>>;
+  ): Promise<Either<Error, AuthenticationResult>>;
   closeSession(sessionToken: SessionToken): Promise<Either<Error, void>>;
 }
 

@@ -6,35 +6,49 @@ import { useState } from 'react';
 import {
   AuthenticationDetails,
   AuthenticationService,
-  SessionToken,
+  AuthenticationResult,
 } from 'datafixer/core/auth';
 
 const SESSION_TOKEN_KEY = 'sessionToken';
 
+// This mimicks the shape of AuthenticationResult, with a null sessionToken.
+const anonymousSession = {
+  sessionToken: null,
+  userDetails: {
+    displayName: 'Anonymous User',
+  },
+};
+
+export type SessionData = AuthenticationResult | typeof anonymousSession;
+
 export type SessionHook = {
-  sessionToken: SessionToken | null;
+  data: SessionData;
   logIn: (authenticationDetails: any) => void;
   logOut: () => void;
 };
 
-const persistSessionToken = (sessionToken: SessionToken | null) => {
-  if (sessionToken === null) {
-    window.localStorage.removeItem(SESSION_TOKEN_KEY);
-  } else {
-    window.localStorage.setItem(SESSION_TOKEN_KEY, sessionToken);
+const persistSessionData = (sessionData: SessionData) => {
+  window.localStorage.setItem(SESSION_TOKEN_KEY, JSON.stringify(sessionData));
+};
+
+const getLocalStorageSessionData = () => {
+  const keyValue = window.localStorage.getItem(SESSION_TOKEN_KEY);
+  if (keyValue === null) {
+    return anonymousSession;
   }
+  const localAuthResult = JSON.parse(keyValue);
+  if (localAuthResult === null) {
+    return anonymousSession;
+  }
+  return localAuthResult as SessionData;
 };
 
 export const useSession = (
   authenticationService: AuthenticationService
 ): SessionHook => {
-  const [sessionToken, logInToken] = useState<SessionToken | null>(null);
-
-  // Initialize state with value from local storage, if set.
-  const localSessionToken = window.localStorage.getItem(SESSION_TOKEN_KEY);
-  if (localSessionToken !== sessionToken) {
-    logInToken(localSessionToken);
-  }
+  const [sessionData, setSessionData] = useState<SessionData>(
+    getLocalStorageSessionData()
+  );
 
   const logIn = (authenticationDetails: AuthenticationDetails) => {
     authenticationService
@@ -45,41 +59,41 @@ export const useSession = (
           fold(
             (error: Error) => {
               console.error('Error logging in', error);
-              return null;
+              return anonymousSession;
             },
-            (sessionToken: SessionToken) => sessionToken
+            (sessionData: SessionData) => sessionData
           )
         )
       )
-      .then(token => {
-        persistSessionToken(token);
-        logInToken(token);
+      .then(sessionData => {
+        persistSessionData(sessionData);
+        setSessionData(sessionData);
       });
   };
 
   const logOut = () => {
-    if (sessionToken === null) {
+    if (sessionData.sessionToken === null) {
       return;
     }
     authenticationService
-      .logOut(sessionToken)
+      .logOut(sessionData.sessionToken)
       .then(either =>
         pipe(
           either,
           fold(
             (error: Error) => {
               console.error('Error closing session', error);
-              return sessionToken;
+              return sessionData;
             },
             () => null
           )
         )
       )
-      .then(token => {
-        persistSessionToken(token);
-        logInToken(token);
+      .then(sessionData => {
+        persistSessionData(sessionData || anonymousSession);
+        setSessionData(sessionData || anonymousSession);
       });
   };
 
-  return { sessionToken, logIn, logOut };
+  return { data: sessionData, logIn, logOut };
 };

@@ -28,8 +28,8 @@ export const Header = ({ session }: { session: SessionHook }) => {
           </button>
           <div className="usa-nav__secondary">
             <ul className="usa-nav__secondary-links">
-              <li className="usa-nav__secondary-item">
-                {session.sessionToken === null ? (
+              {session.data.sessionToken === null ? (
+                <li className="usa-nav__secondary-item">
                   <button
                     className="usa-button usa-button--unstyled"
                     onClick={() => {
@@ -38,15 +38,22 @@ export const Header = ({ session }: { session: SessionHook }) => {
                   >
                     Log in
                   </button>
-                ) : (
-                  <button
-                    className="usa-button usa-button--unstyled"
-                    onClick={session.logOut}
-                  >
-                    Log out
-                  </button>
-                )}
-              </li>
+                </li>
+              ) : (
+                <>
+                  <li className="usa-nav__secondary-item">
+                    {`Welcome, ${session.data.userDetails.displayName}!`}
+                  </li>
+                  <li className="usa-nav__secondary-item">
+                    <button
+                      className="usa-button usa-button--unstyled"
+                      onClick={session.logOut}
+                    >
+                      Log out
+                    </button>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

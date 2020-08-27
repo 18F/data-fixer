@@ -1,4 +1,9 @@
-import { AuthenticationDetails, AuthenticationGateway, SessionToken } from '..';
+import {
+  AuthenticationDetails,
+  AuthenticationGateway,
+  AuthenticationResult,
+  SessionToken,
+} from '..';
 import { Either } from 'fp-ts/Either';
 import { tryCatch } from 'fp-ts/TaskEither';
 
@@ -17,11 +22,16 @@ export class MockAuthenticationGateway implements AuthenticationGateway {
 
   authenticate(
     authenticationDetails: AuthenticationDetails
-  ): Promise<Either<Error, SessionToken>> {
-    return tryCatch<Error, SessionToken>(
+  ): Promise<Either<Error, AuthenticationResult>> {
+    return tryCatch<Error, AuthenticationResult>(
       () => {
         window.localStorage.setItem(`mockSession-${MOCK_TOKEN}`, 'true');
-        return Promise.resolve(MOCK_TOKEN);
+        return Promise.resolve({
+          sessionToken: MOCK_TOKEN,
+          userDetails: {
+            displayName: 'Mock User',
+          },
+        });
       },
       reason => new Error(String(reason))
     )();
