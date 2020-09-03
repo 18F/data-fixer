@@ -18,7 +18,7 @@ export const Layout = ({
   return (
     <>
       <Banner />
-      <Header session={session} />
+      <Header session={session} updateLocation={updateLocation} />
       <div className="grid-container">{children}</div>
       <Footer updateLocation={updateLocation} />
     </>

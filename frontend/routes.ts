@@ -10,6 +10,10 @@ export interface HomeLocation {
   readonly type: 'Home';
 }
 
+export interface NewProjectLocation {
+  readonly type: 'NewProject';
+}
+
 export interface OrganizationLocation {
   readonly type: 'Organization';
   readonly organizationAlias: OrganizationAlias;
@@ -34,6 +38,7 @@ export interface NotFoundLocation {
 
 export type Location =
   | HomeLocation
+  | NewProjectLocation
   | DatasetLocation
   | OrganizationLocation
   | ProjectLocation
@@ -45,6 +50,10 @@ export interface UpdateLocation {
 
 export const home: Location = {
   type: 'Home',
+};
+
+export const newProject: Location = {
+  type: 'NewProject',
 };
 
 export const organizationLocation = (
@@ -85,6 +94,7 @@ const notFound: Location = {
 };
 
 const homeMatch = end;
+const newProjectMatch = lit('new').then(end);
 const organization = str('organizationAlias');
 const organizationMatch = organization.then(end);
 const project = organization.then(str('alias'));
@@ -93,6 +103,7 @@ const datasetMatch = project.then(str('datasetId')).then(end);
 
 const router = zero<Location>()
   .alt(homeMatch.parser.map(() => home))
+  .alt(newProjectMatch.parser.map(() => newProject))
   .alt(
     organizationMatch.parser.map(({ organizationAlias }) =>
       organizationLocation(organizationAlias)
@@ -117,6 +128,8 @@ export const getUrl = (location: Location): string => {
   switch (location.type) {
     case 'Home':
       return format(homeMatch.formatter, location);
+    case 'NewProject':
+      return format(newProjectMatch.formatter, location);
     case 'Dataset':
       return format(datasetMatch.formatter, location);
     case 'Project':
@@ -127,3 +140,8 @@ export const getUrl = (location: Location): string => {
       return '/';
   }
 };
+
+export interface Router {
+  currentLocation: Location;
+  updateLocation: (location: Location) => void;
+}

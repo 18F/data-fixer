@@ -1,18 +1,36 @@
+import { Option } from 'fp-ts/Option';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
   DatasetId,
   DatasetProject,
+  DatasetProjectDetails,
+  Organization,
   OrganizationAlias,
+  OrganizationReference,
   ProjectAlias,
 } from './entities';
 import { DatasetGateway } from './gateways';
 
 export const CreateDatasetProjectService = (
   datasetGateway: DatasetGateway
-) => async (datasetProject: DatasetProject) => {
-  const id = uuidv4();
-  return datasetGateway.createDatasetProject(id, datasetProject);
+) => async (
+  organizationReference: OrganizationReference,
+  alias: ProjectAlias,
+  datasetProjectDetails: DatasetProjectDetails
+) => {
+  const datasetProject: DatasetProject = {
+    id: uuidv4(),
+    organization: organizationReference,
+    alias: alias,
+    source: {
+      type: 'upload',
+    },
+    consumers: [],
+    details: datasetProjectDetails,
+    datasetVersions: [],
+  };
+  return datasetGateway.createDatasetProject(datasetProject);
 };
 export type CreateDatasetProjectService = ReturnType<
   typeof CreateDatasetProjectService
@@ -43,6 +61,24 @@ export type GetFeaturedProjectsService = ReturnType<
   typeof GetFeaturedProjectsService
 >;
 
+export const GetOrganizationService = (
+  datasetGateway: DatasetGateway
+) => async (
+  organizationAlias: OrganizationAlias
+): Promise<Option<Organization>> => {
+  return await datasetGateway.getOrganizationByAlias(organizationAlias);
+};
+export type GetOrganizationService = ReturnType<typeof GetOrganizationService>;
+
+export const GetOrganizationsService = (
+  datasetGateway: DatasetGateway
+) => async (): Promise<Array<Organization>> => {
+  return await datasetGateway.getOrganizations();
+};
+export type GetOrganizationsService = ReturnType<
+  typeof GetOrganizationsService
+>;
+
 export const ResetFactoryDefaultsService = (
   datasetGateway: DatasetGateway
 ) => async () => {
@@ -58,6 +94,8 @@ export const DatasetService = (datasetGateway: DatasetGateway) => {
     getDataset: GetDatasetService(datasetGateway),
     getDatasetProject: GetDatasetProjectService(datasetGateway),
     getFeaturedProjects: GetFeaturedProjectsService(datasetGateway),
+    getOrganization: GetOrganizationService(datasetGateway),
+    getOrganizations: GetOrganizationsService(datasetGateway),
     resetFactoryDefaults: ResetFactoryDefaultsService(datasetGateway),
   };
 };

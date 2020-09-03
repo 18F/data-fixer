@@ -1,3 +1,5 @@
+import * as O from 'fp-ts/Option';
+
 import {
   Dataset,
   DatasetGateway,
@@ -20,8 +22,16 @@ export class MockDatasetGateway implements DatasetGateway {
   data: MockData;
 
   constructor(private initialMockData: MockData) {
-    this.data = initialMockData;
-    this._setData(initialMockData);
+    this.data = this._getData() || initialMockData;
+    this._setData(this.data);
+  }
+
+  _getData() {
+    const data = window.localStorage.getItem('mockData');
+    if (!data) {
+      return null;
+    }
+    return JSON.parse(data);
   }
 
   _setData(data: MockData) {
@@ -41,14 +51,12 @@ export class MockDatasetGateway implements DatasetGateway {
     organizationAlias: OrganizationAlias,
     projectAlias: ProjectAlias
   ) {
-    const organization = Object.values(this.data.organizations).filter(
-      (org: Organization) => org.alias === organizationAlias
-    )[0];
     const project = Object.values(this.data.datasetProjects).filter(
       (project: DatasetProject) =>
         project.organization.alias === organizationAlias &&
         project.alias === projectAlias
     )[0];
+    console.log('returning', project);
     return project;
   }
 
@@ -56,14 +64,29 @@ export class MockDatasetGateway implements DatasetGateway {
     return Object.values(this.data.datasetProjects);
   }
 
-  async createDatasetProject(id: ProjectId, project: DatasetProject) {
+  getOrganizationByAlias(
+    alias: OrganizationAlias
+  ): Promise<O.Option<Organization>> {
+    return Promise.resolve(
+      O.fromNullable(
+        Object.values(this.data.organizations).find(org => org.alias === alias)
+      )
+    );
+  }
+
+  async getOrganizations(): Promise<Array<Organization>> {
+    return Object.values(this.data.organizations);
+  }
+
+  async createDatasetProject(project: DatasetProject) {
     this._setData({
       ...this.data,
       datasetProjects: {
         ...this.data.datasetProjects,
-        [id]: project,
+        [project.id]: project,
       },
     });
+    return project;
   }
 
   resetFactoryDefaults() {

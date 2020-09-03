@@ -5,12 +5,14 @@ import 'uswds';
 import { AuthenticationService } from 'datafixer/core/auth';
 import { DatasetService } from 'datafixer/core/data';
 
-import { DatasetPage } from './components/dataset';
-import { DatasetProjectPage } from './components/dataset-project';
 import { Home } from './components/home';
 import { Layout } from './components/layout';
-import { useLocation } from './hooks/location';
 import { useSession } from './hooks/session';
+import { DatasetPage } from './pages/dataset';
+import { DatasetProjectPage } from './pages/dataset-project';
+import { NewDatasetProjectPage } from './pages/dataset-project-new';
+import { OrganizationPage } from './pages/organization';
+import { useLocation } from './hooks/location';
 
 const App = ({
   authenticationService,
@@ -19,30 +21,45 @@ const App = ({
   authenticationService: AuthenticationService;
   datasetService: DatasetService;
 }) => {
-  const [location, updateLocation] = useLocation();
+  const router = useLocation();
   const session = useSession(authenticationService);
 
   let pageComponent: JSX.Element;
-  switch (location.type) {
+  switch (router.currentLocation.type) {
     case 'Home':
       pageComponent = (
         <Home
           getFeaturedProjects={datasetService.getFeaturedProjects}
           resetFactoryDefaults={datasetService.resetFactoryDefaults}
-          updateLocation={updateLocation}
+          updateLocation={router.updateLocation}
+        />
+      );
+      break;
+    case 'NewProject':
+      pageComponent = (
+        <NewDatasetProjectPage
+          createDatasetProject={datasetService.createDatasetProject}
+          getOrganizations={datasetService.getOrganizations}
+          updateLocation={router.updateLocation}
         />
       );
       break;
     case 'Organization':
-      pageComponent = <div>TODO: Organization page here</div>;
+      pageComponent = (
+        <OrganizationPage
+          createDatasetProject={datasetService.createDatasetProject}
+          getOrganization={datasetService.getOrganization}
+          location={router.currentLocation}
+        />
+      );
       break;
     case 'Dataset':
       pageComponent = (
         <DatasetPage
           getDataset={datasetService.getDataset}
           getDatasetProject={datasetService.getDatasetProject}
-          location={location}
-          updateLocation={updateLocation}
+          location={router.currentLocation}
+          updateLocation={router.updateLocation}
         />
       );
       break;
@@ -50,8 +67,8 @@ const App = ({
       pageComponent = (
         <DatasetProjectPage
           getDatasetProject={datasetService.getDatasetProject}
-          location={location}
-          updateLocation={updateLocation}
+          location={router.currentLocation}
+          updateLocation={router.updateLocation}
         />
       );
       break;
@@ -61,7 +78,7 @@ const App = ({
   }
 
   return (
-    <Layout session={session} updateLocation={updateLocation}>
+    <Layout session={session} updateLocation={router.updateLocation}>
       {pageComponent}
     </Layout>
   );

@@ -5,7 +5,7 @@ import {
   ResetFactoryDefaultsService,
 } from 'datafixer/core/data';
 
-import { Link } from './link';
+import { Link } from '../components/link';
 import { useFeaturedProjects } from '../hooks/featured-projects';
 import { projectLocation, UpdateLocation } from '../routes';
 
@@ -38,7 +38,10 @@ export const Home = ({
         <li>
           <button
             className="usa-button usa-button--unstyled"
-            onClick={resetFactoryDefaults}
+            onClick={() => {
+              resetFactoryDefaults();
+              location.reload();
+            }}
           >
             Reset To Factory Defaults
           </button>

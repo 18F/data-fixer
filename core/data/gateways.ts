@@ -1,7 +1,10 @@
+import { Option } from 'fp-ts/Option';
+
 import {
   Dataset,
   DatasetId,
   DatasetProject,
+  Organization,
   OrganizationAlias,
   ProjectId,
   ProjectAlias,
@@ -15,6 +18,10 @@ export interface DatasetGateway {
     alias: ProjectAlias
   ): Promise<DatasetProject>;
   getFeaturedProjects(): Promise<DatasetProject[]>;
-  createDatasetProject(id: ProjectId, dataset: DatasetProject): Promise<void>;
+  getOrganizationByAlias(
+    alias: OrganizationAlias
+  ): Promise<Option<Organization>>;
+  getOrganizations(): Promise<Array<Organization>>;
+  createDatasetProject(dataset: DatasetProject): Promise<DatasetProject>;
   resetFactoryDefaults(): void;
 }

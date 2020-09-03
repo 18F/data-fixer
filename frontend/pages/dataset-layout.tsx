@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DatasetProject, ProjectId, DatasetId } from 'datafixer/core/data';
 
-import { Link } from './link';
+import { Link } from '../components/link';
 import {
   datasetLocation,
   projectLocation,

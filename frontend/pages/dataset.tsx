@@ -6,11 +6,11 @@ import {
   GetDatasetService,
 } from 'datafixer/core/data';
 
-import { DataTable } from './data-table';
-import { DatasetLayout } from './dataset-layout';
+import { DataTable } from '../components/data-table';
 import { useDataset } from '../hooks/dataset';
 import { useDatasetProject } from '../hooks/dataset-project';
 import { DatasetLocation, Location } from '../routes';
+import { DatasetLayout } from './dataset-layout';
 
 export const DatasetPage = ({
   getDataset,

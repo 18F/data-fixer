@@ -21,8 +21,10 @@ ts_library(
         "@npm//@types/react-dom",
         "@npm//fp-ts",
         "@npm//fp-ts-routing",
+        "@npm//io-ts",
         "@npm//react",
         "@npm//react-dom",
+        "@npm//react-hook-form",
         "@npm//uswds",
     ],
 )

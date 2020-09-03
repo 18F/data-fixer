@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-import { parseLocation, getUrl, Location } from '../routes';
+import { parseLocation, getUrl, Location, Router } from '../routes';
 
-export const useLocation = (): [Location, (location: Location) => void] => {
-  const [location, setRoute] = useState<Location>(
+export const useLocation = (): Router => {
+  const [currentLocation, setLocation] = useState<Location>(
     parseLocation(window.location.pathname)
   );
 
   const updateLocation = (newLocation: Location) => {
-    setRoute(newLocation);
+    setLocation(newLocation);
     window.history.pushState(null, '', getUrl(newLocation));
   };
 
   window.addEventListener('popstate', () => {
-    setRoute(parseLocation(window.location.pathname));
+    setLocation(parseLocation(window.location.pathname));
   });
 
-  return [location, updateLocation];
+  return { currentLocation, updateLocation };
 };

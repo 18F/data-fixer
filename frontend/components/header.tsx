@@ -1,10 +1,18 @@
 import React from 'react';
 
 import { SessionHook } from '../hooks/session';
+import { newProject, UpdateLocation } from '../routes';
+import { Link } from './link';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';
 
-export const Header = ({ session }: { session: SessionHook }) => {
+export const Header = ({
+  session,
+  updateLocation,
+}: {
+  session: SessionHook;
+  updateLocation: UpdateLocation;
+}) => {
   return (
     <header className="usa-header usa-header--extended">
       <div className="usa-navbar">
@@ -42,7 +50,9 @@ export const Header = ({ session }: { session: SessionHook }) => {
               ) : (
                 <>
                   <li className="usa-nav__secondary-item">
-                    {`Welcome, ${session.data.userDetails.displayName}!`}
+                    <Link to={newProject} updateLocation={updateLocation}>
+                      New Project
+                    </Link>
                   </li>
                   <li className="usa-nav__secondary-item">
                     <button
