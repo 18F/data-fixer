@@ -19,6 +19,12 @@ export interface OrganizationLocation {
   readonly organizationAlias: OrganizationAlias;
 }
 
+export interface NewDatasetLocation {
+  readonly type: 'NewDataset';
+  readonly organizationAlias: OrganizationAlias;
+  readonly alias: ProjectAlias;
+}
+
 export interface DatasetLocation {
   readonly type: 'Dataset';
   readonly organizationAlias: OrganizationAlias;
@@ -41,6 +47,7 @@ export type Location =
   | NewProjectLocation
   | DatasetLocation
   | OrganizationLocation
+  | NewDatasetLocation
   | ProjectLocation
   | NotFoundLocation;
 
@@ -62,6 +69,17 @@ export const organizationLocation = (
   return {
     type: 'Organization',
     organizationAlias,
+  };
+};
+
+export const newDataset = (
+  organizationAlias: OrganizationAlias,
+  alias: ProjectAlias
+): Location => {
+  return {
+    type: 'NewDataset',
+    organizationAlias,
+    alias,
   };
 };
 
@@ -99,6 +117,7 @@ const organization = str('organizationAlias');
 const organizationMatch = organization.then(end);
 const project = organization.then(str('alias'));
 const projectMatch = project.then(end);
+const newDatasetMatch = project.then(lit('new'));
 const datasetMatch = project.then(str('datasetId')).then(end);
 
 const router = zero<Location>()
@@ -110,13 +129,18 @@ const router = zero<Location>()
     )
   )
   .alt(
-    datasetMatch.parser.map(({ organizationAlias, alias, datasetId }) =>
-      datasetLocation(organizationAlias, alias, datasetId)
+    projectMatch.parser.map(({ organizationAlias, alias }) =>
+      projectLocation(organizationAlias, alias)
     )
   )
   .alt(
-    projectMatch.parser.map(({ organizationAlias, alias }) =>
-      projectLocation(organizationAlias, alias)
+    newDatasetMatch.parser.map(({ organizationAlias, alias }) =>
+      newDataset(organizationAlias, alias)
+    )
+  )
+  .alt(
+    datasetMatch.parser.map(({ organizationAlias, alias, datasetId }) =>
+      datasetLocation(organizationAlias, alias, datasetId)
     )
   );
 
@@ -132,6 +156,8 @@ export const getUrl = (location: Location): string => {
       return format(newProjectMatch.formatter, location);
     case 'Dataset':
       return format(datasetMatch.formatter, location);
+    case 'NewDataset':
+      return format(newDatasetMatch.formatter, location);
     case 'Project':
       return format(projectMatch.formatter, location);
     case 'Organization':

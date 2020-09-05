@@ -7,16 +7,16 @@ import {
 
 import { Link } from '../components/link';
 import { useFeaturedProjects } from '../hooks/featured-projects';
-import { projectLocation, UpdateLocation } from '../routes';
+import { projectLocation, Router } from '../routes';
 
 export const Home = ({
   getFeaturedProjects,
   resetFactoryDefaults,
-  updateLocation,
+  router,
 }: {
   getFeaturedProjects: GetFeaturedProjectsService;
   resetFactoryDefaults: ResetFactoryDefaultsService;
-  updateLocation: UpdateLocation;
+  router: Router;
 }) => {
   const featuredProjects = useFeaturedProjects(getFeaturedProjects);
 
@@ -56,7 +56,7 @@ export const Home = ({
           <li key={project.id}>
             <Link
               to={projectLocation(project.organization.alias, project.alias)}
-              updateLocation={updateLocation}
+              updateLocation={router.updateLocation}
             >
               {project.details.title}
             </Link>

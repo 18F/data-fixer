@@ -9,6 +9,7 @@ import { Home } from './components/home';
 import { Layout } from './components/layout';
 import { useSession } from './hooks/session';
 import { DatasetPage } from './pages/dataset';
+import { DatasetUploadPage } from './pages/dataset-upload';
 import { DatasetProjectPage } from './pages/dataset-project';
 import { NewDatasetProjectPage } from './pages/dataset-project-new';
 import { OrganizationPage } from './pages/organization';
@@ -31,7 +32,7 @@ const App = ({
         <Home
           getFeaturedProjects={datasetService.getFeaturedProjects}
           resetFactoryDefaults={datasetService.resetFactoryDefaults}
-          updateLocation={router.updateLocation}
+          router={router}
         />
       );
       break;
@@ -62,6 +63,9 @@ const App = ({
           updateLocation={router.updateLocation}
         />
       );
+      break;
+    case 'NewDataset':
+      pageComponent = <DatasetUploadPage />;
       break;
     case 'Project':
       pageComponent = (
