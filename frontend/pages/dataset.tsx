@@ -12,22 +12,21 @@ import { useDatasetProject } from '../hooks/dataset-project';
 import { DatasetLocation, Location } from '../routes';
 import { DatasetLayout } from './dataset-layout';
 
-export const DatasetPage = ({
-  getDataset,
-  getDatasetProject,
-  location,
-  updateLocation,
-}: {
+type DatasetPageContext = {
   getDataset: GetDatasetService;
   getDatasetProject: GetDatasetProjectService;
-  location: DatasetLocation;
   updateLocation: (location: Location) => void;
+};
+
+export const DatasetPage = (props: {
+  ctx: DatasetPageContext;
+  location: DatasetLocation;
 }) => {
-  const dataset = useDataset(location.datasetId, getDataset);
+  const dataset = useDataset(props.location.datasetId, props.ctx.getDataset);
   const datasetProject = useDatasetProject(
-    location.organizationAlias,
-    location.alias,
-    getDatasetProject
+    props.location.organizationAlias,
+    props.location.alias,
+    props.ctx.getDatasetProject
   );
 
   if (!dataset || !datasetProject) {
@@ -37,9 +36,9 @@ export const DatasetPage = ({
   return (
     <DatasetLayout
       datasetProject={datasetProject}
-      currentId={location.datasetId}
-      location={location}
-      updateLocation={updateLocation}
+      currentId={props.location.datasetId}
+      location={props.location}
+      updateLocation={props.ctx.updateLocation}
     >
       <figure>
         <figcaption>{dataset.schema.type}</figcaption>

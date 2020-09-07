@@ -9,16 +9,15 @@ import { Link } from '../components/link';
 import { useFeaturedProjects } from '../hooks/featured-projects';
 import { projectLocation, Router } from '../routes';
 
-export const Home = ({
-  getFeaturedProjects,
-  resetFactoryDefaults,
-  router,
-}: {
+type HomeContext = {
   getFeaturedProjects: GetFeaturedProjectsService;
   resetFactoryDefaults: ResetFactoryDefaultsService;
   router: Router;
-}) => {
-  const featuredProjects = useFeaturedProjects(getFeaturedProjects);
+  window: { location: { reload: () => void } };
+};
+
+export const Home = ({ ctx }: { ctx: HomeContext }) => {
+  const featuredProjects = useFeaturedProjects(ctx.getFeaturedProjects);
 
   if (!featuredProjects) {
     return <div>Loading...</div>;
@@ -39,8 +38,8 @@ export const Home = ({
           <button
             className="usa-button usa-button--unstyled"
             onClick={() => {
-              resetFactoryDefaults();
-              location.reload();
+              ctx.resetFactoryDefaults();
+              ctx.window.location.reload();
             }}
           >
             Reset To Factory Defaults
@@ -56,7 +55,7 @@ export const Home = ({
           <li key={project.id}>
             <Link
               to={projectLocation(project.organization.alias, project.alias)}
-              updateLocation={router.updateLocation}
+              updateLocation={ctx.router.updateLocation}
             >
               {project.details.title}
             </Link>

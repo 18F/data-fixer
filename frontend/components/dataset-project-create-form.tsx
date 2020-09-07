@@ -11,27 +11,35 @@ import {
 import { projectLocation, Location } from '../routes';
 import { useOrganizations } from '../hooks/organization';
 
-export const CreateProjectForm = ({
-  createDatasetProject,
-  getOrganizations,
-  updateLocation,
-}: {
+type CreateProjectFormContext = {
   createDatasetProject: CreateDatasetProjectService;
   getOrganizations: GetOrganizationsService;
   updateLocation: (location: Location) => void;
+};
+
+export const CreateProjectForm = ({
+  ctx,
+}: {
+  ctx: CreateProjectFormContext;
 }) => {
   const { register, handleSubmit, errors } = useForm();
-  const organizations = useOrganizations(getOrganizations);
+  const organizations = useOrganizations(ctx.getOrganizations);
   const onSubmit = async (data: any) => {
     if (!organizations || !organizations.length) {
       return;
     }
-    const project = await createDatasetProject(organizations[0], data.alias, {
-      title: data.projectName,
-      source: data.source,
-      description: data.description,
-    });
-    updateLocation(projectLocation(project.organization.alias, project.alias));
+    const project = await ctx.createDatasetProject(
+      organizations[0],
+      data.alias,
+      {
+        title: data.projectName,
+        source: data.source,
+        description: data.description,
+      }
+    );
+    ctx.updateLocation(
+      projectLocation(project.organization.alias, project.alias)
+    );
   };
 
   if (!organizations) {

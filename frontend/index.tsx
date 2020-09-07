@@ -15,41 +15,48 @@ import { NewDatasetProjectPage } from './pages/dataset-project-new';
 import { OrganizationPage } from './pages/organization';
 import { useLocation } from './hooks/location';
 
-const App = ({
-  authenticationService,
-  datasetService,
-}: {
+type AppContext = {
   authenticationService: AuthenticationService;
   datasetService: DatasetService;
-}) => {
+  window: Window;
+};
+
+const App = (ctx: AppContext) => {
   const router = useLocation();
-  const session = useSession(authenticationService);
+  const session = useSession(ctx.authenticationService);
 
   let pageComponent: JSX.Element;
   switch (router.currentLocation.type) {
     case 'Home':
       pageComponent = (
         <Home
-          getFeaturedProjects={datasetService.getFeaturedProjects}
-          resetFactoryDefaults={datasetService.resetFactoryDefaults}
-          router={router}
+          ctx={{
+            getFeaturedProjects: ctx.datasetService.getFeaturedProjects,
+            resetFactoryDefaults: ctx.datasetService.resetFactoryDefaults,
+            router: router,
+            window: window,
+          }}
         />
       );
       break;
     case 'NewProject':
       pageComponent = (
         <NewDatasetProjectPage
-          createDatasetProject={datasetService.createDatasetProject}
-          getOrganizations={datasetService.getOrganizations}
-          updateLocation={router.updateLocation}
+          ctx={{
+            createDatasetProject: ctx.datasetService.createDatasetProject,
+            getOrganizations: ctx.datasetService.getOrganizations,
+            updateLocation: router.updateLocation,
+          }}
         />
       );
       break;
     case 'Organization':
       pageComponent = (
         <OrganizationPage
-          createDatasetProject={datasetService.createDatasetProject}
-          getOrganization={datasetService.getOrganization}
+          ctx={{
+            createDatasetProject: ctx.datasetService.createDatasetProject,
+            getOrganization: ctx.datasetService.getOrganization,
+          }}
           location={router.currentLocation}
         />
       );
@@ -57,10 +64,12 @@ const App = ({
     case 'Dataset':
       pageComponent = (
         <DatasetPage
-          getDataset={datasetService.getDataset}
-          getDatasetProject={datasetService.getDatasetProject}
+          ctx={{
+            getDataset: ctx.datasetService.getDataset,
+            getDatasetProject: ctx.datasetService.getDatasetProject,
+            updateLocation: router.updateLocation,
+          }}
           location={router.currentLocation}
-          updateLocation={router.updateLocation}
         />
       );
       break;
@@ -70,9 +79,11 @@ const App = ({
     case 'Project':
       pageComponent = (
         <DatasetProjectPage
-          getDatasetProject={datasetService.getDatasetProject}
+          ctx={{
+            getDatasetProject: ctx.datasetService.getDatasetProject,
+            updateLocation: router.updateLocation,
+          }}
           location={router.currentLocation}
-          updateLocation={router.updateLocation}
         />
       );
       break;
@@ -82,21 +93,12 @@ const App = ({
   }
 
   return (
-    <Layout session={session} updateLocation={router.updateLocation}>
+    <Layout ctx={{ updateLocation: router.updateLocation }} session={session}>
       {pageComponent}
     </Layout>
   );
 };
 
-export const RenderPage = (
-  authenticationService: AuthenticationService,
-  datasetService: DatasetService
-) => () => {
-  return render(
-    <App
-      authenticationService={authenticationService}
-      datasetService={datasetService}
-    />,
-    document.getElementById('root')
-  );
+export const RenderPage = (ctx: AppContext) => () => {
+  return render(<App {...ctx} />, document.getElementById('root'));
 };

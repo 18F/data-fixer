@@ -8,18 +8,18 @@ import {
 import { useOrganization } from '../hooks/organization';
 import { OrganizationLocation } from '../routes';
 
-export const OrganizationPage = ({
-  createDatasetProject,
-  getOrganization,
-  location,
-}: {
+type OrganizationPageContext = {
   createDatasetProject: CreateDatasetProjectService;
   getOrganization: GetOrganizationService;
+};
+
+export const OrganizationPage = (props: {
+  ctx: OrganizationPageContext;
   location: OrganizationLocation;
 }) => {
   const organization = useOrganization(
-    location.organizationAlias,
-    getOrganization
+    props.location.organizationAlias,
+    props.ctx.getOrganization
   );
 
   if (!organization) {

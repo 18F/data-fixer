@@ -6,21 +6,25 @@ import { Header } from './header';
 import { SessionHook } from '../hooks/session';
 import { Location } from '../routes';
 
+type LayoutContext = {
+  updateLocation: (location: Location) => void;
+};
+
 export const Layout = ({
+  ctx,
   children,
   session,
-  updateLocation,
 }: {
+  ctx: LayoutContext;
   children: React.ReactNode;
   session: SessionHook;
-  updateLocation: (location: Location) => void;
 }) => {
   return (
     <>
       <Banner />
-      <Header session={session} updateLocation={updateLocation} />
+      <Header ctx={{ updateLocation: ctx.updateLocation }} session={session} />
       <div className="grid-container">{children}</div>
-      <Footer updateLocation={updateLocation} />
+      <Footer ctx={{ updateLocation: ctx.updateLocation }} />
     </>
   );
 };

@@ -9,7 +9,11 @@ const authenticationService = AuthenticationService(
   new MockAuthenticationGateway()
 );
 
-const renderPage = RenderPage(authenticationService, datasetService);
+const renderPage = RenderPage({
+  authenticationService,
+  datasetService,
+  window,
+});
 
 // App entrypoint - render a dummy page
 renderPage();

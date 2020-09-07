@@ -6,12 +6,16 @@ import { Link } from './link';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';
 
-export const Header = ({
-  session,
-  updateLocation,
-}: {
-  session: SessionHook;
+type HeaderContext = {
   updateLocation: UpdateLocation;
+};
+
+export const Header = ({
+  ctx,
+  session,
+}: {
+  ctx: HeaderContext;
+  session: SessionHook;
 }) => {
   return (
     <header className="usa-header usa-header--extended">
@@ -50,7 +54,7 @@ export const Header = ({
               ) : (
                 <>
                   <li className="usa-nav__secondary-item">
-                    <Link to={newProject} updateLocation={updateLocation}>
+                    <Link to={newProject} updateLocation={ctx.updateLocation}>
                       New Project
                     </Link>
                   </li>

@@ -7,19 +7,19 @@ import { Link } from '../components/link';
 import { useDatasetProject } from '../hooks/dataset-project';
 import { newDataset, ProjectLocation, Location } from '../routes';
 
-export const DatasetProjectPage = ({
-  getDatasetProject,
-  location,
-  updateLocation,
-}: {
+type DatasetProjectPageContext = {
   getDatasetProject: GetDatasetProjectService;
-  location: ProjectLocation;
   updateLocation: (location: Location) => void;
+};
+
+export const DatasetProjectPage = (props: {
+  ctx: DatasetProjectPageContext;
+  location: ProjectLocation;
 }) => {
   const datasetProject = useDatasetProject(
-    location.organizationAlias,
-    location.alias,
-    getDatasetProject
+    props.location.organizationAlias,
+    props.location.alias,
+    props.ctx.getDatasetProject
   );
 
   if (!datasetProject) {
@@ -30,15 +30,15 @@ export const DatasetProjectPage = ({
     <DatasetLayout
       datasetProject={datasetProject}
       currentId={datasetProject.id}
-      location={location}
-      updateLocation={updateLocation}
+      location={props.location}
+      updateLocation={props.ctx.updateLocation}
     >
       <h1>{datasetProject.details.title}</h1>
       <h2>{datasetProject.details.source}</h2>
       <p>{datasetProject.details.description}</p>
       <Link
-        to={newDataset(location.organizationAlias, location.alias)}
-        updateLocation={updateLocation}
+        to={newDataset(props.location.organizationAlias, props.location.alias)}
+        updateLocation={props.ctx.updateLocation}
       >
         Upload New Dataset
       </Link>

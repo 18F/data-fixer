@@ -8,18 +8,22 @@ import {
 import { Location } from '../routes';
 import { CreateProjectForm } from '../components/dataset-project-create-form';
 
-export const NewDatasetProjectPage = ({
-  createDatasetProject,
-  getOrganizations,
-  updateLocation,
-}: {
+type NewDatasetProjectPageContext = {
   createDatasetProject: CreateDatasetProjectService;
   getOrganizations: GetOrganizationsService;
   updateLocation: (location: Location) => void;
+};
+
+export const NewDatasetProjectPage = ({
+  ctx,
+}: {
+  ctx: NewDatasetProjectPageContext;
 }) => (
   <CreateProjectForm
-    createDatasetProject={createDatasetProject}
-    getOrganizations={getOrganizations}
-    updateLocation={updateLocation}
+    ctx={{
+      createDatasetProject: ctx.createDatasetProject,
+      getOrganizations: ctx.getOrganizations,
+      updateLocation: ctx.updateLocation,
+    }}
   />
 );

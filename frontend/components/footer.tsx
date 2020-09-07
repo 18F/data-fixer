@@ -1,15 +1,15 @@
 import React from 'react';
 
 import { Link } from './link';
-import { home, Location } from '../routes';
+import { home, UpdateLocation } from '../routes';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';
 
-export const Footer = ({
-  updateLocation,
-}: {
-  updateLocation: (location: Location) => void;
-}) => {
+type FooterContext = {
+  updateLocation: UpdateLocation;
+};
+
+export const Footer = ({ ctx }: { ctx: FooterContext }) => {
   return (
     <footer className="usa-footer usa-footer--slim" role="contentinfo">
       <div className="grid-container usa-footer__return-to-top">
@@ -32,7 +32,7 @@ export const Footer = ({
                   <Link
                     className="usa-footer__primary-link"
                     to={home}
-                    updateLocation={updateLocation}
+                    updateLocation={ctx.updateLocation}
                   >
                     About Data Fixer
                   </Link>
