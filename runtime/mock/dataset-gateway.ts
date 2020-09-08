@@ -10,7 +10,9 @@ import {
   OrganizationAlias,
   ProjectId,
   ProjectAlias,
-} from '..';
+} from 'datafixer/core/data';
+
+import { mockData } from './mock-data';
 
 export type MockData = {
   datasetProjects: Record<ProjectId, DatasetProject>;
@@ -18,16 +20,23 @@ export type MockData = {
   organizations: Record<OrganizationId, Organization>;
 };
 
+type MockDatasetGatewayContext = {
+  localStorage: Storage;
+};
+
 export class MockDatasetGateway implements DatasetGateway {
   data: MockData;
 
-  constructor(private initialMockData: MockData) {
+  constructor(
+    private ctx: MockDatasetGatewayContext,
+    private initialMockData: MockData = mockData
+  ) {
     this.data = this._getData() || initialMockData;
     this._setData(this.data);
   }
 
   _getData() {
-    const data = window.localStorage.getItem('mockData');
+    const data = this.ctx.localStorage.getItem('mockData');
     if (!data) {
       return null;
     }
@@ -36,7 +45,7 @@ export class MockDatasetGateway implements DatasetGateway {
 
   _setData(data: MockData) {
     this.data = data;
-    window.localStorage.setItem('mockData', JSON.stringify(data));
+    this.ctx.localStorage.setItem('mockData', JSON.stringify(data));
   }
 
   async getDataset(id: DatasetId) {

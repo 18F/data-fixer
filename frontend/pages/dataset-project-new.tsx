@@ -4,8 +4,8 @@ import {
   CreateDatasetProjectService,
   GetOrganizationsService,
 } from 'datafixer/core/data';
+import { Location } from 'datafixer/core/routes';
 
-import { Location } from '../routes';
 import { CreateProjectForm } from '../components/dataset-project-create-form';
 
 type NewDatasetProjectPageContext = {

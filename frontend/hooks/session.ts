@@ -7,7 +7,7 @@ import {
   AuthenticationDetails,
   AuthenticationService,
   AuthenticationResult,
-} from 'datafixer/core/auth';
+} from 'datafixer/core/authentication';
 
 const SESSION_TOKEN_KEY = 'sessionToken';
 
@@ -27,12 +27,15 @@ export type SessionHook = {
   logOut: () => void;
 };
 
-const persistSessionData = (sessionData: SessionData) => {
-  window.localStorage.setItem(SESSION_TOKEN_KEY, JSON.stringify(sessionData));
+const persistSessionData = (
+  localStorage: Storage,
+  sessionData: SessionData
+) => {
+  localStorage.setItem(SESSION_TOKEN_KEY, JSON.stringify(sessionData));
 };
 
-const getLocalStorageSessionData = () => {
-  const keyValue = window.localStorage.getItem(SESSION_TOKEN_KEY);
+const getLocalStorageSessionData = (localStorage: Storage) => {
+  const keyValue = localStorage.getItem(SESSION_TOKEN_KEY);
   if (keyValue === null) {
     return anonymousSession;
   }
@@ -44,10 +47,11 @@ const getLocalStorageSessionData = () => {
 };
 
 export const useSession = (
-  authenticationService: AuthenticationService
+  authenticationService: AuthenticationService,
+  localStorage: Storage
 ): SessionHook => {
   const [sessionData, setSessionData] = useState<SessionData>(
-    getLocalStorageSessionData()
+    getLocalStorageSessionData(localStorage)
   );
 
   const logIn = (authenticationDetails: AuthenticationDetails) => {
@@ -66,7 +70,7 @@ export const useSession = (
         )
       )
       .then(sessionData => {
-        persistSessionData(sessionData);
+        persistSessionData(localStorage, sessionData);
         setSessionData(sessionData);
       });
   };
@@ -90,7 +94,7 @@ export const useSession = (
         )
       )
       .then(sessionData => {
-        persistSessionData(sessionData || anonymousSession);
+        persistSessionData(localStorage, sessionData || anonymousSession);
         setSessionData(sessionData || anonymousSession);
       });
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { home, UpdateLocation } from 'datafixer/core/routes';
 import { Link } from './link';
-import { home, UpdateLocation } from '../routes';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';
 

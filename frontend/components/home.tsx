@@ -4,16 +4,20 @@ import {
   GetFeaturedProjectsService,
   ResetFactoryDefaultsService,
 } from 'datafixer/core/data';
+import {
+  LocationService,
+  projectLocation,
+  Router,
+} from 'datafixer/core/routes';
 
 import { Link } from '../components/link';
 import { useFeaturedProjects } from '../hooks/featured-projects';
-import { projectLocation, Router } from '../routes';
 
 type HomeContext = {
   getFeaturedProjects: GetFeaturedProjectsService;
+  locationService: LocationService;
   resetFactoryDefaults: ResetFactoryDefaultsService;
   router: Router;
-  window: { location: { reload: () => void } };
 };
 
 export const Home = ({ ctx }: { ctx: HomeContext }) => {
@@ -39,7 +43,7 @@ export const Home = ({ ctx }: { ctx: HomeContext }) => {
             className="usa-button usa-button--unstyled"
             onClick={() => {
               ctx.resetFactoryDefaults();
-              ctx.window.location.reload();
+              ctx.locationService.reload();
             }}
           >
             Reset To Factory Defaults

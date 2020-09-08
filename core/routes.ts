@@ -5,6 +5,7 @@ import {
   ProjectAlias,
   OrganizationAlias,
 } from 'datafixer/core/data';
+import { simpleEvent } from './util/simple-event';
 
 export interface HomeLocation {
   readonly type: 'Home';
@@ -170,4 +171,37 @@ export const getUrl = (location: Location): string => {
 export interface Router {
   currentLocation: Location;
   updateLocation: (location: Location) => void;
+}
+
+export interface LocationGateway {
+  getPath: () => string;
+  setPath: (path: string) => void;
+  reload: () => void;
+}
+
+interface LocationListener {
+  (path: Location): void;
+}
+
+export class LocationService {
+  private location: Location;
+  public readonly changeEvent = simpleEvent<LocationListener>(this);
+
+  constructor(private ctx: { locationGateway: LocationGateway }) {
+    this.location = parseLocation(this.ctx.locationGateway.getPath());
+  }
+
+  getLocation() {
+    return this.location;
+  }
+
+  setLocation(location: Location) {
+    this.location = location;
+    this.ctx.locationGateway.setPath(getUrl(location));
+    this.changeEvent.trigger(this.location);
+  }
+
+  reload() {
+    this.ctx.locationGateway.reload();
+  }
 }

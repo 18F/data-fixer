@@ -8,7 +8,8 @@ import {
   DatasetProjectDetails,
   GetOrganizationsService,
 } from 'datafixer/core/data';
-import { projectLocation, Location } from '../routes';
+import { projectLocation, Location } from 'datafixer/core/routes';
+
 import { useOrganizations } from '../hooks/organization';
 
 type CreateProjectFormContext = {

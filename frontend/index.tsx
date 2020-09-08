@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { DOMElement } from 'react';
 import { render } from 'react-dom';
-import 'uswds';
+import ReactDOMServer from 'react-dom/server';
 
-import { AuthenticationService } from 'datafixer/core/auth';
+import { AuthenticationService } from 'datafixer/core/authentication';
 import { DatasetService } from 'datafixer/core/data';
+import { LocationService } from 'datafixer/core/routes';
 
 import { Home } from './components/home';
 import { Layout } from './components/layout';
@@ -18,12 +19,13 @@ import { useLocation } from './hooks/location';
 type AppContext = {
   authenticationService: AuthenticationService;
   datasetService: DatasetService;
-  window: Window;
+  locationService: LocationService;
+  localStorage: Storage;
 };
 
-const App = (ctx: AppContext) => {
-  const router = useLocation();
-  const session = useSession(ctx.authenticationService);
+export const App = ({ ctx }: { ctx: AppContext }) => {
+  const router = useLocation({ locationService: ctx.locationService });
+  const session = useSession(ctx.authenticationService, ctx.localStorage);
 
   let pageComponent: JSX.Element;
   switch (router.currentLocation.type) {
@@ -32,9 +34,9 @@ const App = (ctx: AppContext) => {
         <Home
           ctx={{
             getFeaturedProjects: ctx.datasetService.getFeaturedProjects,
+            locationService: ctx.locationService,
             resetFactoryDefaults: ctx.datasetService.resetFactoryDefaults,
             router: router,
-            window: window,
           }}
         />
       );
@@ -99,6 +101,10 @@ const App = (ctx: AppContext) => {
   );
 };
 
-export const RenderPage = (ctx: AppContext) => () => {
-  return render(<App {...ctx} />, document.getElementById('root'));
+export const renderApp = (ctx: AppContext, element: HTMLElement) => {
+  render(<App ctx={ctx} />, element);
+};
+
+export const renderToString = (ctx: AppContext) => {
+  return ReactDOMServer.renderToString(<App ctx={ctx} />);
 };

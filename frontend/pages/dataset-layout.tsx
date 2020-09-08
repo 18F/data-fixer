@@ -1,28 +1,31 @@
 import React from 'react';
 
 import { DatasetProject, ProjectId, DatasetId } from 'datafixer/core/data';
-
-import { Link } from '../components/link';
 import {
   datasetLocation,
   projectLocation,
   DatasetLocation,
   Location,
   ProjectLocation,
-} from '../routes';
+} from 'datafixer/core/routes';
+
+import { Link } from '../components/link';
+
+type DatasetLayoutContext = {
+  datasetProject: DatasetProject;
+  updateLocation: (location: Location) => void;
+};
 
 export const DatasetLayout = ({
+  ctx,
   children,
   currentId,
-  datasetProject,
   location,
-  updateLocation,
 }: {
+  ctx: DatasetLayoutContext;
   children: React.ReactNode;
   currentId: DatasetId | ProjectId;
-  datasetProject: DatasetProject;
   location: DatasetLocation | ProjectLocation;
-  updateLocation: (location: Location) => void;
 }) => {
   return (
     <div className="grid-row grid-gap-lg">
@@ -31,17 +34,19 @@ export const DatasetLayout = ({
           <ul className="usa-sidenav">
             <li className="usa-sidenav__item">
               <Link
-                className={currentId === datasetProject.id ? 'usa-current' : ''}
+                className={
+                  currentId === ctx.datasetProject.id ? 'usa-current' : ''
+                }
                 to={projectLocation(location.organizationAlias, location.alias)}
-                updateLocation={updateLocation}
+                updateLocation={ctx.updateLocation}
               >
-                {datasetProject.details.title}
+                {ctx.datasetProject.details.title}
               </Link>
             </li>
             <li className="usa-sidenav__item">
               <a>Dataset Versions</a>
               <ul className="usa-sidenav__sublist">
-                {datasetProject.datasetVersions.map((datasetId, index) => (
+                {ctx.datasetProject.datasetVersions.map((datasetId, index) => (
                   <li key={datasetId} className={'usa-sidenav__item'}>
                     <Link
                       className={currentId === datasetId ? 'usa-current' : ''}
@@ -50,7 +55,7 @@ export const DatasetLayout = ({
                         location.alias,
                         datasetId
                       )}
-                      updateLocation={updateLocation}
+                      updateLocation={ctx.updateLocation}
                     >
                       Version {index + 1}
                     </Link>
@@ -58,19 +63,19 @@ export const DatasetLayout = ({
                 ))}
               </ul>
             </li>
-            {datasetProject.source.type == 'aggregate' ? (
+            {ctx.datasetProject.source.type == 'aggregate' ? (
               <li className="usa-sidenav__item">
                 <a>Sources</a>
                 <ul className="usa-sidenav__sublist">
                   <ul className="usa-sidenav__sublist">
-                    {datasetProject.source.projects.map(project => (
+                    {ctx.datasetProject.source.projects.map(project => (
                       <li key={project.id} className="usa-sidenav__item">
                         <Link
                           to={projectLocation(
                             project.organization.alias,
                             project.alias
                           )}
-                          updateLocation={updateLocation}
+                          updateLocation={ctx.updateLocation}
                         >
                           {project.organization.alias}/{project.alias}
                         </Link>
@@ -80,18 +85,18 @@ export const DatasetLayout = ({
                 </ul>
               </li>
             ) : null}
-            {datasetProject.consumers.length > 0 && (
+            {ctx.datasetProject.consumers.length > 0 && (
               <li className="usa-sidenav__item">
                 <a>Data consumers</a>
                 <ul className="usa-sidenav__sublist">
-                  {datasetProject.consumers.map(project => (
+                  {ctx.datasetProject.consumers.map(project => (
                     <li key={project.id}>
                       <Link
                         to={projectLocation(
                           project.organization.alias,
                           project.alias
                         )}
-                        updateLocation={updateLocation}
+                        updateLocation={ctx.updateLocation}
                       >
                         {project.organization.alias}/{project.alias}
                       </Link>

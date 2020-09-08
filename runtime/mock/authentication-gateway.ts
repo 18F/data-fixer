@@ -1,19 +1,27 @@
+import { Either } from 'fp-ts/Either';
+import { tryCatch } from 'fp-ts/TaskEither';
+
 import {
   AuthenticationDetails,
   AuthenticationGateway,
   AuthenticationResult,
   SessionToken,
-} from '..';
-import { Either } from 'fp-ts/Either';
-import { tryCatch } from 'fp-ts/TaskEither';
+} from 'datafixer/core/authentication';
 
 const MOCK_TOKEN: SessionToken = 'abc';
 
+type MockAthenticationGatewayContext = {
+  localStorage: Storage;
+};
+
 export class MockAuthenticationGateway implements AuthenticationGateway {
+  constructor(private ctx: MockAthenticationGatewayContext) {}
   isSessionActive(sessionToken: SessionToken): Promise<Either<Error, boolean>> {
     return tryCatch<Error, boolean>(
       () => {
-        const item = window.localStorage.getItem(`mockSession-${sessionToken}`);
+        const item = this.ctx.localStorage.getItem(
+          `mockSession-${sessionToken}`
+        );
         return Promise.resolve(item !== null);
       },
       reason => new Error(String(reason))
@@ -25,7 +33,7 @@ export class MockAuthenticationGateway implements AuthenticationGateway {
   ): Promise<Either<Error, AuthenticationResult>> {
     return tryCatch<Error, AuthenticationResult>(
       () => {
-        window.localStorage.setItem(`mockSession-${MOCK_TOKEN}`, 'true');
+        this.ctx.localStorage.setItem(`mockSession-${MOCK_TOKEN}`, 'true');
         return Promise.resolve({
           sessionToken: MOCK_TOKEN,
           userDetails: {
@@ -41,7 +49,7 @@ export class MockAuthenticationGateway implements AuthenticationGateway {
     return tryCatch<Error, void>(
       () =>
         Promise.resolve(
-          window.localStorage.removeItem(`mockSession-${sessionToken}`)
+          this.ctx.localStorage.removeItem(`mockSession-${sessionToken}`)
         ),
       reason => new Error(String(reason))
     )();

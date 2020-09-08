@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { GetDatasetProjectService } from 'datafixer/core/data';
+import { newDataset, ProjectLocation, Location } from 'datafixer/core/routes';
 
 import { DatasetLayout } from './dataset-layout';
 import { Link } from '../components/link';
 import { useDatasetProject } from '../hooks/dataset-project';
-import { newDataset, ProjectLocation, Location } from '../routes';
 
 type DatasetProjectPageContext = {
   getDatasetProject: GetDatasetProjectService;
@@ -28,10 +28,12 @@ export const DatasetProjectPage = (props: {
 
   return (
     <DatasetLayout
-      datasetProject={datasetProject}
+      ctx={{
+        datasetProject: datasetProject,
+        updateLocation: props.ctx.updateLocation,
+      }}
       currentId={datasetProject.id}
       location={props.location}
-      updateLocation={props.ctx.updateLocation}
     >
       <h1>{datasetProject.details.title}</h1>
       <h2>{datasetProject.details.source}</h2>

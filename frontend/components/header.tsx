@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { newProject, UpdateLocation } from 'datafixer/core/routes';
+
 import { SessionHook } from '../hooks/session';
-import { newProject, UpdateLocation } from '../routes';
 import { Link } from './link';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';

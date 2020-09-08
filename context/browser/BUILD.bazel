@@ -8,11 +8,12 @@ ts_library(
     name = "lib",
     srcs = [
         ":index.ts",
-        ":mock-data.ts",
     ],
     deps = [
         "//core",
         "//frontend",
+        "//runtime/browser",
+        "//runtime/mock",
     ],
 )
 

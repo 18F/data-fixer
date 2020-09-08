@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getUrl, Location } from '../routes';
+import { getUrl, Location } from 'datafixer/core/routes';
 
 export const Link = ({
   className,

@@ -5,11 +5,11 @@ import {
   GetDatasetProjectService,
   GetDatasetService,
 } from 'datafixer/core/data';
+import { DatasetLocation, Location } from 'datafixer/core/routes';
 
 import { DataTable } from '../components/data-table';
 import { useDataset } from '../hooks/dataset';
 import { useDatasetProject } from '../hooks/dataset-project';
-import { DatasetLocation, Location } from '../routes';
 import { DatasetLayout } from './dataset-layout';
 
 type DatasetPageContext = {
@@ -35,10 +35,12 @@ export const DatasetPage = (props: {
 
   return (
     <DatasetLayout
-      datasetProject={datasetProject}
+      ctx={{
+        datasetProject: datasetProject,
+        updateLocation: props.ctx.updateLocation,
+      }}
       currentId={props.location.datasetId}
       location={props.location}
-      updateLocation={props.ctx.updateLocation}
     >
       <figure>
         <figcaption>{dataset.schema.type}</figcaption>

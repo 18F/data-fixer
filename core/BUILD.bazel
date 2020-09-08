@@ -11,10 +11,11 @@ ts_library(
     ),
     module_name = "datafixer/core",
     deps = [
+        "@npm//@types/uuid",
         "@npm//fp-ts",
+        "@npm//fp-ts-routing",
         "@npm//io-ts",
         "@npm//uuid",
-        "@npm//@types/uuid",
     ],
 )
 

@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-import { parseLocation, getUrl, Location, Router } from '../routes';
+import { Location, LocationService, Router } from 'datafixer/core/routes';
 
-export const useLocation = (): Router => {
+type UseLocationContext = {
+  locationService: LocationService;
+};
+
+export const useLocation = (ctx: UseLocationContext): Router => {
   const [currentLocation, setLocation] = useState<Location>(
-    parseLocation(window.location.pathname)
+    ctx.locationService.getLocation()
   );
+  ctx.locationService.changeEvent.addListener(setLocation);
 
   const updateLocation = (newLocation: Location) => {
-    setLocation(newLocation);
-    window.history.pushState(null, '', getUrl(newLocation));
+    ctx.locationService.setLocation(newLocation);
   };
-
-  window.addEventListener('popstate', () => {
-    setLocation(parseLocation(window.location.pathname));
-  });
 
   return { currentLocation, updateLocation };
 };

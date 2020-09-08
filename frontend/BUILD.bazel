@@ -20,7 +20,6 @@ ts_library(
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//fp-ts",
-        "@npm//fp-ts-routing",
         "@npm//io-ts",
         "@npm//react",
         "@npm//react-dom",

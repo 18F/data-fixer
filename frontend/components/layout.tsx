@@ -1,10 +1,11 @@
 import React from 'react';
 
+import { Location } from 'datafixer/core/routes';
+
 import { Banner } from './banner';
 import { Footer } from './footer';
 import { Header } from './header';
 import { SessionHook } from '../hooks/session';
-import { Location } from '../routes';
 
 type LayoutContext = {
   updateLocation: (location: Location) => void;

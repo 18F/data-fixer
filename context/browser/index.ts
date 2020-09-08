@@ -1,19 +1,37 @@
-import { AuthenticationService } from 'datafixer/core/auth';
-import { MockAuthenticationGateway } from 'datafixer/core/auth/impl/mock';
-import { DatasetService } from 'datafixer/core/data';
-import { RenderPage } from 'datafixer/frontend';
-import { mockDatasetGateway } from './mock-data';
+import 'uswds';
 
+import { AuthenticationService } from 'datafixer/core/authentication';
+import { DatasetService } from 'datafixer/core/data';
+import { LocationService } from 'datafixer/core/routes';
+import { renderApp } from 'datafixer/frontend';
+import { BrowserLocationGateway } from 'datafixer/runtime/browser/location-gateway';
+import { MockAuthenticationGateway } from 'datafixer/runtime/mock/authentication-gateway';
+import { MockDatasetGateway } from 'datafixer/runtime/mock/dataset-gateway';
+
+const mockDatasetGateway = new MockDatasetGateway({
+  localStorage: window.localStorage,
+});
 const datasetService = DatasetService(mockDatasetGateway);
 const authenticationService = AuthenticationService(
-  new MockAuthenticationGateway()
+  new MockAuthenticationGateway({
+    localStorage: window.localStorage,
+  })
 );
 
-const renderPage = RenderPage({
+const locationGateway = new BrowserLocationGateway({
+  location: window.location,
+  history: window.history,
+});
+const ctx = {
   authenticationService,
   datasetService,
-  window,
-});
+  localStorage: window.localStorage,
+  locationService: new LocationService({ locationGateway }),
+};
 
-// App entrypoint - render a dummy page
-renderPage();
+const element = document.getElementById('root');
+if (element) {
+  renderApp(ctx, element);
+} else {
+  console.error('no #root');
+}

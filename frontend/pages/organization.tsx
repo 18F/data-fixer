@@ -4,9 +4,9 @@ import {
   CreateDatasetProjectService,
   GetOrganizationService,
 } from 'datafixer/core/data';
+import { OrganizationLocation } from 'datafixer/core/routes';
 
 import { useOrganization } from '../hooks/organization';
-import { OrganizationLocation } from '../routes';
 
 type OrganizationPageContext = {
   createDatasetProject: CreateDatasetProjectService;
