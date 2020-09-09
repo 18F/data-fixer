@@ -1,6 +1,6 @@
 # 10x datafixer prototype
 
-This repository contains the UI prototype for Phase 2 of the (10x)[https://10x.gsa.gov/] "Data Fixer" tool.
+This repository contains the prototype for the Phase 2 (10x)[https://10x.gsa.gov/] "Data Fixer" tool.
 
 The original 10x pitch text:
 
@@ -50,8 +50,8 @@ yarn test
 
 ## Deployment
 
-The deployable build artifact is a Docker image that runs the node.js server. The server includes all assets required to host the application, and can be built with:
+The deployable build artifact is a Docker image that runs the node.js server. The server includes all assets required to host the application, and can be built and deployed into a cloud.gov sandbox with appropriate credentials:
 
 ```bash
-TODO
+./bin/deploy.sh
 ```

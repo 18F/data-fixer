@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "bazel build //...",
+    "clean": "bazel clean",
     "format": "yarn run prettier --write core frontend context",
+    "push": "bazel run //context/server:image-push",
     "server": "ibazel run //context/server:start",
     "start": "ibazel run //context/browser:devserver",
     "storybook": "ibazel run //context/storybook:storybook",

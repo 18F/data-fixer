@@ -1,0 +1,9 @@
+applications:
+  - name: datafixer
+    disk_quota: 4096M
+    timeout: 30
+    memory: 512M
+    instances: 1
+    random-route: true
+    docker:
+      image: danielnaab/datafixer:dev

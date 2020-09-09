@@ -1,9 +1,12 @@
 import { LocationGateway } from 'datafixer/core/routes';
 
+type BrowserLocationGatewayContext = {
+  location: globalThis.Location;
+  history: globalThis.History;
+};
+
 export class BrowserLocationGateway implements LocationGateway {
-  constructor(
-    private ctx: { location: globalThis.Location; history: globalThis.History }
-  ) {}
+  constructor(private ctx: BrowserLocationGatewayContext) {}
 
   getPath() {
     return this.ctx.location.pathname;

@@ -1,11 +1,8 @@
-import * as O from 'fp-ts/Option';
-import * as t from 'io-ts';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
   CreateDatasetProjectService,
-  DatasetProjectDetails,
   GetOrganizationsService,
 } from 'datafixer/core/data';
 import { projectLocation, Location } from 'datafixer/core/routes';

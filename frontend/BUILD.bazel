@@ -114,17 +114,17 @@ filegroup(
 )
 
 filegroup(
-    name = "assets",
+    name = "assets-dev",
     srcs = [
-        ":css-bundle",
+        ":css-dev-bundle",
         ":uswds-assets",
     ],
 )
 
 filegroup(
-    name = "assets-dev",
+    name = "assets",
     srcs = [
-        ":css-dev-bundle",
-        ":uswds-assets",
+        ":assets-dev",
+        ":css-bundle",
     ],
 )

@@ -5,7 +5,7 @@ load("@npm//@bazel/terser:index.bzl", "terser_minified")
 load("@npm//@bazel/typescript:index.bzl", "ts_devserver", "ts_library")
 
 ts_library(
-    name = "lib",
+    name = "browser",
     srcs = [
         ":index.ts",
     ],
@@ -23,7 +23,7 @@ rollup_bundle(
     entry_point = ":index.ts",
     format = "iife",
     deps = [
-        ":lib",
+        ":browser",
         "//core",
         "//frontend",
         "@npm//@rollup/plugin-commonjs",
@@ -37,6 +37,25 @@ terser_minified(
     src = ":bundle",
 )
 
+filegroup(
+    name = "assets",
+    srcs = [
+        ":bundle",
+        ":bundle.min",
+        ":index.html",
+        "//frontend:assets",
+    ],
+)
+
+filegroup(
+    name = "assets-dev",
+    srcs = [
+        ":bundle",
+        ":index.html",
+        "//frontend:assets-dev",
+    ],
+)
+
 # Serve up the Rollup bundle via ts_devserver. This isn't as efficient as
 # letting ts_devserver inject UMD modules, but its easier to manage some of the
 # node dependencies if we develop against the Rollup bundle.
@@ -48,8 +67,6 @@ ts_devserver(
     ],
     port = 9000,
     static_files = [
-        ":bundle",
-        ":index.html",
-        "//frontend:assets-dev",
+        ":assets-dev",
     ],
 )

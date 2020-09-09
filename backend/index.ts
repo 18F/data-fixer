@@ -6,10 +6,11 @@ import {
   Location,
   getUrl,
   parseLocation,
-  LocationGateway,
   LocationService,
 } from 'datafixer/core/routes';
 import { renderToString } from 'datafixer/frontend';
+
+import { ServerLocationGateway } from './location-gateway';
 
 type ServerContext = {
   authenticationService: AuthenticationService;
@@ -17,23 +18,9 @@ type ServerContext = {
   localStorage: Storage;
 };
 
-class ServerLocationGateway implements LocationGateway {
-  constructor(private path: string) {}
-  getPath() {
-    return this.path;
-  }
-  setPath(path: string) {
-    throw new Error('Not implemented on the server');
-  }
-  reload() {
-    throw new Error('Not implemented on the server');
-  }
-}
-
 const RenderHtmlService = (ctx: ServerContext) => (location: Location) => {
   return renderToString({
     ...ctx,
-    localStorage: ctx.localStorage,
     locationService: new LocationService({
       locationGateway: new ServerLocationGateway(getUrl(location)),
     }),
@@ -47,11 +34,28 @@ export const ServerService = (ctx: ServerContext) => (port: number) => {
 
   expressRouter.get('*', (req, res) => {
     const location = parseLocation(req.originalUrl);
-    const html = renderHtml(location);
+    const html = `
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>10x Data Fixer Prototype</title>
+    <link rel="stylesheet" href="/datafixer/frontend/bundle.min.css" />
+  </head>
+  <body>
+    <div id="root">${renderHtml(location)}</div>
+    <script src="/datafixer/context/browser/bundle.min.js"></script>
+  </body>
+</html>
+`;
     res.send(html);
   });
 
   const app = express();
+
+  // TODO: Map just required files rather than entire context/server sandbox.
+  app.use(express.static('..'));
   app.use(expressRouter);
+
   app.listen(port, () => console.log(`Server listening on port ${port}.`));
 };
