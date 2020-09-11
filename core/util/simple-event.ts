@@ -1,4 +1,4 @@
-export const simpleEvent = <T extends Function>(context: any) => {
+export const SimpleEvent = <T extends Function>(context: any) => {
   let listeners: T[] = [];
   return {
     addListener: (listener: T) => {
@@ -14,3 +14,4 @@ export const simpleEvent = <T extends Function>(context: any) => {
     ),
   };
 };
+export type SimpleEvent = ReturnType<typeof SimpleEvent>;

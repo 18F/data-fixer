@@ -1,22 +1,28 @@
-import { LocationGateway } from 'datafixer/core/routes';
+import { LocationGateway, UrlListener } from 'datafixer/core/routes';
+import { SimpleEvent } from 'datafixer/core/util/simple-event';
 
 type BrowserLocationGatewayContext = {
-  location: globalThis.Location;
-  history: globalThis.History;
+  window: globalThis.Window;
 };
 
 export class BrowserLocationGateway implements LocationGateway {
-  constructor(private ctx: BrowserLocationGatewayContext) {}
+  public readonly changeEvent = SimpleEvent(this);
+
+  constructor(private ctx: BrowserLocationGatewayContext) {
+    this.ctx.window.addEventListener('popstate', () => {
+      this.changeEvent.trigger(this.getPath());
+    });
+  }
 
   getPath() {
-    return this.ctx.location.pathname;
+    return this.ctx.window.location.pathname;
   }
 
   setPath(path: string) {
-    this.ctx.history.pushState(null, '', path);
+    this.ctx.window.history.pushState(null, '', path);
   }
 
   reload() {
-    this.ctx.location.reload();
+    this.ctx.window.location.reload();
   }
 }

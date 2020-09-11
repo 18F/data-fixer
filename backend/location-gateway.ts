@@ -1,6 +1,8 @@
 import { LocationGateway } from 'datafixer/core/routes';
+import { SimpleEvent } from 'datafixer/core/util/simple-event';
 
 export class ServerLocationGateway implements LocationGateway {
+  public readonly changeEvent = SimpleEvent(this);
   constructor(private path: string) {}
   getPath() {
     return this.path;

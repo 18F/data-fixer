@@ -65,7 +65,6 @@ export class MockDatasetGateway implements DatasetGateway {
         project.organization.alias === organizationAlias &&
         project.alias === projectAlias
     )[0];
-    console.log('returning', project);
     return project;
   }
 

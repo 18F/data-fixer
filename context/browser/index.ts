@@ -18,10 +18,7 @@ const authenticationService = AuthenticationService(
   })
 );
 
-const locationGateway = new BrowserLocationGateway({
-  location: window.location,
-  history: window.history,
-});
+const locationGateway = new BrowserLocationGateway({ window });
 const ctx = {
   authenticationService,
   datasetService,
