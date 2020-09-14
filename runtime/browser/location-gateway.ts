@@ -1,4 +1,4 @@
-import { LocationGateway, UrlListener } from 'datafixer/core/routes';
+import { LocationGateway } from 'datafixer/core/routes';
 import { SimpleEvent } from 'datafixer/core/util/simple-event';
 
 type BrowserLocationGatewayContext = {

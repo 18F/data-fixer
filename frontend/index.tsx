@@ -1,4 +1,4 @@
-import React, { DOMElement } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
@@ -76,7 +76,14 @@ export const App = ({ ctx }: { ctx: AppContext }) => {
       );
       break;
     case 'NewDataset':
-      pageComponent = <DatasetUploadPage />;
+      pageComponent = (
+        <DatasetUploadPage
+          ctx={{
+            createMockDataset: ctx.datasetService.createMockDataset,
+          }}
+          router={router}
+        />
+      );
       break;
     case 'Project':
       pageComponent = (

@@ -24,4 +24,5 @@ export interface DatasetGateway {
   getOrganizations(): Promise<Array<Organization>>;
   createDatasetProject(dataset: DatasetProject): Promise<DatasetProject>;
   resetFactoryDefaults(): void;
+  createDataset(dataset: Dataset): void;
 }

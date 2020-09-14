@@ -9,6 +9,7 @@ import {
   OrganizationAlias,
   OrganizationReference,
   ProjectAlias,
+  ProjectId,
 } from './entities';
 import { DatasetGateway } from './gateways';
 
@@ -88,6 +89,40 @@ export type ResetFactoryDefaultsService = ReturnType<
   typeof ResetFactoryDefaultsService
 >;
 
+export const CreateMockDatasetService = (
+  datasetGateway: DatasetGateway
+) => async (
+  organizationAlias: OrganizationAlias,
+  projectAlias: ProjectAlias
+) => {
+  // Feed some mock data
+  const project = await datasetGateway.getDatasetProjectByName(
+    organizationAlias,
+    projectAlias
+  );
+  const datasetId = uuidv4();
+  datasetGateway.createDataset({
+    id: datasetId,
+    projectId: project.id,
+    schema: {
+      type: 'Schema type',
+      description: 'Mock uploaded schema',
+    },
+    data: [
+      ['fake1', 'fake2', 'fake3'],
+      ['XXX', '111', 'AAA'],
+      ['YYY', '222', 'BBB'],
+      ['ZZZ', '333', 'CCC'],
+    ],
+    consumers: [],
+    sources: [],
+  });
+  return datasetId;
+};
+export type CreateMockDatasetService = ReturnType<
+  typeof CreateMockDatasetService
+>;
+
 export const DatasetService = (datasetGateway: DatasetGateway) => {
   return {
     createDatasetProject: CreateDatasetProjectService(datasetGateway),
@@ -97,6 +132,7 @@ export const DatasetService = (datasetGateway: DatasetGateway) => {
     getOrganization: GetOrganizationService(datasetGateway),
     getOrganizations: GetOrganizationsService(datasetGateway),
     resetFactoryDefaults: ResetFactoryDefaultsService(datasetGateway),
+    createMockDataset: CreateMockDatasetService(datasetGateway),
   };
 };
 export type DatasetService = ReturnType<typeof DatasetService>;

@@ -100,4 +100,22 @@ export class MockDatasetGateway implements DatasetGateway {
   resetFactoryDefaults() {
     this._setData(this.initialMockData);
   }
+
+  async createDataset(dataset: Dataset) {
+    const project = await this.getDatasetProjectById(dataset.projectId);
+    this._setData({
+      ...this.data,
+      datasets: {
+        ...this.data.datasets,
+        [dataset.id]: dataset,
+      },
+      datasetProjects: {
+        ...this.data.datasetProjects,
+        [project.id]: {
+          ...project,
+          datasetVersions: project.datasetVersions.concat(dataset.id),
+        },
+      },
+    });
+  }
 }
