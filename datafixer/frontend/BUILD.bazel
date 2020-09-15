@@ -16,7 +16,7 @@ ts_library(
     ),
     module_name = "datafixer/frontend",
     deps = [
-        "//core",
+        "//datafixer/core",
         "@npm//@types/react",
         "@npm//@types/react-dom",
         "@npm//fp-ts",

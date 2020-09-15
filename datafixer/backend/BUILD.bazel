@@ -7,9 +7,9 @@ ts_library(
     srcs = glob(["**/*.ts"]),
     module_name = "datafixer/backend",
     deps = [
-        "//core",
-        "//frontend",
-        "//runtime/node",
+        "//datafixer/core",
+        "//datafixer/frontend",
+        "//datafixer/runtime/node",
         "@npm//@types/express",
         "@npm//@types/node",
         "@npm//@types/react-dom",

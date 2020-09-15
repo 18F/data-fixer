@@ -21,4 +21,5 @@ const ctx = {
 
 const server = ServerService(ctx);
 
+console.log('Starting server');
 server(8080);

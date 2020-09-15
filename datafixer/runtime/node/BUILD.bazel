@@ -3,11 +3,11 @@ package(default_visibility = ["//visibility:public"])
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 ts_library(
-    name = "mock",
+    name = "node",
     srcs = glob(["**/*.ts"]),
-    module_name = "datafixer/runtime/mock",
+    module_name = "datafixer/runtime/node",
     deps = [
-        "//core",
-        "@npm//fp-ts",
+        "//datafixer/core",
+        "@npm//@types/node",
     ],
 )

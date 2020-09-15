@@ -10,10 +10,10 @@ ts_library(
     srcs = glob(["**/*.ts"]),
     module_name = "datafixer/context/server",
     deps = [
-        "//backend",
-        "//core",
-        "//runtime/mock",
-        "//runtime/node",
+        "//datafixer/backend",
+        "//datafixer/core",
+        "//datafixer/runtime/mock",
+        "//datafixer/runtime/node",
         "@npm//@types/node",
         "@npm//@types/node-localstorage",
         "@npm//node-localstorage",
@@ -24,7 +24,7 @@ nodejs_binary(
     name = "start",
     data = [
         ":server",
-        "//context/browser:assets",
+        "//datafixer/context/browser:assets",
     ],
     entry_point = ":index.ts",
 )
@@ -38,7 +38,7 @@ nodejs_image(
     name = "image",
     data = [
         ":server",
-        "//context/browser:assets",
+        "//datafixer/context/browser:assets",
     ],
     entry_point = ":index.ts",
 )

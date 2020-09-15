@@ -7,6 +7,7 @@ import {
   getUrl,
   parseLocation,
   LocationService,
+  NotFoundLocation,
 } from 'datafixer/core/routes';
 import { renderToString } from 'datafixer/frontend';
 
@@ -34,20 +35,22 @@ export const ServerService = (ctx: ServerContext) => (port: number) => {
 
   expressRouter.get('*', (req, res) => {
     const location = parseLocation(req.originalUrl);
-    const html = `
+    const html = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>10x Data Fixer Prototype</title>
-    <link rel="stylesheet" href="/datafixer/frontend/bundle.min.css" />
+    <link rel="stylesheet" href="/datafixer/datafixer/frontend/bundle.min.css" />
   </head>
   <body>
     <div id="root">${renderHtml(location)}</div>
-    <script src="/datafixer/context/browser/bundle.min.js"></script>
+    <script src="/datafixer/datafixer/context/browser/bundle.min.js"></script>
   </body>
 </html>
 `;
+    const status = location.type === 'NotFound' ? 404 : 200;
+    res.status(status);
     res.send(html);
   });
 
@@ -56,6 +59,5 @@ export const ServerService = (ctx: ServerContext) => (port: number) => {
   // TODO: Map just required files rather than entire context/server sandbox.
   app.use(express.static('..'));
   app.use(expressRouter);
-
   app.listen(port, () => console.log(`Server listening on port ${port}.`));
 };
