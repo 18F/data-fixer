@@ -8,4 +8,10 @@ $theme-banner-max-width: 'widescreen';
 $theme-footer-max-width: 'widescreen';
 $theme-header-max-width: 'widescreen';
 
+$utilities-use-important: true;
+$global-color-palettes: (
+  'palette-color-default',
+  'palette-color-state'
+) !default;
+
 @import 'uswds';
