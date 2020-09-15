@@ -1,6 +1,6 @@
 # 10x datafixer prototype
 
-This repository contains the prototype for the Phase 2 (10x)[https://10x.gsa.gov/] "Data Fixer" tool.
+This repository contains the prototype for the Phase 2 [10x](https://10x.gsa.gov/) "Data Fixer" tool.
 
 The original 10x pitch text:
 
@@ -8,7 +8,7 @@ The original 10x pitch text:
 
 ## Developer Instructions
 
-This project uses the (Bazel)[https://bazel.build/] build system. Installation of Bazel and all dependencies is bootstrapped with (yarn)[https://yarnpkg.com/].
+This project uses the [Bazel](https://bazel.build/) build system. Installation of Bazel and all dependencies is bootstrapped with [yarn](https://yarnpkg.com/).
 
 To install all application dependencies:
 
