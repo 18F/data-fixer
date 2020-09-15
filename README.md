@@ -4,13 +4,13 @@ This repository contains the prototype for the Phase 2 (10x)[https://10x.gsa.gov
 
 The original 10x pitch text:
 
-    Data practitioners are often faced with incorrectly-formatted data for fields that have known formats, such as zip code or social security number. TTS will explore using machine learning to extend the 10x U.S. Data Federation's ReVal tool (or to create a new tool) capable of not only validating data, but proposing fixes when such formatting errors are identified, which could result in much quicker data repair, saving time and effort for practitioners. - the U.S. Data Federation, Data Fixer Author
+> Data practitioners are often faced with incorrectly-formatted data for fields that have known formats, such as zip code or social security number. TTS will explore using machine learning to extend the 10x U.S. Data Federation's ReVal tool (or to create a new tool) capable of not only validating data, but proposing fixes when such formatting errors are identified, which could result in much quicker data repair, saving time and effort for practitioners. - the U.S. Data Federation, Data Fixer Author
 
 ## Developer Instructions
 
 This project uses the (Bazel)[https://bazel.build/] build system. Installation of Bazel and all dependencies is bootstrapped with (yarn)[https://yarnpkg.com/].
 
-To install Bazel and all application dependencies:
+To install all application dependencies:
 
 ```bash
 yarn install
