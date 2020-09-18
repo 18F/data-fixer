@@ -15,6 +15,7 @@ import { DatasetProjectPage } from './pages/dataset-project';
 import { NewDatasetProjectPage } from './pages/dataset-project-new';
 import { OrganizationPage } from './pages/organization';
 import { useLocation } from './hooks/location';
+import { HomePresenter } from './presenter/home';
 
 type AppContext = {
   authenticationService: AuthenticationService;
@@ -32,10 +33,12 @@ export const App = ({ ctx }: { ctx: AppContext }) => {
     case 'Home':
       pageComponent = (
         <Home
-          ctx={{
+          presenter={HomePresenter({
             getFeaturedProjects: ctx.datasetService.getFeaturedProjects,
             locationService: ctx.locationService,
             resetFactoryDefaults: ctx.datasetService.resetFactoryDefaults,
+          })}
+          ctx={{
             router: router,
           }}
         />

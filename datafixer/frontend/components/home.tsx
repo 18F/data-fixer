@@ -1,29 +1,25 @@
+import { useStore } from 'effector-react';
 import React from 'react';
 
-import {
-  GetFeaturedProjectsService,
-  ResetFactoryDefaultsService,
-} from 'datafixer/core/data';
-import {
-  LocationService,
-  projectLocation,
-  Router,
-} from 'datafixer/core/routes';
+import { projectLocation, Router } from 'datafixer/core/routes';
 
 import { Link } from '../components/link';
-import { useFeaturedProjects } from '../hooks/featured-projects';
+import { HomePresenter } from '../presenter/home';
 
 type HomeContext = {
-  getFeaturedProjects: GetFeaturedProjectsService;
-  locationService: LocationService;
-  resetFactoryDefaults: ResetFactoryDefaultsService;
   router: Router;
 };
 
-export const Home = ({ ctx }: { ctx: HomeContext }) => {
-  const featuredProjects = useFeaturedProjects(ctx.getFeaturedProjects);
+export const Home = ({
+  ctx,
+  presenter,
+}: {
+  ctx: HomeContext;
+  presenter: HomePresenter;
+}) => {
+  const featuredProjects = useStore(presenter.featuredProjects);
 
-  if (!featuredProjects) {
+  if (featuredProjects.length === 0) {
     return <div>Loading...</div>;
   }
 
@@ -42,8 +38,7 @@ export const Home = ({ ctx }: { ctx: HomeContext }) => {
           <button
             className="usa-button usa-button--unstyled"
             onClick={() => {
-              ctx.resetFactoryDefaults();
-              ctx.locationService.reload();
+              presenter.resetFactoryDefaults();
             }}
           >
             Reset To Factory Defaults

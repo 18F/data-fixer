@@ -19,6 +19,8 @@ ts_library(
         "//datafixer/core",
         "@npm//@types/react",
         "@npm//@types/react-dom",
+        "@npm//effector",
+        "@npm//effector-react",
         "@npm//fp-ts",
         "@npm//io-ts",
         "@npm//react",
