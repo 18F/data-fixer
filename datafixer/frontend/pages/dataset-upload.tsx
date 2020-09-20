@@ -1,25 +1,16 @@
 import React from 'react';
 
-import { CreateMockDatasetService } from 'datafixer/core/data';
-import {
-  datasetLocation,
-  NewDatasetLocation,
-  Router,
-} from 'datafixer/core/routes';
+import { DatasetUploadPresenter } from '../presenter/dataset-upload';
 
-type DatasetUploadPageContext = {
-  createMockDataset: CreateMockDatasetService;
-};
-
-export const DatasetUploadPage = (props: {
-  ctx: DatasetUploadPageContext;
-  router: Router;
+export const DatasetUploadPage = ({
+  presenter,
+}: {
+  presenter: DatasetUploadPresenter;
 }) => {
-  const location = props.router.currentLocation as NewDatasetLocation;
   return (
     <div>
       <h2>
-        {location.organizationAlias} / {location.alias}
+        {presenter.location.organizationAlias} / {presenter.location.alias}
       </h2>
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="file-input">
@@ -35,17 +26,7 @@ export const DatasetUploadPage = (props: {
       <button
         className="usa-button"
         onClick={async () => {
-          const datasetId = await props.ctx.createMockDataset(
-            location.organizationAlias,
-            location.alias
-          );
-          props.router.updateLocation(
-            datasetLocation(
-              location.organizationAlias,
-              location.alias,
-              datasetId
-            )
-          );
+          await presenter.createMockDataset();
         }}
       >
         Upload data

@@ -1,43 +1,27 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  CreateDatasetProjectService,
-  GetOrganizationsService,
-} from 'datafixer/core/data';
-import { projectLocation, Location } from 'datafixer/core/routes';
+import { Organization } from 'datafixer/core/data';
 
-import { useOrganizations } from '../hooks/organization';
-
-type CreateProjectFormContext = {
-  createDatasetProject: CreateDatasetProjectService;
-  getOrganizations: GetOrganizationsService;
-  updateLocation: (location: Location) => void;
+type CreateProjectFormProps = {
+  createProject: Function;
+  organizations: Organization[];
 };
 
 export const CreateProjectForm = ({
-  ctx,
-}: {
-  ctx: CreateProjectFormContext;
-}) => {
+  createProject,
+  organizations,
+}: CreateProjectFormProps) => {
   const { register, handleSubmit, errors } = useForm();
-  const organizations = useOrganizations(ctx.getOrganizations);
   const onSubmit = async (data: any) => {
     if (!organizations || !organizations.length) {
       return;
     }
-    const project = await ctx.createDatasetProject(
-      organizations[0],
-      data.alias,
-      {
-        title: data.projectName,
-        source: data.source,
-        description: data.description,
-      }
-    );
-    ctx.updateLocation(
-      projectLocation(project.organization.alias, project.alias)
-    );
+    await createProject(organizations[0], data.alias, {
+      title: data.projectName,
+      source: data.source,
+      description: data.description,
+    });
   };
 
   if (!organizations) {

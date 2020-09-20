@@ -1,4 +1,4 @@
-import { createDomain, Effect, Store } from 'effector';
+import { createDomain, Event, Store } from 'effector';
 
 import {
   DatasetProject,
@@ -27,12 +27,10 @@ export const HomePresenter = (ctx: Context) => {
     (_, { result }) => result
   );
 
-  const resetFactoryDefaults = HomeDomain.effect<void, void, Error>({
-    handler: () => {
-      ctx.resetFactoryDefaults();
-      ctx.locationService.reload();
-    },
-  });
+  const resetFactoryDefaults = () => {
+    ctx.resetFactoryDefaults();
+    ctx.locationService.reload();
+  };
 
   // Start loading featured projects immediately.
   getFeaturedProjects();
@@ -42,7 +40,4 @@ export const HomePresenter = (ctx: Context) => {
     resetFactoryDefaults,
   };
 };
-export type HomePresenter = {
-  featuredProjects: Store<DatasetProject[]>;
-  resetFactoryDefaults: Effect<void, void, Error>;
-};
+export type HomePresenter = ReturnType<typeof HomePresenter>;

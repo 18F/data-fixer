@@ -16,6 +16,9 @@ import { NewDatasetProjectPage } from './pages/dataset-project-new';
 import { OrganizationPage } from './pages/organization';
 import { useLocation } from './hooks/location';
 import { HomePresenter } from './presenter/home';
+import { DatasetUploadPresenter } from './presenter/dataset-upload';
+import { OrganizationPresenter } from './presenter/organization';
+import { ProjectCreatePresenter } from './presenter/project-create';
 
 type AppContext = {
   authenticationService: AuthenticationService;
@@ -47,22 +50,21 @@ export const App = ({ ctx }: { ctx: AppContext }) => {
     case 'NewProject':
       pageComponent = (
         <NewDatasetProjectPage
-          ctx={{
+          presenter={ProjectCreatePresenter({
             createDatasetProject: ctx.datasetService.createDatasetProject,
             getOrganizations: ctx.datasetService.getOrganizations,
             updateLocation: router.updateLocation,
-          }}
+          })}
         />
       );
       break;
     case 'Organization':
       pageComponent = (
         <OrganizationPage
-          ctx={{
-            createDatasetProject: ctx.datasetService.createDatasetProject,
+          presenter={OrganizationPresenter({
             getOrganization: ctx.datasetService.getOrganization,
-          }}
-          location={router.currentLocation}
+            locationService: ctx.locationService,
+          })}
         />
       );
       break;
@@ -81,10 +83,13 @@ export const App = ({ ctx }: { ctx: AppContext }) => {
     case 'NewDataset':
       pageComponent = (
         <DatasetUploadPage
-          ctx={{
-            createMockDataset: ctx.datasetService.createMockDataset,
-          }}
-          router={router}
+          presenter={DatasetUploadPresenter(
+            {
+              createMockDataset: ctx.datasetService.createMockDataset,
+              updateLocation: router.updateLocation,
+            },
+            router.currentLocation
+          )}
         />
       );
       break;

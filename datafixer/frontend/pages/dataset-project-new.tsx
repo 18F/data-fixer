@@ -1,29 +1,23 @@
 import React from 'react';
+import { useStore } from 'effector-react';
 
-import {
-  CreateDatasetProjectService,
-  GetOrganizationsService,
-} from 'datafixer/core/data';
 import { Location } from 'datafixer/core/routes';
 
 import { CreateProjectForm } from '../components/dataset-project-create-form';
+import { ProjectCreatePresenter } from '../presenter/project-create';
 
 type NewDatasetProjectPageContext = {
-  createDatasetProject: CreateDatasetProjectService;
-  getOrganizations: GetOrganizationsService;
-  updateLocation: (location: Location) => void;
+  presenter: ProjectCreatePresenter;
 };
 
 export const NewDatasetProjectPage = ({
-  ctx,
-}: {
-  ctx: NewDatasetProjectPageContext;
-}) => (
-  <CreateProjectForm
-    ctx={{
-      createDatasetProject: ctx.createDatasetProject,
-      getOrganizations: ctx.getOrganizations,
-      updateLocation: ctx.updateLocation,
-    }}
-  />
-);
+  presenter,
+}: NewDatasetProjectPageContext) => {
+  const organizations = useStore(presenter.organizations);
+  return (
+    <CreateProjectForm
+      createProject={presenter.createProject}
+      organizations={organizations}
+    />
+  );
+};

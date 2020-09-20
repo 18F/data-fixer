@@ -1,26 +1,14 @@
 import React from 'react';
+import { useStore } from 'effector-react';
 
-import {
-  CreateDatasetProjectService,
-  GetOrganizationService,
-} from 'datafixer/core/data';
-import { OrganizationLocation } from 'datafixer/core/routes';
+import { OrganizationPresenter } from '../presenter/organization';
 
-import { useOrganization } from '../hooks/organization';
-
-type OrganizationPageContext = {
-  createDatasetProject: CreateDatasetProjectService;
-  getOrganization: GetOrganizationService;
+type OrganizationPageProps = {
+  presenter: OrganizationPresenter;
 };
 
-export const OrganizationPage = (props: {
-  ctx: OrganizationPageContext;
-  location: OrganizationLocation;
-}) => {
-  const organization = useOrganization(
-    props.location.organizationAlias,
-    props.ctx.getOrganization
-  );
+export const OrganizationPage = ({ presenter }: OrganizationPageProps) => {
+  const organization = useStore(presenter.organization);
 
   if (!organization) {
     return <div>Loading...</div>;
