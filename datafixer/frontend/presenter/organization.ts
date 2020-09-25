@@ -2,12 +2,12 @@ import { createDomain, Store } from 'effector';
 import { pipe } from 'fp-ts/lib/function';
 import { fold } from 'fp-ts/lib/Option';
 
+import { Organization, OrganizationAlias } from 'datafixer/core';
+import { GetOrganizationService } from 'datafixer/services/dataset';
 import {
-  GetOrganizationService,
-  Organization,
-  OrganizationAlias,
-} from 'datafixer/core/data';
-import { LocationService, OrganizationLocation } from 'datafixer/core/routes';
+  LocationService,
+  OrganizationLocation,
+} from 'datafixer/services/routes';
 
 export type Context = {
   getOrganization: GetOrganizationService;

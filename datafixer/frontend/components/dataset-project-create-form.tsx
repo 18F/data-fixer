@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Organization } from 'datafixer/core/data';
+import { Organization } from 'datafixer/core';
 
 type CreateProjectFormProps = {
   createProject: Function;

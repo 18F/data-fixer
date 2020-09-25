@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { render } from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
-import { AuthenticationService } from 'datafixer/core/authentication';
-import { DatasetService } from 'datafixer/core/data';
-import { Location, LocationService, Router } from 'datafixer/core/routes';
+import { AuthenticationService } from 'datafixer/services/authentication';
+import { DatasetService } from 'datafixer/services/dataset';
+import { Location, LocationService, Router } from 'datafixer/services/routes';
 
-import { Home } from './components/home';
 import { Layout } from './components/layout';
 import { DatasetPage } from './pages/dataset';
 import { DatasetUploadPage } from './pages/dataset-upload';
 import { DatasetProjectPage } from './pages/dataset-project';
 import { NewDatasetProjectPage } from './pages/dataset-project-new';
+import { Home } from './pages/home';
 import { OrganizationPage } from './pages/organization';
 import { Presenter } from './presenter';
 

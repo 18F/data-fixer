@@ -6,14 +6,14 @@ load("@npm//@bazel/typescript:index.bzl", "ts_devserver", "ts_library")
 
 ts_library(
     name = "browser",
-    srcs = [
-        ":index.ts",
-    ],
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.test.ts"],
+    ),
     deps = [
-        "//datafixer/core",
+        "//datafixer/adapters",
         "//datafixer/frontend",
-        "//datafixer/runtime/browser",
-        "//datafixer/runtime/mock",
+        "//datafixer/services",
     ],
 )
 

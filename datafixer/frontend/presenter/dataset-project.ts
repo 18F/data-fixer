@@ -2,16 +2,15 @@ import { createDomain, createEffect, createStore, Store } from 'effector';
 
 import {
   DatasetProject,
-  GetDatasetProjectService,
   OrganizationAlias,
   ProjectAlias,
-} from 'datafixer/core/data';
+} from 'datafixer/core';
 import {
   LocationService,
   newDataset,
   ProjectLocation,
-} from 'datafixer/core/routes';
-
+} from 'datafixer/services/routes';
+import { GetDatasetProjectService } from 'datafixer/services/dataset';
 type Context = {
   getDatasetProject: GetDatasetProjectService;
   locationService: LocationService;

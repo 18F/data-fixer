@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { DatasetProject, ProjectId, DatasetId } from 'datafixer/core/data';
+import { DatasetProject, ProjectId, DatasetId } from 'datafixer/core';
 import {
   datasetLocation,
   projectLocation,
   DatasetLocation,
   Location,
   ProjectLocation,
-} from 'datafixer/core/routes';
+} from 'datafixer/services/routes';
 
 import { Link } from '../components/link';
 

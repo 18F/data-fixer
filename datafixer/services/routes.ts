@@ -1,11 +1,7 @@
 import { end, format, lit, parse, str, zero, Route } from 'fp-ts-routing';
 
-import {
-  DatasetId,
-  ProjectAlias,
-  OrganizationAlias,
-} from 'datafixer/core/data';
-import { SimpleEvent } from './util/simple-event';
+import { DatasetId, ProjectAlias, OrganizationAlias } from 'datafixer/core';
+import { SimpleEvent } from 'datafixer/core/util/simple-event';
 
 export interface HomeLocation {
   readonly type: 'Home';

@@ -1,10 +1,9 @@
-import { CreateMockDatasetService } from 'datafixer/core/data';
+import { CreateMockDatasetService } from 'datafixer/services/dataset';
 import {
   datasetLocation,
   LocationService,
   NewDatasetLocation,
-  UpdateLocation,
-} from 'datafixer/core/routes';
+} from 'datafixer/services/routes';
 
 export type Context = {
   createMockDataset: CreateMockDatasetService;

@@ -6,7 +6,7 @@ import {
   AuthenticationGateway,
   AuthenticationResult,
   SessionToken,
-} from 'datafixer/core/authentication';
+} from 'datafixer/services/authentication';
 
 const MOCK_TOKEN: SessionToken = 'abc';
 

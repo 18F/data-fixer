@@ -1,17 +1,15 @@
 import express from 'express';
 
-import { AuthenticationService } from 'datafixer/core/authentication';
-import { DatasetService } from 'datafixer/core/data';
+import { SinglePageLocationGateway } from 'datafixer/adapters/location/single-page';
+import { renderToString } from 'datafixer/frontend';
+import { AuthenticationService } from 'datafixer/services/authentication';
+import { DatasetService } from 'datafixer/services/dataset';
 import {
   Location,
   getUrl,
   parseLocation,
   LocationService,
-  NotFoundLocation,
-} from 'datafixer/core/routes';
-import { renderToString } from 'datafixer/frontend';
-
-import { ServerLocationGateway } from './location-gateway';
+} from 'datafixer/services/routes';
 
 type ServerContext = {
   authenticationService: AuthenticationService;
@@ -23,7 +21,7 @@ const RenderHtmlService = (ctx: ServerContext) => (location: Location) => {
   return renderToString({
     ...ctx,
     locationService: new LocationService({
-      locationGateway: new ServerLocationGateway(getUrl(location)),
+      locationGateway: new SinglePageLocationGateway(getUrl(location)),
     }),
   });
 };

@@ -1,3 +1,4 @@
+import { createEvent, createStore, Store } from 'effector';
 import { fold } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/pipeable';
 
@@ -5,8 +6,7 @@ import {
   AuthenticationDetails,
   AuthenticationService,
   AuthenticationResult,
-} from 'datafixer/core/authentication';
-import { createEvent, createStore, Store } from 'effector';
+} from 'datafixer/services/authentication';
 
 const SESSION_TOKEN_KEY = 'sessionToken';
 

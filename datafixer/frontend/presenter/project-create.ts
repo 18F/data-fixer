@@ -1,10 +1,10 @@
 import { createEffect, createStore, Effect, Store } from 'effector';
 
+import { Organization } from 'datafixer/core';
 import {
   CreateDatasetProjectService,
   GetOrganizationsService,
-  Organization,
-} from 'datafixer/core/data';
+} from 'datafixer/services/dataset';
 
 export type Context = {
   createDatasetProject: CreateDatasetProjectService;

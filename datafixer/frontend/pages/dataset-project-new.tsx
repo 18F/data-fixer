@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStore } from 'effector-react';
 
-import { Location } from 'datafixer/core/routes';
+import { Location } from 'datafixer/services/routes';
 
 import { CreateProjectForm } from '../components/dataset-project-create-form';
 import { ProjectCreatePresenter } from '../presenter/project-create';

@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import React from 'react';
 
-import { DatasetLocation, Location } from 'datafixer/core/routes';
+import { DatasetLocation, Location } from 'datafixer/services/routes';
 import { DataTable } from '../components/data-table';
 import { DatasetLayout } from './dataset-layout';
 import { DatasetPresenter } from '../presenter/dataset';

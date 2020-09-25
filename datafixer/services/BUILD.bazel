@@ -4,14 +4,19 @@ load("@npm//@bazel/jasmine:index.bzl", "jasmine_node_test")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
 
 ts_library(
-    name = "core",
+    name = "services",
     srcs = glob(
         ["**/*.ts"],
         exclude = ["**/*.test.ts"],
     ),
-    module_name = "datafixer/core",
+    module_name = "datafixer/services",
     deps = [
+        "//datafixer/core",
+        "@npm//@types/uuid",
+        "@npm//fp-ts",
+        "@npm//fp-ts-routing",
         "@npm//io-ts",
+        "@npm//uuid",
     ],
 )
 
@@ -19,7 +24,7 @@ ts_library(
     name = "test_lib",
     srcs = glob(["**/*.test.ts"]),
     deps = [
-        ":core",
+        ":services",
         "@npm//@types/jasmine",
     ],
 )

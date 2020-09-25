@@ -1,5 +1,5 @@
-import { LocationGateway } from 'datafixer/core/routes';
 import { SimpleEvent } from 'datafixer/core/util/simple-event';
+import { LocationGateway } from 'datafixer/services/routes';
 
 type BrowserLocationGatewayContext = {
   window: globalThis.Window;

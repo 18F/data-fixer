@@ -1,6 +1,6 @@
-import { AuthenticationService } from 'datafixer/core/authentication';
-import { DatasetService } from 'datafixer/core/data';
-import { LocationService } from 'datafixer/core/routes';
+import { AuthenticationService } from 'datafixer/services/authentication';
+import { DatasetService } from 'datafixer/services/dataset';
+import { LocationService } from 'datafixer/services/routes';
 
 import { HomePresenter } from './home';
 import { DatasetPresenter } from './dataset';

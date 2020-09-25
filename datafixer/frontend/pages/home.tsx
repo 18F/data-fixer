@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import React, { useEffect } from 'react';
 
-import { projectLocation, Router } from 'datafixer/core/routes';
+import { projectLocation, Router } from 'datafixer/services/routes';
 
 import { Link } from '../components/link';
 import { HomePresenter } from '../presenter/home';

@@ -2,6 +2,7 @@ import { Option } from 'fp-ts/Option';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
+  Dataset,
   DatasetId,
   DatasetProject,
   DatasetProjectDetails,
@@ -9,8 +10,25 @@ import {
   OrganizationAlias,
   OrganizationReference,
   ProjectAlias,
-} from './entities';
-import { DatasetGateway } from './gateways';
+  ProjectId,
+} from 'datafixer/core';
+
+export interface DatasetGateway {
+  getDataset(id: DatasetId): Promise<Dataset>;
+  getDatasetProjectById(id: ProjectId): Promise<DatasetProject>;
+  getDatasetProjectByName(
+    organizationAlias: OrganizationAlias,
+    alias: ProjectAlias
+  ): Promise<DatasetProject>;
+  getFeaturedProjects(): Promise<DatasetProject[]>;
+  getOrganizationByAlias(
+    alias: OrganizationAlias
+  ): Promise<Option<Organization>>;
+  getOrganizations(): Promise<Array<Organization>>;
+  createDatasetProject(dataset: DatasetProject): Promise<DatasetProject>;
+  resetFactoryDefaults(): void;
+  createDataset(dataset: Dataset): void;
+}
 
 export const CreateDatasetProjectService = (
   datasetGateway: DatasetGateway

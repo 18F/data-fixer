@@ -1,7 +1,7 @@
 import { useStore } from 'effector-react';
 import React from 'react';
 
-import { newProject, UpdateLocation } from 'datafixer/core/routes';
+import { newProject, UpdateLocation } from 'datafixer/services/routes';
 
 import { Link } from './link';
 import { SessionPresenter } from '../presenter/session';

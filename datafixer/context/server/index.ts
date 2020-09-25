@@ -1,24 +1,26 @@
 import { LocalStorage } from 'node-localstorage';
 
-import { ServerService } from 'datafixer/backend';
-import { AuthenticationService } from 'datafixer/core/authentication';
-import { DatasetService } from 'datafixer/core/data';
-import { MockAuthenticationGateway } from 'datafixer/runtime/mock/authentication-gateway';
-import { MockDatasetGateway } from 'datafixer/runtime/mock/dataset-gateway';
+import { MockAuthenticationGateway } from 'datafixer/adapters/authentication/mock';
+import { MockDatasetGateway } from 'datafixer/adapters/dataset/mock';
+import { ServerService } from 'datafixer/adapters/web-server';
+import { AuthenticationService } from 'datafixer/services/authentication';
+import { DatasetService } from 'datafixer/services/dataset';
 
-const localStorage = new LocalStorage('./scratch');
-const mockDatasetGateway = new MockDatasetGateway({ localStorage });
-const datasetService = DatasetService(mockDatasetGateway);
-const authenticationService = AuthenticationService(
-  new MockAuthenticationGateway({ localStorage })
-);
-
-const ctx = {
-  authenticationService,
-  datasetService,
-  localStorage,
+const Context = () => {
+  const localStorage = new LocalStorage('./scratch');
+  const mockDatasetGateway = new MockDatasetGateway({ localStorage });
+  const datasetService = DatasetService(mockDatasetGateway);
+  const authenticationService = AuthenticationService(
+    new MockAuthenticationGateway({ localStorage })
+  );
+  return {
+    authenticationService,
+    datasetService,
+    localStorage,
+  };
 };
 
+const ctx = Context();
 const server = ServerService(ctx);
 
 console.log('Starting server');

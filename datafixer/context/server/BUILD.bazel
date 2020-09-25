@@ -10,10 +10,8 @@ ts_library(
     srcs = glob(["**/*.ts"]),
     module_name = "datafixer/context/server",
     deps = [
-        "//datafixer/backend",
-        "//datafixer/core",
-        "//datafixer/runtime/mock",
-        "//datafixer/runtime/node",
+        "//datafixer/adapters",
+        "//datafixer/services",
         "@npm//@types/node",
         "@npm//@types/node-localstorage",
         "@npm//node-localstorage",

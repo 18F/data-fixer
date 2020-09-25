@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { newDataset, ProjectLocation, Location } from 'datafixer/core/routes';
+import {
+  newDataset,
+  ProjectLocation,
+  Location,
+} from 'datafixer/services/routes';
 
 import { DatasetLayout } from './dataset-layout';
 import { Link } from '../components/link';

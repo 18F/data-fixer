@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Location } from 'datafixer/core/routes';
+import { Location } from 'datafixer/services/routes';
 
 import { Banner } from './banner';
 import { Footer } from './footer';

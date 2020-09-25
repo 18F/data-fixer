@@ -1,11 +1,11 @@
 import { createDomain, Store } from 'effector';
 
+import { DatasetProject } from 'datafixer/core';
+import { LocationService } from 'datafixer/services/routes';
 import {
-  DatasetProject,
   GetFeaturedProjectsService,
   ResetFactoryDefaultsService,
-} from 'datafixer/core/data';
-import { LocationService } from 'datafixer/core/routes';
+} from 'datafixer/services/dataset';
 
 type Context = {
   getFeaturedProjects: GetFeaturedProjectsService;

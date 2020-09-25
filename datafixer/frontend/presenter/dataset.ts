@@ -4,12 +4,14 @@ import {
   Dataset,
   DatasetId,
   DatasetProject,
-  GetDatasetProjectService,
-  GetDatasetService,
   OrganizationAlias,
   ProjectAlias,
-} from 'datafixer/core/data';
-import { DatasetLocation, LocationService } from 'datafixer/core/routes';
+} from 'datafixer/core';
+import { DatasetLocation, LocationService } from 'datafixer/services/routes';
+import {
+  GetDatasetProjectService,
+  GetDatasetService,
+} from 'datafixer/services/dataset';
 
 type Context = {
   getDataset: GetDatasetService;
