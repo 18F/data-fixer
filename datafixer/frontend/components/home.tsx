@@ -1,5 +1,5 @@
 import { useStore } from 'effector-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { projectLocation, Router } from 'datafixer/core/routes';
 
@@ -18,6 +18,10 @@ export const Home = ({
   presenter: HomePresenter;
 }) => {
   const featuredProjects = useStore(presenter.featuredProjects);
+
+  useEffect(() => {
+    presenter.init();
+  }, []);
 
   if (featuredProjects.length === 0) {
     return <div>Loading...</div>;

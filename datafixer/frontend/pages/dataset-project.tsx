@@ -1,27 +1,26 @@
 import React from 'react';
 
-import { GetDatasetProjectService } from 'datafixer/core/data';
 import { newDataset, ProjectLocation, Location } from 'datafixer/core/routes';
 
 import { DatasetLayout } from './dataset-layout';
 import { Link } from '../components/link';
-import { useDatasetProject } from '../hooks/dataset-project';
+import { DatasetProjectPresenter } from '../presenter/dataset-project';
+import { useStore } from 'effector-react';
 
 type DatasetProjectPageContext = {
-  getDatasetProject: GetDatasetProjectService;
+  location: ProjectLocation;
+  presenter: DatasetProjectPresenter;
   updateLocation: (location: Location) => void;
 };
 
-export const DatasetProjectPage = (props: {
-  ctx: DatasetProjectPageContext;
-  location: ProjectLocation;
-}) => {
-  const datasetProject = useDatasetProject(
-    props.location.organizationAlias,
-    props.location.alias,
-    props.ctx.getDatasetProject
-  );
+export const DatasetProjectPage = ({
+  location,
+  presenter,
+  updateLocation,
+}: DatasetProjectPageContext) => {
+  presenter.init();
 
+  const datasetProject = useStore(presenter.datasetProject);
   if (!datasetProject) {
     return <div>Loading...</div>;
   }
@@ -30,17 +29,17 @@ export const DatasetProjectPage = (props: {
     <DatasetLayout
       ctx={{
         datasetProject: datasetProject,
-        updateLocation: props.ctx.updateLocation,
+        updateLocation: updateLocation,
       }}
       currentId={datasetProject.id}
-      location={props.location}
+      location={location}
     >
       <h1>{datasetProject.details.title}</h1>
       <h2>{datasetProject.details.source}</h2>
       <p>{datasetProject.details.description}</p>
       <Link
-        to={newDataset(props.location.organizationAlias, props.location.alias)}
-        updateLocation={props.ctx.updateLocation}
+        to={presenter.getNewDatasetLocation()}
+        updateLocation={updateLocation}
       >
         Upload New Dataset
       </Link>

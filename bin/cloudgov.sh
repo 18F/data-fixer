@@ -8,6 +8,7 @@ ORGANIZATION_NAME=sandbox-gsa
 SPACE_NAME=daniel.naab
 
 TERRAFORM_SERVICE=terraform-user
+TERRAFORM_STORAGE_SERVICE=terraform-storage
 
 space_exists() {
   cf space "$1" >/dev/null 2>&1
@@ -33,10 +34,14 @@ if [ "$1" = "setup" ] ; then echo
 	  cf create-service-key ${TERRAFORM_SERVICE} ${TERRAFORM_SERVICE}-key
 	  echo "to get the CF_USERNAME and CF_PASSWORD, execute './bin/cloudgov.sh print-service-key'"
 	fi
+
+	# if service_exists "${TERRAFORM_STORAGE_SERVICE}" ; then
+	# 	cf create-service s3 basic-private ${TERRAFORM_STORAGE_SERVICE}
+	# fi
 fi
 
 if [ "$1" = "print-service-key" ] ; then echo
-  cf service-key terraform-user terraform-user-key
+  cf service-key terraform-user ${TERRAFORM_SERVICE}-key
 fi
 
 if [ "$1" = "deploy" ] ; then echo

@@ -7,10 +7,11 @@ export const DatasetUploadPage = ({
 }: {
   presenter: DatasetUploadPresenter;
 }) => {
+  const location = presenter.getLocation();
   return (
     <div>
       <h2>
-        {presenter.location.organizationAlias} / {presenter.location.alias}
+        {location.organizationAlias} / {location.alias}
       </h2>
       <div className="usa-form-group">
         <label className="usa-label" htmlFor="file-input">

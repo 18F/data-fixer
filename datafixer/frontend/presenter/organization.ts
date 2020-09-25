@@ -24,9 +24,7 @@ export const OrganizationPresenter = (ctx: Context) => {
     Error
   >({
     handler: async organizationAlias => {
-      console.log('getting organization', organizationAlias);
       return ctx.getOrganization(organizationAlias).then(organization => {
-        console.log('got organization', organization);
         return pipe(
           organization,
           fold(

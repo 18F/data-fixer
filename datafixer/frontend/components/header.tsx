@@ -1,9 +1,10 @@
+import { useStore } from 'effector-react';
 import React from 'react';
 
 import { newProject, UpdateLocation } from 'datafixer/core/routes';
 
-import { SessionHook } from '../hooks/session';
 import { Link } from './link';
+import { SessionPresenter } from '../presenter/session';
 
 const ASSETS_ROOT = '/npm/node_modules/uswds/dist';
 
@@ -16,8 +17,10 @@ export const Header = ({
   session,
 }: {
   ctx: HeaderContext;
-  session: SessionHook;
+  session: SessionPresenter;
 }) => {
+  const sessionData = useStore(session.data);
+
   return (
     <header className="usa-header usa-header--extended">
       <div className="usa-navbar">
@@ -41,7 +44,7 @@ export const Header = ({
           </button>
           <div className="usa-nav__secondary">
             <ul className="usa-nav__secondary-links">
-              {session.data.sessionToken === null ? (
+              {sessionData.sessionToken === null ? (
                 <li className="usa-nav__secondary-item">
                   <button
                     className="usa-button usa-button--unstyled"

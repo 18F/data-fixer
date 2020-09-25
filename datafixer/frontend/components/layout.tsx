@@ -5,7 +5,7 @@ import { Location } from 'datafixer/core/routes';
 import { Banner } from './banner';
 import { Footer } from './footer';
 import { Header } from './header';
-import { SessionHook } from '../hooks/session';
+import { SessionPresenter } from '../presenter/session';
 
 type LayoutContext = {
   updateLocation: (location: Location) => void;
@@ -18,7 +18,7 @@ export const Layout = ({
 }: {
   ctx: LayoutContext;
   children: React.ReactNode;
-  session: SessionHook;
+  session: SessionPresenter;
 }) => {
   return (
     <>

@@ -1,13 +1,12 @@
-import { fold, left } from 'fp-ts/Either';
+import { fold } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/pipeable';
-
-import { useState } from 'react';
 
 import {
   AuthenticationDetails,
   AuthenticationService,
   AuthenticationResult,
 } from 'datafixer/core/authentication';
+import { createEvent, createStore, Store } from 'effector';
 
 const SESSION_TOKEN_KEY = 'sessionToken';
 
@@ -46,13 +45,20 @@ const getLocalStorageSessionData = (localStorage: Storage) => {
   return localAuthResult as SessionData;
 };
 
-export const useSession = (
-  authenticationService: AuthenticationService,
-  localStorage: Storage
-): SessionHook => {
-  const [sessionData, setSessionData] = useState<SessionData>(
+type Context = {
+  authenticationService: AuthenticationService;
+  localStorage: Storage;
+};
+
+export const SessionPresenter = ({
+  authenticationService,
+  localStorage,
+}: Context) => {
+  const setSessionData = createEvent<SessionData>();
+  const sessionData: Store<SessionData> = createStore<SessionData>(
     getLocalStorageSessionData(localStorage)
   );
+  sessionData.on(setSessionData, (_, sessionData: SessionData) => sessionData);
 
   const logIn = (authenticationDetails: AuthenticationDetails) => {
     authenticationService
@@ -76,28 +82,30 @@ export const useSession = (
   };
 
   const logOut = () => {
-    if (sessionData.sessionToken === null) {
+    const data = sessionData.getState();
+    if (data.sessionToken === null) {
       return;
     }
     authenticationService
-      .logOut(sessionData.sessionToken)
+      .logOut(data.sessionToken)
       .then(either =>
         pipe(
           either,
           fold(
             (error: Error) => {
               console.error('Error closing session', error);
-              return sessionData;
+              return data;
             },
             () => null
           )
         )
       )
-      .then(sessionData => {
-        persistSessionData(localStorage, sessionData || anonymousSession);
-        setSessionData(sessionData || anonymousSession);
+      .then(data => {
+        persistSessionData(localStorage, data || anonymousSession);
+        setSessionData(data || anonymousSession);
       });
   };
 
   return { data: sessionData, logIn, logOut };
 };
+export type SessionPresenter = ReturnType<typeof SessionPresenter>;

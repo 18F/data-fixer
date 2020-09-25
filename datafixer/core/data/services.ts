@@ -9,7 +9,6 @@ import {
   OrganizationAlias,
   OrganizationReference,
   ProjectAlias,
-  ProjectId,
 } from './entities';
 import { DatasetGateway } from './gateways';
 
@@ -39,7 +38,13 @@ export type CreateDatasetProjectService = ReturnType<
 
 export const GetDatasetProjectService = (
   datasetGateway: DatasetGateway
-) => async (organizationAlias: OrganizationAlias, alias: ProjectAlias) => {
+) => async ({
+  organizationAlias,
+  alias,
+}: {
+  organizationAlias: OrganizationAlias;
+  alias: ProjectAlias;
+}) => {
   return datasetGateway.getDatasetProjectByName(organizationAlias, alias);
 };
 export type GetDatasetProjectService = ReturnType<

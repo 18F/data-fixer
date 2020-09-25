@@ -1,33 +1,26 @@
-import React, { useState } from 'react';
+import { useStore } from 'effector-react';
+import React from 'react';
 
-import {
-  DatasetProject,
-  GetDatasetProjectService,
-  GetDatasetService,
-} from 'datafixer/core/data';
 import { DatasetLocation, Location } from 'datafixer/core/routes';
-
 import { DataTable } from '../components/data-table';
-import { useDataset } from '../hooks/dataset';
-import { useDatasetProject } from '../hooks/dataset-project';
 import { DatasetLayout } from './dataset-layout';
+import { DatasetPresenter } from '../presenter/dataset';
 
 type DatasetPageContext = {
-  getDataset: GetDatasetService;
-  getDatasetProject: GetDatasetProjectService;
+  location: DatasetLocation;
+  presenter: DatasetPresenter;
   updateLocation: (location: Location) => void;
 };
 
-export const DatasetPage = (props: {
-  ctx: DatasetPageContext;
-  location: DatasetLocation;
-}) => {
-  const dataset = useDataset(props.location.datasetId, props.ctx.getDataset);
-  const datasetProject = useDatasetProject(
-    props.location.organizationAlias,
-    props.location.alias,
-    props.ctx.getDatasetProject
-  );
+export const DatasetPage = ({
+  location,
+  presenter,
+  updateLocation,
+}: DatasetPageContext) => {
+  presenter.init();
+
+  const dataset = useStore(presenter.dataset);
+  const datasetProject = useStore(presenter.datasetProject);
 
   if (!dataset || !datasetProject) {
     return <div>Loading...</div>;
@@ -37,10 +30,10 @@ export const DatasetPage = (props: {
     <DatasetLayout
       ctx={{
         datasetProject: datasetProject,
-        updateLocation: props.ctx.updateLocation,
+        updateLocation: updateLocation,
       }}
-      currentId={props.location.datasetId}
-      location={props.location}
+      currentId={location.datasetId}
+      location={location}
     >
       <figure>
         <figcaption>{dataset.schema.type}</figcaption>

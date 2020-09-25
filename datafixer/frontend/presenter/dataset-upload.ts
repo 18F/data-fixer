@@ -1,30 +1,33 @@
 import { CreateMockDatasetService } from 'datafixer/core/data';
 import {
   datasetLocation,
+  LocationService,
   NewDatasetLocation,
   UpdateLocation,
 } from 'datafixer/core/routes';
 
 export type Context = {
   createMockDataset: CreateMockDatasetService;
-  updateLocation: UpdateLocation;
+  locationService: LocationService;
 };
 
-export const DatasetUploadPresenter = (
-  { createMockDataset, updateLocation }: Context,
-  location: NewDatasetLocation
-) => {
+export const DatasetUploadPresenter = ({
+  createMockDataset,
+  locationService,
+}: Context) => {
+  const getLocation = () => locationService.getLocation() as NewDatasetLocation;
   return {
     createMockDataset: async () => {
+      const location = getLocation();
       const datasetId = await createMockDataset(
         location.organizationAlias,
         location.alias
       );
-      updateLocation(
+      locationService.setLocation(
         datasetLocation(location.organizationAlias, location.alias, datasetId)
       );
     },
-    location,
+    getLocation,
   };
 };
 export type DatasetUploadPresenter = ReturnType<typeof DatasetUploadPresenter>;

@@ -1,4 +1,4 @@
-import { createDomain, Event, Store } from 'effector';
+import { createDomain, Store } from 'effector';
 
 import {
   DatasetProject,
@@ -7,7 +7,7 @@ import {
 } from 'datafixer/core/data';
 import { LocationService } from 'datafixer/core/routes';
 
-export type Context = {
+type Context = {
   getFeaturedProjects: GetFeaturedProjectsService;
   locationService: LocationService;
   resetFactoryDefaults: ResetFactoryDefaultsService;
@@ -22,10 +22,9 @@ export const HomePresenter = (ctx: Context) => {
     Error
   >({ handler: ctx.getFeaturedProjects });
 
-  const featuredProjects = HomeDomain.store<DatasetProject[]>([]).on(
-    getFeaturedProjects.done,
-    (_, { result }) => result
-  );
+  const featuredProjects: Store<DatasetProject[]> = HomeDomain.store<
+    DatasetProject[]
+  >([]).on(getFeaturedProjects.done, (_, { result }) => result);
 
   const resetFactoryDefaults = () => {
     ctx.resetFactoryDefaults();
@@ -33,9 +32,12 @@ export const HomePresenter = (ctx: Context) => {
   };
 
   // Start loading featured projects immediately.
-  getFeaturedProjects();
+  const init = () => {
+    getFeaturedProjects();
+  };
 
   return {
+    init,
     featuredProjects,
     resetFactoryDefaults,
   };

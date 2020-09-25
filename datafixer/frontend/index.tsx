@@ -1,24 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { render } from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 
 import { AuthenticationService } from 'datafixer/core/authentication';
 import { DatasetService } from 'datafixer/core/data';
-import { LocationService } from 'datafixer/core/routes';
+import { Location, LocationService, Router } from 'datafixer/core/routes';
 
 import { Home } from './components/home';
 import { Layout } from './components/layout';
-import { useSession } from './hooks/session';
 import { DatasetPage } from './pages/dataset';
 import { DatasetUploadPage } from './pages/dataset-upload';
 import { DatasetProjectPage } from './pages/dataset-project';
 import { NewDatasetProjectPage } from './pages/dataset-project-new';
 import { OrganizationPage } from './pages/organization';
-import { useLocation } from './hooks/location';
-import { HomePresenter } from './presenter/home';
-import { DatasetUploadPresenter } from './presenter/dataset-upload';
-import { OrganizationPresenter } from './presenter/organization';
-import { ProjectCreatePresenter } from './presenter/project-create';
+import { Presenter } from './presenter';
 
 type AppContext = {
   authenticationService: AuthenticationService;
@@ -27,20 +22,36 @@ type AppContext = {
   localStorage: Storage;
 };
 
-export const App = ({ ctx }: { ctx: AppContext }) => {
+export const useLocation = (ctx: {
+  locationService: LocationService;
+}): Router => {
+  const [currentLocation, setLocation] = useState<Location>(
+    ctx.locationService.getLocation()
+  );
+  ctx.locationService.changeEvent.addListener(setLocation);
+
+  const updateLocation = (newLocation: Location) => {
+    ctx.locationService.setLocation(newLocation);
+  };
+
+  return { currentLocation, updateLocation };
+};
+
+export const App = ({
+  ctx,
+  presenter,
+}: {
+  ctx: AppContext;
+  presenter: Presenter;
+}) => {
   const router = useLocation({ locationService: ctx.locationService });
-  const session = useSession(ctx.authenticationService, ctx.localStorage);
 
   let pageComponent: JSX.Element;
   switch (router.currentLocation.type) {
     case 'Home':
       pageComponent = (
         <Home
-          presenter={HomePresenter({
-            getFeaturedProjects: ctx.datasetService.getFeaturedProjects,
-            locationService: ctx.locationService,
-            resetFactoryDefaults: ctx.datasetService.resetFactoryDefaults,
-          })}
+          presenter={presenter.home}
           ctx={{
             router: router,
           }}
@@ -49,58 +60,30 @@ export const App = ({ ctx }: { ctx: AppContext }) => {
       break;
     case 'NewProject':
       pageComponent = (
-        <NewDatasetProjectPage
-          presenter={ProjectCreatePresenter({
-            createDatasetProject: ctx.datasetService.createDatasetProject,
-            getOrganizations: ctx.datasetService.getOrganizations,
-            updateLocation: router.updateLocation,
-          })}
-        />
+        <NewDatasetProjectPage presenter={presenter.newDatasetProject} />
       );
       break;
     case 'Organization':
-      pageComponent = (
-        <OrganizationPage
-          presenter={OrganizationPresenter({
-            getOrganization: ctx.datasetService.getOrganization,
-            locationService: ctx.locationService,
-          })}
-        />
-      );
+      pageComponent = <OrganizationPage presenter={presenter.organization} />;
       break;
     case 'Dataset':
       pageComponent = (
         <DatasetPage
-          ctx={{
-            getDataset: ctx.datasetService.getDataset,
-            getDatasetProject: ctx.datasetService.getDatasetProject,
-            updateLocation: router.updateLocation,
-          }}
           location={router.currentLocation}
+          presenter={presenter.dataset}
+          updateLocation={router.updateLocation}
         />
       );
       break;
     case 'NewDataset':
-      pageComponent = (
-        <DatasetUploadPage
-          presenter={DatasetUploadPresenter(
-            {
-              createMockDataset: ctx.datasetService.createMockDataset,
-              updateLocation: router.updateLocation,
-            },
-            router.currentLocation
-          )}
-        />
-      );
+      pageComponent = <DatasetUploadPage presenter={presenter.datasetUpload} />;
       break;
     case 'Project':
       pageComponent = (
         <DatasetProjectPage
-          ctx={{
-            getDatasetProject: ctx.datasetService.getDatasetProject,
-            updateLocation: router.updateLocation,
-          }}
           location={router.currentLocation}
+          presenter={presenter.datasetProject}
+          updateLocation={router.updateLocation}
         />
       );
       break;
@@ -110,16 +93,21 @@ export const App = ({ ctx }: { ctx: AppContext }) => {
   }
 
   return (
-    <Layout ctx={{ updateLocation: router.updateLocation }} session={session}>
+    <Layout
+      ctx={{ updateLocation: router.updateLocation }}
+      session={presenter.session}
+    >
       {pageComponent}
     </Layout>
   );
 };
 
 export const renderApp = (ctx: AppContext, element: HTMLElement) => {
-  render(<App ctx={ctx} />, element);
+  const presenter = Presenter(ctx);
+  render(<App ctx={ctx} presenter={presenter} />, element);
 };
 
 export const renderToString = (ctx: AppContext) => {
-  return ReactDOMServer.renderToString(<App ctx={ctx} />);
+  const presenter = Presenter(ctx);
+  return ReactDOMServer.renderToString(<App ctx={ctx} presenter={presenter} />);
 };
