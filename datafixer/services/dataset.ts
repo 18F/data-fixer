@@ -131,6 +131,7 @@ export const CreateMockDatasetService = (
       type: 'Schema type',
       description: 'Mock uploaded schema',
     },
+    uploadedDate: new Date().toDateString(),
     data: [
       ['fake1', 'fake2', 'fake3'],
       ['XXX', '111', 'AAA'],

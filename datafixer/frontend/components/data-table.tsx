@@ -1,11 +1,11 @@
 import React from 'react';
 
 const errorClasses = 'bg-error-lighter border-left-1 border-error-dark';
-const cellClasses = (col: string) => `${col === 'XXX' ? errorClasses : ''}`;
+const cellClasses = (col: any) => `${col.suggestion ? errorClasses : ''}`;
 
 export const DataTable = (props: {
   caption: string;
-  table: Array<Array<string>>;
+  table: Array<Array<any>>;
 }) => {
   if (props.table.length === 0) {
     return null;
@@ -29,9 +29,11 @@ export const DataTable = (props: {
             <tr key={rowIndex}>
               {row.map((col, colIndex) => (
                 <td key={colIndex} className={cellClasses(col)}>
-                  {col}
-                  {col === 'XXX' ? (
-                    <button className="usa-button--unstyled">Edit</button>
+                  {col.value || col}
+                  {col.suggestion && col.value ? (
+                    <button className="usa-button--unstyled float-right">
+                      Edit
+                    </button>
                   ) : null}
                 </td>
               ))}

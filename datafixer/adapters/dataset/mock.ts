@@ -56,6 +56,103 @@ const DOT_PROJECT = {
 const DOT_DATASET_V1 = '3c7b24e1-696b-4490-9deb-5140f07993df';
 const DOT_DATASET_V2 = '7c81fc21-fefd-4dc8-9df5-e0aeb571b293';
 
+const COVID_ORG = {
+  id: '68172cc0-032b-11eb-a84f-f218984f7ebf',
+  alias: 'covid19',
+};
+const COVID_AUSTRALIA = {
+  id: '8e1d55de-032b-11eb-a84f-f218984f7ebf',
+  alias: 'australia',
+  organization: {
+    id: COVID_ORG.id,
+    alias: 'covid19',
+  },
+};
+const COVID_AUSTRALIA_DATASET_V1 = '9d06b1d0-032b-11eb-a84f-f218984f7ebf';
+const COVID_AUSTRALIA_DATA = [
+  [
+    'Province State',
+    'Country Region',
+    'Latitude',
+    'Longitude',
+    'Last Update',
+    'Confirmed Cases',
+    'Recovered Cases',
+  ],
+  [
+    'Australian Capital Territory',
+    { value: 'Austraia', suggestion: 'Australia' },
+    '-35.4735',
+    '149.0124',
+    '2020-08-20 04:27:43',
+    { value: '0113', suggestion: '113' },
+    '110',
+  ],
+  [
+    'New South Wales',
+    { value: 'Australa', suggestion: 'Australia' },
+    '-33.8688',
+    '151.2093',
+    '2020-08-20 04:27:43',
+    '3971',
+    '2995',
+  ],
+  [
+    'Northern Territory',
+    { value: 'Austria', suggestion: 'Australia' },
+    '-12.4634',
+    '130.8456',
+    { value: '02020-08-20 04:27:43', suggestion: '2020-08-20 04:27:43' },
+    '33',
+    '31',
+  ],
+  [
+    'Queensland',
+    { value: 'Anstralia', suggestion: 'Australia' },
+    '-27.4698',
+    '153.0251',
+    '2020-08-20 04:27:43',
+    '1093',
+    '1081',
+  ],
+  [
+    'South Australia',
+    { value: 'Aust', suggestion: 'Australia' },
+    '-34.9285',
+    '138.6007',
+    '2020-08-20 04:27:43',
+    { value: '0462', suggestion: '462' },
+    '452',
+  ],
+  [
+    'Tasmania',
+    { value: 'Australa', suggestion: 'Australia' },
+    '-42.8821',
+    '147.3272',
+    '2020-08-20 04:27:43',
+    '230',
+    '216',
+  ],
+  [
+    'Victoria',
+    { value: 'Austr', suggestion: 'Australia' },
+    '-37.8136',
+    '144.9631',
+    { value: '22020-08-20 04:27:43', suggestion: '2020-08-20 04:27:43' },
+    '17683',
+    '9729',
+  ],
+  [
+    'Western Australia',
+    { value: 'Aussie', suggestion: 'Australia' },
+    '-31.9505',
+    '115.8605',
+    '2020-08-20 04:27:43',
+    '651',
+    '633',
+  ],
+];
+
 export const mockData: MockData = {
   datasets: {
     [WISCONSIN_DATASET_V1]: {
@@ -65,6 +162,7 @@ export const mockData: MockData = {
         type: 'Schema type',
         description: 'SCHEMA HERE',
       },
+      uploadedDate: '2020-10-10 04:23:43',
       data: [
         ['hwy', 'mile', 'info'],
         ['60', '10', 'repaving'],
@@ -81,6 +179,7 @@ export const mockData: MockData = {
         type: 'Schema type',
         description: 'SCHEMA HERE',
       },
+      uploadedDate: '2020-10-10 04:23:43',
       data: [
         ['hwy', 'mile', 'info'],
         ['60', '10', 'repaving'],
@@ -98,6 +197,7 @@ export const mockData: MockData = {
         type: 'Schema type',
         description: 'SCHEMA HERE',
       },
+      uploadedDate: '2020-10-10 04:23:43',
       data: [
         ['hwy', 'mile', 'info'],
         ['I94', '98', 'accident'],
@@ -113,6 +213,7 @@ export const mockData: MockData = {
         type: 'Schema type',
         description: 'SCHEMA HERE',
       },
+      uploadedDate: '2020-10-10 04:23:43',
       data: [
         ['state', 'hwy', 'mile', 'info'],
         ['WI', '60', '10', 'repaving'],
@@ -131,6 +232,7 @@ export const mockData: MockData = {
         type: 'Schema type',
         description: 'SCHEMA HERE',
       },
+      uploadedDate: '2020-10-10 04:23:43',
       data: [
         ['state', 'hwy', 'mile', 'info'],
         ['WI', '60', '10', 'repaving'],
@@ -142,6 +244,18 @@ export const mockData: MockData = {
       ],
       consumers: [],
       sources: [MINNESOTA_DATASET_V1, WISCONSIN_DATASET_V1],
+    },
+    [COVID_AUSTRALIA_DATASET_V1]: {
+      id: COVID_AUSTRALIA_DATASET_V1,
+      projectId: COVID_AUSTRALIA.id,
+      schema: {
+        type: 'Schema type',
+        description: 'SCHEMA HERE',
+      },
+      uploadedDate: '2020-10-10 04:23:43',
+      data: COVID_AUSTRALIA_DATA,
+      consumers: [],
+      sources: [],
     },
   },
   datasetProjects: {
@@ -193,6 +307,21 @@ export const mockData: MockData = {
           'Aggregated collection of all state-reported road closures in the United States.',
       },
       datasetVersions: [DOT_DATASET_V1, DOT_DATASET_V2],
+    },
+    [COVID_AUSTRALIA.id]: {
+      id: COVID_AUSTRALIA.id,
+      organization: COVID_ORG,
+      alias: 'covid-statistics',
+      source: {
+        type: 'upload',
+      },
+      consumers: [],
+      details: {
+        title: 'Australian COVID-19 statistics',
+        source: '',
+        description: 'Australian COVID-19 statistics by province',
+      },
+      datasetVersions: [COVID_AUSTRALIA_DATASET_V1],
     },
   },
   organizations: {

@@ -26,6 +26,11 @@ const ProjectReference = t.type({
 });
 type ProjectReference = t.TypeOf<typeof ProjectReference>;
 
+const DatapointSuggestion = t.type({
+  value: t.any,
+  suggestion: t.any,
+});
+export type DatapointSuggestion = t.TypeOf<typeof DatapointSuggestion>;
 const TabularData = t.array(t.array(t.any));
 export type TabularData = t.TypeOf<typeof TabularData>;
 
@@ -43,6 +48,7 @@ const Dataset = t.type({
     type: t.string,
     description: t.string,
   }),
+  uploadedDate: t.string,
   data: TabularData,
   consumers: t.array(Identifier),
   sources: t.array(Identifier),
