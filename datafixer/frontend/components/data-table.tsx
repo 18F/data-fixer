@@ -31,7 +31,10 @@ export const DataTable = (props: {
                 <td key={colIndex} className={cellClasses(col)}>
                   {col.value || col}
                   {col.suggestion && col.value ? (
-                    <button className="usa-button--unstyled float-right">
+                    <button
+                      className="usa-button--unstyled float-right"
+                      title={`Suggestion: ${col.suggestion}`}
+                    >
                       Edit
                     </button>
                   ) : null}
