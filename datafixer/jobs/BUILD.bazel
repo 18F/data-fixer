@@ -1,0 +1,18 @@
+load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+load("//macros:ipython.bzl", "ipython")
+
+py_binary(
+    name = "sample_job",
+    srcs = ["sample_job.py"],
+    main = "sample_job.py",
+    deps = [
+        requirement("pandas"),
+    ],
+)
+
+ipython(
+    name = "shell",
+    deps = [
+    ],
+)

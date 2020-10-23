@@ -48,6 +48,20 @@ There is currently little test coverage, but the test suite may be run with:
 yarn test
 ```
 
+## Notes
+
+Python dependencies are specified in requirements.in, with all transitive dependencies in requirements.txt, but managed with Bazel via requirements.txt. To update the transitive depdencies, use [pip-compile](https://github.com/jazzband/pip-tools#example-usage-for-pip-compile):
+
+```bash
+pip-compile --generate-hashes --allow-unsafe requirements.in
+```
+
+There is also a shell target available for testing Python dependencies. This will spawn an IPython repl with the sample dependencies in //datafixer/jobs available:
+
+```bash
+yarn bazel run //datafixer/jobs:shell
+```
+
 ## Deployment
 
 The deployable build artifact is a Docker image that runs the node.js server. The server includes all assets required to host the application, and can be built and deployed into a cloud.gov sandbox with appropriate credentials:

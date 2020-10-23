@@ -3,24 +3,31 @@
 # Declares that this directory is the root of a Bazel workspace.
 # See https://docs.bazel.build/versions/master/build-ref.html#workspace
 workspace(
-    # How this workspace would be referenced with absolute labels from another workspace
+    # How this workspace would be referenced with absolute labels from another
+    # workspace
     name = "datafixer",
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
     managed_directories = {"@npm": ["node_modules"]},
 )
 
-# Install the nodejs "bootstrap" package
-# This provides the basic tools for running and packaging nodejs programs in Bazel
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+#
+# node.js configuration
+#
+
+# Install the nodejs "bootstrap" package
+# This provides the basic tools for running and packaging nodejs programs in
+# Bazel
 http_archive(
     name = "build_bazel_rules_nodejs",
     sha256 = "4952ef879704ab4ad6729a29007e7094aef213ea79e9f2e94cbe1c9a753e63ef",
     urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.2.0/rules_nodejs-2.2.0.tar.gz"],
 )
 
-# The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
+# The npm_install rule runs yarn anytime the package.json or package-lock.json
+# file changes.
 # It also extracts any Bazel rules distributed in an npm package.
 load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
 
@@ -31,9 +38,40 @@ yarn_install(
     yarn_lock = "//:yarn.lock",
 )
 
+#
+# Python configuration
+#
+
+http_archive(
+    name = "rules_python",
+    sha256 = "b6d46438523a3ec0f3cead544190ee13223a52f6a6765a29eae7b7cc24cc83a0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.1.0/rules_python-0.1.0.tar.gz",
+)
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
+
+load("@rules_python//python:pip.bzl", "pip_install")
+
+pip_install(
+    # Because we might have to compile a lot of dependencies, set an extra long
+    # timeout.
+    timeout = 60 * 30,
+    requirements = "//:requirements.txt",
+)
+
+#
+# Docker configuration
+#
+
 # Download the rules_docker repository at release v0.14.4
 http_archive(
     name = "io_bazel_rules_docker",
+    # This patch is required due to deprecated usage of pip_deps in
+    # rules_docker; this should be safe to remove when rules_docker-0.14.5
+    # lands.
+    patches = ["//:rules_docker.pr1650.patch"],
     sha256 = "4521794f0fba2e20f3bf15846ab5e01d5332e587e9ce81629c7f96c793bb7036",
     strip_prefix = "rules_docker-0.14.4",
     urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.4/rules_docker-v0.14.4.tar.gz"],
