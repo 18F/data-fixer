@@ -7,7 +7,7 @@ This directory includes Starlark macros.
 To create a shell target, with a project available in its namespace. To use:
 
 ```starlark
-load("//macros:ipython.bzl", "ipython")
+load("//tools/ipython:ipython.bzl", "ipython")
 
 ipython(
     name = "shell",

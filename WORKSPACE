@@ -39,6 +39,37 @@ yarn_install(
 )
 
 #
+# Python mypy configuration
+#
+
+mypy_integration_version = "0.1.0"
+
+http_archive(
+    name = "mypy_integration",
+    sha256 = "511ca642294129b7abebf6afd48aa63e7d91de3ec5fa0689d60d1dc6a94a7d1a",
+    strip_prefix = "bazel-mypy-integration-{version}".format(version = mypy_integration_version),
+    url = "https://github.com/thundergolfer/bazel-mypy-integration/archive/{version}.tar.gz".format(
+        version = mypy_integration_version,
+    ),
+)
+
+load(
+    "@mypy_integration//repositories:repositories.bzl",
+    mypy_integration_repositories = "repositories",
+)
+
+mypy_integration_repositories()
+
+load("@mypy_integration//:config.bzl", "mypy_configuration")
+
+# Optionally pass a MyPy config file, otherwise pass no argument.
+mypy_configuration("//tools/mypy:mypy.ini")
+
+load("@mypy_integration//repositories:deps.bzl", mypy_integration_deps = "deps")
+
+mypy_integration_deps("//tools/mypy:mypy_version.txt")
+
+#
 # Python configuration
 #
 
@@ -58,6 +89,7 @@ pip_install(
     # Because we might have to compile a lot of dependencies, set an extra long
     # timeout.
     timeout = 60 * 30,
+    python_interpreter = "python3",
     requirements = "//:requirements.txt",
 )
 

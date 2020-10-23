@@ -1,6 +1,6 @@
 load("@pip//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
-load("//macros:ipython.bzl", "ipython")
+load("//tools/ipython:ipython.bzl", "ipython")
 
 py_binary(
     name = "sample_job",
@@ -11,8 +11,8 @@ py_binary(
     ],
 )
 
-ipython(
-    name = "shell",
-    deps = [
-    ],
-)
+# ipython(
+#     name = "shell",
+#     deps = [
+#     ],
+# )
