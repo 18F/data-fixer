@@ -1,6 +1,9 @@
+def test():
+    print('Hello, world!')
+
 def main():
     import pdb; pdb.set_trace()  #pylint: disable=C0321
-    console.log('Hello, world!')
+    test()
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,6 @@
+load("//tools/jupyter:notebook.bzl", "notebook")
+
+notebook(
+    name = "launch",
+    deps = [],
+)

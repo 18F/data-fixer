@@ -1,18 +1,31 @@
 load("@pip//:requirements.bzl", "requirement")
-load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 load("//tools/ipython:ipython.bzl", "ipython")
+load("//tools/jupyter:notebook.bzl", "notebook")
+
+py_library(
+    name = "sample_job_lib",
+    srcs = glob(
+        [
+            "**/*.py",
+        ],
+    ),
+    deps = [
+        requirement("pandas"),
+    ],
+)
 
 py_binary(
     name = "sample_job",
     srcs = ["sample_job.py"],
     main = "sample_job.py",
     deps = [
-        requirement("pandas"),
+        ":sample_job_lib",
     ],
 )
 
-# ipython(
-#     name = "shell",
-#     deps = [
-#     ],
-# )
+ipython(
+    name = "shell",
+    deps = [
+    ],
+)
