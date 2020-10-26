@@ -1,0 +1,19 @@
+load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+load("//tools/pytest:pytest.bzl", "pytest_test")
+
+py_library(
+    name = "python",
+    srcs = [
+        "datasets.py",
+    ],
+    deps = [],
+)
+
+pytest_test(
+    name = "datasets_test",
+    srcs = ["datasets_test.py"],
+    deps = [
+        ":python",
+    ],
+)

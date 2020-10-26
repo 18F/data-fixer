@@ -58,10 +58,10 @@ Python dependencies are specified in requirements.in, with all transitive depend
 pip-compile --generate-hashes --allow-unsafe requirements.in
 ```
 
-There is also a shell target available for testing Python dependencies. This will spawn an IPython repl with the sample dependencies in //datafixer/jobs available:
+There is also a shell target available for testing Python dependencies in a sample Python job. This will spawn an IPython repl with provided dependencies available:
 
 ```bash
-yarn bazel run //datafixer/jobs:shell
+yarn bazel run //processors/tasks/python_sample:shell
 ```
 
 ## Deployment
