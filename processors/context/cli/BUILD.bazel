@@ -1,0 +1,13 @@
+load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "cli",
+    srcs = ["run.py"],
+    args = [],
+    main = "run.py",
+    deps = [
+        requirement("click"),
+        "//processors/tasks/python_sample:command",
+    ],
+)

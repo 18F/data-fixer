@@ -1,12 +1,22 @@
 load("@pip//:requirements.bzl", "requirement")
-load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("//tools/pytest:pytest.bzl", "pytest_test")
+
+package(default_visibility = ["//visibility:public"])
 
 py_library(
     name = "python",
     srcs = [
-        "datasets.py",
+        "__init__.py",
     ],
+    deps = [
+        ":datasets",
+    ],
+)
+
+py_library(
+    name = "datasets",
+    srcs = ["datasets.py"],
     deps = [],
 )
 
@@ -14,6 +24,6 @@ pytest_test(
     name = "datasets_test",
     srcs = ["datasets_test.py"],
     deps = [
-        ":python",
+        ":datasets",
     ],
 )

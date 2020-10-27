@@ -1,9 +1,9 @@
-def test():
-    print('Hello, world!')
+from processors.lib.python import datasets
 
-def main():
-    import pdb; pdb.set_trace()  #pylint: disable=C0321
-    test()
+
+def task(ctx, arg1, arg2):
+    print(arg1, arg2, datasets.new_dataset(ctx))
+
 
 if __name__ == '__main__':
-    main()
+    task()

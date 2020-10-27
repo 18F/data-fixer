@@ -55,7 +55,7 @@ yarn test
 Python dependencies are specified in requirements.in, with all transitive dependencies in requirements.txt, but managed with Bazel via requirements.txt. To update the transitive depdencies, use [pip-compile](https://github.com/jazzband/pip-tools#example-usage-for-pip-compile):
 
 ```bash
-pip-compile --generate-hashes --allow-unsafe requirements.in
+pip-compile --generate-hashes --allow-unsafe requirements.in >> requirements.txt
 ```
 
 There is also a shell target available for testing Python dependencies in a sample Python job. This will spawn an IPython repl with provided dependencies available:

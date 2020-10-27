@@ -8,4 +8,4 @@ This package includes common, shared code for each task runtime. Shared utilitie
 
 Each target language needs its own such utilties. Current implementations are:
 
-- [processors/lib/python](./python) - Python language utilities
+- [processors/lib/python](./python)

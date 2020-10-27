@@ -1,31 +1,39 @@
+package(default_visibility = ["//visibility:public"])
+
 load("@pip//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 load("//tools/ipython:ipython.bzl", "ipython")
 load("//tools/jupyter:notebook.bzl", "notebook")
 
 py_library(
-    name = "sample_job_lib",
-    srcs = glob(
-        [
-            "**/*.py",
-        ],
-    ),
+    name = "python_sample",
+    srcs = ["sample_job.py"],
     deps = [
         requirement("pandas"),
+        "//processors/lib/python",
+    ],
+)
+
+py_library(
+    name = "command",
+    srcs = ["command.py"],
+    deps = [
+        ":python_sample",
     ],
 )
 
 py_binary(
-    name = "sample_job",
+    name = "python_sample_bin",
     srcs = ["sample_job.py"],
     main = "sample_job.py",
     deps = [
-        ":sample_job_lib",
+        ":python_sample",
     ],
 )
 
 ipython(
     name = "shell",
     deps = [
+        ":python_sample",
     ],
 )
