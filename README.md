@@ -61,7 +61,7 @@ pip-compile --generate-hashes --allow-unsafe requirements.in >> requirements.txt
 There is also a shell target available for testing Python dependencies in a sample Python job. This will spawn an IPython repl with provided dependencies available:
 
 ```bash
-yarn bazel run //processors/tasks/python_sample:shell
+yarn bazel run //processors/tasks/create_mock_dataset:shell
 ```
 
 ## Deployment

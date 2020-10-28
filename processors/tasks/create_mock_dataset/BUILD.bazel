@@ -6,8 +6,8 @@ load("//tools/ipython:ipython.bzl", "ipython")
 load("//tools/jupyter:notebook.bzl", "notebook")
 
 py_library(
-    name = "python_sample",
-    srcs = ["sample_job.py"],
+    name = "task",
+    srcs = ["task.py"],
     deps = [
         requirement("pandas"),
         "//processors/lib/python",
@@ -18,22 +18,22 @@ py_library(
     name = "command",
     srcs = ["command.py"],
     deps = [
-        ":python_sample",
+        ":task",
     ],
 )
 
 py_binary(
-    name = "python_sample_bin",
-    srcs = ["sample_job.py"],
-    main = "sample_job.py",
+    name = "task_bin",
+    srcs = ["task.py"],
+    main = "task.py",
     deps = [
-        ":python_sample",
+        ":task",
     ],
 )
 
 ipython(
     name = "shell",
     deps = [
-        ":python_sample",
+        ":task",
     ],
 )

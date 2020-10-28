@@ -15,15 +15,26 @@ py_library(
 )
 
 py_library(
+    name = "context",
+    srcs = [
+        "context.py",
+    ],
+    deps = [],
+)
+
+py_library(
     name = "datasets",
     srcs = ["datasets.py"],
-    deps = [],
+    deps = [
+        ":context",
+    ],
 )
 
 pytest_test(
     name = "datasets_test",
     srcs = ["datasets_test.py"],
     deps = [
+        ":context",
         ":datasets",
     ],
 )

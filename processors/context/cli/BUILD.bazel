@@ -8,6 +8,7 @@ py_binary(
     main = "run.py",
     deps = [
         requirement("click"),
-        "//processors/tasks/python_sample:command",
+        "//processors/lib/python",
+        "//processors/tasks/create_mock_dataset:command",
     ],
 )

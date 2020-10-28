@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "bazel": "dotenv bazel",
+    "bazel": "dotenv -- bazel",
     "build": "bazel build //...",
     "clean": "bazel clean",
     "coverage": "bazel coverage //... && cd ./bazel-out/darwin-fastbuild/testlogs && genhtml -o coverage datafixer/core/test/coverage.dat && open ./coverage/index.html",

@@ -134,3 +134,8 @@ load(
 )
 
 _nodejs_image_repos()
+
+# Added at the end, so as to not override rules_docker
+register_toolchains(
+    "@//:python_toolchain",
+)

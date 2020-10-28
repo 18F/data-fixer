@@ -1,9 +1,31 @@
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
-
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
 exports_files(
     ["tsconfig.json"],
     visibility = ["//visibility:public"],
+)
+
+#
+# Python toolchain configuration
+#
+
+load("@bazel_tools//tools/python:toolchain.bzl", "py_runtime_pair")
+load("@rules_python//python:defs.bzl", "py_runtime")
+
+py_runtime(
+    name = "py3_runtime",
+    interpreter = "py3.sh",
+    python_version = "PY3",
+)
+
+py_runtime_pair(
+    name = "py_runtime_pair",
+    py3_runtime = ":py3_runtime",
+)
+
+toolchain(
+    name = "python_toolchain",
+    toolchain = ":py_runtime_pair",
+    toolchain_type = "@bazel_tools//tools/python:toolchain_type",
 )
