@@ -2,7 +2,9 @@ bazel-out
 dist
 node_modules
 **/.DS_STORE
-.env
+.env.local
 .vscode
 *.code-workspace
 __pycache__/
+data
+db/dev.sqlite3

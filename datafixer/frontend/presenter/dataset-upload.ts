@@ -22,6 +22,9 @@ export const DatasetUploadPresenter = ({
         location.organizationAlias,
         location.alias
       );
+      if (!datasetId) {
+        return undefined;
+      }
       locationService.setLocation(
         datasetLocation(location.organizationAlias, location.alias, datasetId)
       );

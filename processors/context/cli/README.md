@@ -2,12 +2,15 @@
 
 This package includes a task runner for Python tasks, implemented via a Click command-line parser.
 
-This target requires the following environment variables, which may be set in a `.env` file in the workspace root:
+This target requires the following environment variables, which may be set in a `.env.local` file in the workspace root:
 
 ```bash
 # Set to root dataset location path
 DATAFIXER_DATASET_ROOT=file:///Users/me/data
 ```
+
+By default (when running via yarn), `DATAFIXER_DATASET_ROOT` is set to /data under the workspace root.
+
 
 ## Usage
 

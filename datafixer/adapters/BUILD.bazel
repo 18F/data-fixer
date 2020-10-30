@@ -13,5 +13,6 @@ ts_library(
         "@npm//@types/express",
         "@npm//express",
         "@npm//fp-ts",
+        "@npm//knex",
     ],
 )

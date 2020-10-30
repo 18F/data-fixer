@@ -24,7 +24,7 @@ export const DatasetProjectPresenter = ({
 
   const getDatasetProjectFx = createEffect<
     { organizationAlias: OrganizationAlias; alias: ProjectAlias },
-    DatasetProject,
+    DatasetProject | undefined,
     Error
   >({
     handler: getDatasetProject,

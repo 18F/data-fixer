@@ -14,18 +14,18 @@ import {
 } from 'datafixer/core';
 
 export interface DatasetGateway {
-  getDataset(id: DatasetId): Promise<Dataset>;
-  getDatasetProjectById(id: ProjectId): Promise<DatasetProject>;
+  getDataset(id: DatasetId): Promise<Dataset | undefined>;
+  getDatasetProjectById(id: ProjectId): Promise<DatasetProject | undefined>;
   getDatasetProjectByName(
     organizationAlias: OrganizationAlias,
     alias: ProjectAlias
-  ): Promise<DatasetProject>;
+  ): Promise<DatasetProject | undefined>;
   getFeaturedProjects(): Promise<DatasetProject[]>;
   getOrganizationByAlias(
     alias: OrganizationAlias
   ): Promise<Option<Organization>>;
   getOrganizations(): Promise<Array<Organization>>;
-  createDatasetProject(dataset: DatasetProject): Promise<DatasetProject>;
+  createDatasetProject(dataset: DatasetProject): void;
   resetFactoryDefaults(): void;
   createDataset(dataset: Dataset): void;
 }
@@ -123,6 +123,9 @@ export const CreateMockDatasetService = (
     organizationAlias,
     projectAlias
   );
+  if (!project) {
+    return undefined;
+  }
   const datasetId = uuidv4();
   datasetGateway.createDataset({
     id: datasetId,

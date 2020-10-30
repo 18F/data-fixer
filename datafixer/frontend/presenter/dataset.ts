@@ -26,11 +26,11 @@ export const DatasetPresenter = ({
 }: Context) => {
   const getLocation = () => locationService.getLocation() as DatasetLocation;
 
-  const getDatasetFx: Effect<DatasetId, Dataset, Error> = createEffect<
+  const getDatasetFx: Effect<
     DatasetId,
-    Dataset,
+    Dataset | undefined,
     Error
-  >({
+  > = createEffect<DatasetId, Dataset | undefined, Error>({
     handler: getDataset,
   });
   const dataset: Store<Dataset | null> = createStore<Dataset | null>(null).on(
@@ -40,7 +40,7 @@ export const DatasetPresenter = ({
 
   const getDatasetProjectFx = createEffect<
     { organizationAlias: OrganizationAlias; alias: ProjectAlias },
-    DatasetProject,
+    DatasetProject | undefined,
     Error
   >({
     handler: getDatasetProject,
