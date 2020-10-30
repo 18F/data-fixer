@@ -27,11 +27,11 @@ const RenderHtmlService = (ctx: ServerContext) => (location: Location) => {
 };
 
 export const ServerService = (ctx: ServerContext) => (port: number) => {
-  const expressRouter = express.Router();
+  const router = express.Router();
 
   const renderHtml = RenderHtmlService(ctx);
 
-  expressRouter.get('*', (req, res) => {
+  router.get('*', (req, res) => {
     const location = parseLocation(req.originalUrl);
     const html = `<!DOCTYPE html>
 <html>
@@ -56,6 +56,6 @@ export const ServerService = (ctx: ServerContext) => (port: number) => {
 
   // TODO: Map just required files rather than entire context/server sandbox.
   app.use(express.static('..'));
-  app.use(expressRouter);
+  app.use(router);
   app.listen(port, () => console.log(`Server listening on port ${port}.`));
 };
