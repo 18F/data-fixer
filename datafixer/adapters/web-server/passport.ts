@@ -31,7 +31,7 @@ type PassportContext = {
   loginGov: LoginGovKey;
 };
 
-export const UsePassportAdapter = (ctx: PassportContext) => (app: Express) => {
+export const UsePassport = (ctx: PassportContext) => (app: Express) => {
   // Initialize Passport
   app.use(passport.initialize());
   app.use(passport.session());
@@ -62,17 +62,11 @@ export const UsePassportAdapter = (ctx: PassportContext) => (app: Express) => {
         new Strategy(
           { client: oidcClient, params: LOGIN_GOV_STRATEGY_PARAMS },
           (
-            tokenSet: TokenSet,
+            _: TokenSet,
             userInfo: UserinfoResponse,
             done: (err: any, user?: any) => void
           ) => {
-            console.log('tokenset', tokenSet);
-            console.log('access_token', tokenSet.access_token);
-            console.log('id_token', tokenSet.id_token);
-            console.log('claims', tokenSet.claims);
-            console.log('userinfo', userInfo);
-
-            if (!userInfo.email) {
+            if (!userInfo.email || !userInfo.email_verified) {
               return done(null, false);
             }
 

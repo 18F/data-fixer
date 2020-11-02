@@ -1,6 +1,5 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import expressSession from 'express-session';
 import logger from 'morgan';
 
 import { SinglePageLocationGateway } from 'datafixer/adapters/location/single-page';
@@ -13,14 +12,15 @@ import {
   parseLocation,
   LocationService,
 } from 'datafixer/services/routes';
-import { UsePassportAdapter, LoginGovKey } from './passport';
+import { UsePassport, LoginGovKey } from './passport';
+import { SessionContext, UseSession } from './sessions';
 
 type ServerContext = {
   authenticationService: AuthenticationService;
   datasetService: DatasetService;
   localStorage: Storage;
-  sessionSecret: string;
   loginGov: LoginGovKey;
+  session: SessionContext;
 };
 
 const RenderHtmlService = (ctx: ServerContext) => async (
@@ -36,11 +36,11 @@ const RenderHtmlService = (ctx: ServerContext) => async (
 
 export const ServerService = (ctx: ServerContext) => {
   const renderHtml = RenderHtmlService(ctx);
-
-  const usePassport = UsePassportAdapter({
+  const usePassport = UsePassport({
     authenticationService: ctx.authenticationService,
     loginGov: ctx.loginGov,
   });
+  const useSession = UseSession(ctx.session);
 
   return (port: number) => {
     const router = express.Router();
@@ -58,14 +58,8 @@ export const ServerService = (ctx: ServerContext) => {
     // TODO: Map just required files rather than entire context/server sandbox.
     app.use(express.static('..'));
 
-    // Sessions here are in-memory - TODO: wire up to a database
-    app.use(
-      expressSession({
-        secret: ctx.sessionSecret,
-        resave: false,
-        saveUninitialized: false,
-      })
-    );
+    // Wire up session management.
+    useSession(app);
 
     // Wire up passport for authentication.
     usePassport(app);

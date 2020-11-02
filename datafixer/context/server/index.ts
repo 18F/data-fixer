@@ -35,7 +35,10 @@ const Context = () => {
     authenticationService,
     datasetService,
     localStorage,
-    sessionSecret,
+    session: {
+      secret: sessionSecret,
+      duration: 24 * 60 * 60 * 1000,
+    },
     loginGov: {
       jwkKey: loginGovJwkFull,
       oidcDiscoverUrl:
