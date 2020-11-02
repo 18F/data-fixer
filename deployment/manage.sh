@@ -7,6 +7,7 @@
 #set -eo pipefail
 
 LOGIN_GOV_SERVICE=login-gov
+LOGIN_GOV_ISSUER="urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:ai_experience"
 TERRAFORM_SERVICE=terraform-user
 TERRAFORM_SERVICE_KEY=${TERRAFORM_SERVICE}-key
 TERRAFORM_STORAGE_SERVICE=terraform-storage
@@ -88,6 +89,36 @@ export_environment() {
   export_service_key
 }
 
+generate_login_gov_keys() {
+  key_prefix=login-gov-${organization_name}-${space_name}
+
+  # Generate private key
+  openssl genrsa \
+    -out deployment/${key_prefix}-private.pem \
+    4096
+
+  # Output public key
+  openssl rsa \
+    -in deployment/${key_prefix}-private.pem \
+    -out deployment/${key_prefix}-public.pem \
+    -pubout
+
+  # Generate self-signed certificate
+  openssl req \
+    -key deployment/${key_prefix}-private.pem \
+    -new \
+    -x509 \
+    -days 3650 \
+    -subj "/C=US/O=General Services Administration/OU=TTS/CN=gsa.gov" \
+    -out deployment/${key_prefix}-cert.pem
+
+  # Generate JWK from private key; store on filesystem, and load to env var.
+  cat deployment/${key_prefix}-private.pem \
+    | pem-jwk \
+    > deployment/${key_prefix}.jwk
+  LOGIN_GOV_JWK=`cat deployment/${key_prefix}.jwk | jq -aRs`
+}
+
 setup() {
   if space_exists "${space_name}" ; then
     echo space "${space_name}" already created
@@ -115,20 +146,8 @@ setup() {
   if service_exists "${LOGIN_GOV_SERVICE}" ; then
     echo space "${LOGIN_GOV_SERVICE}" already created
   else
-    openssl req \
-      -newkey rsa:2048 \
-      -new \
-      -nodes \
-      -x509 \
-      -days 3650 \
-      -subj "/C=US/O=General Services Administration/OU=TTS/CN=gsa.gov" \
-      -keyout deployment/login-gov-${organization_name}-${space_name}-key.pem \
-      -out deployment/login-gov-${organization_name}-${space_name}-cert.pem
-
-    PRIVATE_KEY=`cat deployment/login-gov-${organization_name}-${space_name}-key.pem | jq -aRs`
-    CERTIFICATE=`cat deployment/login-gov-${organization_name}-${space_name}-cert.pem | jq -aRs`
-    ISSUER="urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:ai_experience"
-    cf create-user-provided-service "${LOGIN_GOV_SERVICE}" -p "{\"issuer\": \"${ISSUER}\", \"privateKey\": ${PRIVATE_KEY}, \"certificate\": ${CERTIFICATE}}"
+    generate_login_gov_keys
+    cf create-user-provided-service "${LOGIN_GOV_SERVICE}" -p "{\"issuer\": \"${LOGIN_GOV_ISSUER}\", \"jwkFullKey\": ${LOGIN_GOV_JWK}}"
   fi
 }
 
@@ -185,7 +204,7 @@ deploy() {
 
 while [ "$1" != "" ]; do
   case $1 in
-    setup | show | export | deploy )  operation=$1
+    setup | show | export | deploy | generate_login_gov_keys ) operation=$1
                                 ;;
     -o | --organization )       shift
                                 organization_name=$1
@@ -215,6 +234,8 @@ case $operation in
   export )                        export_environment
                                   ;;
   deploy )                        deploy
+                                  ;;
+  generate_login_gov_keys )       generate_login_gov_keys
                                   ;;
   * )                             usage
                                   exit 1

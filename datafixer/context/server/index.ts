@@ -21,10 +21,27 @@ const Context = () => {
   const authenticationService = AuthenticationService(
     new MockAuthenticationGateway({ localStorage })
   );
+
+  const sessionSecret = process.env.SESSION_SECRET;
+  if (!sessionSecret) {
+    throw Error('Expected SESSION_SECRET environment variable');
+  }
+  if (!process.env.LOGIN_GOV_JWK_FULL) {
+    throw Error('Expected LOGIN_GOV_JWK_FULL environment variable');
+  }
+  const loginGovJwkFull = JSON.parse(process.env.LOGIN_GOV_JWK_FULL);
+
   return {
     authenticationService,
     datasetService,
     localStorage,
+    sessionSecret,
+    loginGov: {
+      jwkKey: loginGovJwkFull,
+      oidcDiscoverUrl:
+        'https://idp.int.identitysandbox.gov/.well-known/openid-configuration',
+      clientId: 'urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:datafixer',
+    },
   };
 };
 

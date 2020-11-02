@@ -3,7 +3,9 @@ import * as t from 'io-ts';
 
 // Placeholder types
 export type SessionToken = string;
-export type AuthenticationDetails = any;
+export type AuthenticationDetails = {
+  emailAddress: string;
+};
 
 const UserDetailsV = t.type({
   displayName: t.string,
@@ -13,7 +15,7 @@ export type UserDetails = t.TypeOf<typeof UserDetailsV>;
 export type AuthenticationResult = {
   sessionToken: SessionToken;
   userDetails: UserDetails;
-};
+} | null;
 
 export interface AuthenticationGateway {
   isSessionActive(sessionToken: SessionToken): Promise<Either<Error, boolean>>;

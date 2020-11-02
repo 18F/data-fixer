@@ -44,12 +44,12 @@ export const Header = ({
           </button>
           <div className="usa-nav__secondary">
             <ul className="usa-nav__secondary-links">
-              {sessionData.sessionToken === null ? (
+              {sessionData === null || sessionData.sessionToken === null ? (
                 <li className="usa-nav__secondary-item">
                   <button
                     className="usa-button usa-button--unstyled"
                     onClick={() => {
-                      session.logIn({ authDetails: 'here' });
+                      session.logIn({ emailAddress: 'fake@gsa.gov' });
                     }}
                   >
                     Log in

@@ -4,8 +4,8 @@ This includes a [Knex](http://knexjs.org/)-managed database. Typescript support 
 
 During the prototyping phase, sqlite3 is configured for local development, with the intent to use Postgres in production.
 
-* [./migrations](./migrations) - Database migrations
-* [./seeds](./seeds) - Database seeds/fixtures, currently including mock data for prototyping purposes.
+- [./migrations](./migrations) - Database migrations
+- [./seeds](./seeds) - Database seeds/fixtures, currently including mock data for prototyping purposes.
 
 To use:
 

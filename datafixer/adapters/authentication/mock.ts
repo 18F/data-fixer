@@ -1,5 +1,6 @@
 import { Either } from 'fp-ts/Either';
 import { tryCatch } from 'fp-ts/TaskEither';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   AuthenticationDetails,
@@ -33,13 +34,15 @@ export class MockAuthenticationGateway implements AuthenticationGateway {
   ): Promise<Either<Error, AuthenticationResult>> {
     return tryCatch<Error, AuthenticationResult>(
       () => {
-        this.ctx.localStorage.setItem(`mockSession-${MOCK_TOKEN}`, 'true');
-        return Promise.resolve({
-          sessionToken: MOCK_TOKEN,
-          userDetails: {
-            displayName: 'Mock User',
-          },
-        });
+        if (authenticationDetails.emailAddress.endsWith('@gsa.gov')) {
+          return Promise.resolve({
+            sessionToken: uuidv4(),
+            userDetails: {
+              displayName: 'Mock User',
+            },
+          });
+        }
+        return Promise.resolve(null);
       },
       reason => new Error(String(reason))
     )();

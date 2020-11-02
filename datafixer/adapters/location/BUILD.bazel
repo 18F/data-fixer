@@ -1,0 +1,16 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
+
+ts_library(
+    name = "location",
+    srcs = glob(
+        ["**/*.ts"],
+        exclude = ["**/*.test.ts"],
+    ),
+    module_name = "datafixer/adapters/location",
+    deps = [
+        "//datafixer/core",
+        "//datafixer/services",
+    ],
+)

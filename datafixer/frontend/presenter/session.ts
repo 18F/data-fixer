@@ -83,7 +83,7 @@ export const SessionPresenter = ({
 
   const logOut = () => {
     const data = sessionData.getState();
-    if (data.sessionToken === null) {
+    if (data === null || data.sessionToken === null) {
       return;
     }
     authenticationService
