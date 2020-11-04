@@ -39,14 +39,15 @@ export interface NotFoundLocation {
   readonly type: 'NotFound';
 }
 
-export type Location =
+export type ConcreteLocation =
   | HomeLocation
   | NewProjectLocation
   | DatasetLocation
   | OrganizationLocation
   | NewDatasetLocation
-  | ProjectLocation
-  | NotFoundLocation;
+  | ProjectLocation;
+
+export type Location = ConcreteLocation | NotFoundLocation;
 
 export interface UpdateLocation {
   (location: Location): void;
