@@ -46,7 +46,7 @@
     "jasmine": "^3.6.1",
     "jasmine-core": "^3.6.0",
     "node-sass": "^4.14.1",
-    "postcss": "^7.0.32",
+    "postcss": "^7.0.36",
     "postcss-cli": "^7.1.1",
     "postcss-csso": "^4.0.0",
     "prettier": "^2.0.5",
