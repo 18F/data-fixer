@@ -226,7 +226,7 @@ nest-asyncio==1.4.2 \
     --hash=sha256:c2d3bdc76ba235a7ad215128afe31d74a320d25790c50cd94685ec5ea221b94d \
     --hash=sha256:c614fcfaca72b1f04778bc0e73f49c84500b3d045c49d149fc46f1566643c175 \
     # via nbclient
-notebook==6.1.4 \
+notebook==6.4.1 \
     --hash=sha256:07b6e8b8a61aa2f780fe9a97430470485bc71262bc5cae8521f1441b910d2c88 \
     --hash=sha256:687d01f963ea20360c0b904ee7a37c3d8cda553858c8d6e33fd0afd13e89de32 \
     # via jupyter, widgetsnbextension
